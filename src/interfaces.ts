@@ -6,7 +6,7 @@ declare module essex.visuals.gantt.interfaces {
 
     export interface CategoryData {
         category: number;
-        date: string;
+        date: Date;
         value: number;
     }
 

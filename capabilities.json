@@ -1,14 +1,29 @@
 {
     "dataRoles": [
         {
-            "displayName": "Category Data",
+            "displayName": "Category",
             "name": "category",
-            "kind": "Grouping"
+            "kind": "Grouping",
+            "requiredTypes": [
+                {
+                    "text": true
+                }
+            ]
         },
         {
-            "displayName": "Measure Data",
+            "displayName": "Score",
             "name": "measure",
-            "kind": "Measure"
+            "kind": "Measure",
+            "requiredTypes": [
+                {
+                    "numeric": true
+                }
+            ]
+        },
+        {
+            "displayName": "Time",
+            "name": "grouping",
+            "kind": "Grouping"
         }
     ],
     "objects": {
@@ -47,7 +62,7 @@
                         "fill": {}
                     }
                 },
-                 "fontSize": {
+                "fontSize": {
                     "displayName": "Text Size",
                     "type": {
                         "formatting": {
@@ -64,19 +79,19 @@
                 "categories": {
                     "for": {
                         "in": "category"
-                    },
-                    "dataReductionAlgorithm": {
-                        "top": {}
                     }
                 },
                 "values": {
-                    "select": [
-                        {
-                            "bind": {
-                                "to": "measure"
+                    "group": {
+                        "by": "grouping",
+                        "select": [
+                            {
+                                "bind": {
+                                    "to": "measure"
+                                }
                             }
-                        }
-                    ]
+                        ]
+                    }
                 }
             }
         }

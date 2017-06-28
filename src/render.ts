@@ -22,10 +22,6 @@ module essex.visuals.gantt {
         // Get the time-series data for this category sorted by time ascending
         const catData = timeSeries
             .filter(ts => ts.category === category.id)
-            .map(ts => ({
-                ...ts,
-                date: new Date(ts.date),
-            }))
             .sort((a, b) => a.date.getTime() - b.date.getTime());
 
         // Map the time-series data into date spans
@@ -98,7 +94,7 @@ module essex.visuals.gantt {
             .data(d => getCategoryValues(d, data.timeSeries))
             .enter().append('rect')
             .attr('class', 'value-run')
-            .attr('fill', d => d3.interpolateInferno(d.value))
+            .attr('fill', d => d.value <= 0 ? d3.interpolateInferno(-d.value) : d3.interpolateCool(d.value))
             .attr('x', (d: any) => xScale(d.start))
             .attr('y', (d: any, index: number, nodes: SVGRectElement[]) => (
                 CATEGORY_HEIGHT * (d3.select(nodes[index].parentElement).datum() as any).index
