@@ -36,7 +36,6 @@ module powerbi.extensibility.visual {
         private settings: VisualSettings;
 
         constructor(options: VisualConstructorOptions) {
-            console.log('Visual constructor', options);
             this.target = options.element;
             this.host = options.host;
             this.updateCount = 0;
@@ -45,10 +44,9 @@ module powerbi.extensibility.visual {
         public update(options: VisualUpdateOptions) {
             try {
                 const dataView = options && options.dataViews && options.dataViews[0];
-                console.log('Visual Update', options.type, options, dataView);
-                this.settings = Visual.parseSettings(dataView);
-
                 if (dataView) {
+                    // console.log('Visual Update', options);
+                    this.settings = Visual.parseSettings(dataView);
                     const { width, height } = this.target.getBoundingClientRect();
                     this.target.innerHTML = "";
 
@@ -60,7 +58,7 @@ module powerbi.extensibility.visual {
                     render(this.svgNode, this.convertDataView(options.dataViews[0]), this.settings.rendering);
                 }
             } catch (err) {
-                console.log('Error Updating Visual', err);
+                console.error('Error Updating Visual', err);
             }
         }
 

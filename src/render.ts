@@ -38,15 +38,11 @@ module essex.visuals.gantt {
             .range([options.negativeColor, options.positiveColor] as any);
 
         const textPercent = Math.max(0, Math.min(100, options.categoryTextPercent)) / 100;
-        const chartPercent = 1 - options.categoryTextPercent;
-
-        console.log('render!', options);
-
+        const chartPercent = 1 - textPercent;
         const svg = d3Instance.select(element);
         const box = element.getBoundingClientRect();
         const timeRange = d3Instance.extent(data.timeSeries, ts => new Date(ts.date)) as [Date, Date];
         const { width, height } = box;
-        console.log('%sx%s', width, height);
 
         const xScale = d3Instance.scaleTime()
             .domain(timeRange)
