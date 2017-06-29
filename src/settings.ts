@@ -37,8 +37,8 @@ module powerbi.extensibility.visual {
     public positiveColor = "#3494E6";
     public negativeColor = "#EC6EAD";
     public fontSize = 12;
-    public rowHeight = 20;
-    public categoryTextPercent = 20;
+    public rowHeight = 15;
+    public categoryTextPercent = 10;
     public axisHeight = 20;
   }
 }
