@@ -26,7 +26,7 @@
 module powerbi.extensibility.visual {
     "use strict";
     import render = essex.visuals.gantt.render;
-    import GanttData = essex.visuals.gantt.interfaces.GanttData;
+    import GanttData = essex.visuals.gantt.GanttData;
 
     export class Visual implements IVisual {
         private target: HTMLElement;
@@ -70,7 +70,7 @@ module powerbi.extensibility.visual {
                 name: t.toString(),
             }));
 
-            const timeSeries: essex.visuals.gantt.interfaces.CategoryData[] = [];
+            const timeSeries: essex.visuals.gantt.CategoryData[] = [];
             dataView.categorical.values.forEach(topLevelValue => {
                 const date = topLevelValue.source.groupName as Date;
                 topLevelValue.values.forEach((nestedValue, index) => {

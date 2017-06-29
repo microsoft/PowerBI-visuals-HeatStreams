@@ -1,23 +1,5 @@
 module essex.visuals.gantt {
-    import GanttData = essex.visuals.gantt.interfaces.GanttData;
-    import Category = essex.visuals.gantt.interfaces.Category;
-    import CategoryData = essex.visuals.gantt.interfaces.CategoryData;
     const d3Instance = (<any>window).d3;
-
-    export interface ValueSlice {
-        start: Date;
-        end: Date;
-        value: number;
-    }
-
-    export interface RenderOptions {
-        positiveColor: string;
-        negativeColor: string;
-        fontSize: number;
-        rowHeight: number;
-        categoryTextPercent: number;
-        axisHeight: number;
-    }
 
     function addDays(date: Date, days: number): Date {
         var result = new Date(date);

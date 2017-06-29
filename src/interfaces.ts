@@ -1,4 +1,4 @@
-declare module essex.visuals.gantt.interfaces {
+declare module essex.visuals.gantt {
     export interface Category {
         id: number;
         name: string;
@@ -13,5 +13,21 @@ declare module essex.visuals.gantt.interfaces {
     export interface GanttData {
         categories: Category[];
         timeSeries: CategoryData[];
+    }
+
+
+    export interface ValueSlice {
+        start: Date;
+        end: Date;
+        value: number;
+    }
+
+    export interface RenderOptions {
+        positiveColor: string;
+        negativeColor: string;
+        fontSize: number;
+        rowHeight: number;
+        categoryTextPercent: number;
+        axisHeight: number;
     }
 }
