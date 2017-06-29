@@ -87,11 +87,12 @@
                         "in": "category"
                     },
                     "dataReductionAlgorithm": {
-                        "window": {
-                            "count": 5
+                        "sample": {
+                            "count": 40
                         }
                     }
                 },
+                "dataVolume": 6,
                 "values": {
                     "group": {
                         "by": "grouping",

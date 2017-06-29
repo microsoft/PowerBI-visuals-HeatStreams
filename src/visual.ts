@@ -32,13 +32,14 @@ module powerbi.extensibility.visual {
         private target: HTMLElement;
         private host: IVisualHost;
         private svgNode: SVGSVGElement;
-        private updateCount: number;
         private settings: VisualSettings;
 
         constructor(options: VisualConstructorOptions) {
             this.target = options.element;
             this.host = options.host;
-            this.updateCount = 0;
+            this.svgNode = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            this.target.appendChild(this.svgNode);
+            this.updateSvgDimensions();
         }
 
         public update(options: VisualUpdateOptions) {
@@ -46,20 +47,25 @@ module powerbi.extensibility.visual {
                 const dataView = options && options.dataViews && options.dataViews[0];
                 if (dataView) {
                     // console.log('Visual Update', options);
-                    this.settings = Visual.parseSettings(dataView);
-                    const { width, height } = this.target.getBoundingClientRect();
-                    this.target.innerHTML = "";
-
-                    // Create the SVG Node we'll render into
-                    this.svgNode = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-                    this.svgNode.setAttributeNS(null, 'width', `${width}`);
-                    this.svgNode.setAttributeNS(null, 'height', `${height}`);
-                    this.target.appendChild(this.svgNode);
-                    render(this.svgNode, this.convertDataView(options.dataViews[0]), this.settings.rendering);
+                    this.settings = Visual.parseSettings(dataView);                    
+                    this.updateSvgDimensions();                    
+                    this.render(dataView);
                 }
             } catch (err) {
                 console.error('Error Updating Visual', err);
             }
+        }
+
+        private render(dv: DataView) {
+            const data = this.convertDataView(dv);
+            this.svgNode.innerHTML = "";
+            render(this.svgNode, data, this.settings.rendering);
+        }
+
+        private updateSvgDimensions() {
+            const dimensions = this.target.getBoundingClientRect();
+            this.svgNode.setAttributeNS(null, 'width', `${dimensions.width}`);
+            this.svgNode.setAttributeNS(null, 'height', `${dimensions.height}`);
         }
 
         private convertDataView(dataView: DataView): GanttData {

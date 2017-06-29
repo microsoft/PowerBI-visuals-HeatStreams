@@ -43,7 +43,7 @@ module essex.visuals.gantt {
         const box = element.getBoundingClientRect();
         const timeRange = d3Instance.extent(data.timeSeries, ts => new Date(ts.date)) as [Date, Date];
         const { width, height } = box;
-
+        
         const xScale = d3Instance.scaleTime()
             .domain(timeRange)
             .range([width * textPercent, width]);
