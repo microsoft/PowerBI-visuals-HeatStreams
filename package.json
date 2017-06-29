@@ -3,6 +3,7 @@
   "dependencies": {
     "@types/d3": "^4.9.0",
     "d3": "^4.9.1",
+    "lodash": "^4.17.4",
     "powerbi-visuals-utils-dataviewutils": "1.2.0"
   },
   "devDependencies": {

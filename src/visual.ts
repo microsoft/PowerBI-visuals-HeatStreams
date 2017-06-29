@@ -27,6 +27,7 @@ module powerbi.extensibility.visual {
     "use strict";
     import render = essex.visuals.gantt.render;
     import GanttData = essex.visuals.gantt.GanttData;
+    const _ = (<any>window)._;
 
     export class Visual implements IVisual {
         private target: HTMLElement;
@@ -34,7 +35,7 @@ module powerbi.extensibility.visual {
         private svgNode: SVGSVGElement;
         private settings: VisualSettings;
         private selectionManager: ISelectionManager;
-
+        
         constructor(options: VisualConstructorOptions) {
             this.target = options.element;
             this.host = options.host;
@@ -48,7 +49,7 @@ module powerbi.extensibility.visual {
             try {
                 const dataView = options && options.dataViews && options.dataViews[0];
                 if (dataView) {
-                    // console.log('Visual Update', options);
+                    console.log('Visual Update', options, this.selectionManager.getSelectionIds());
                     this.settings = Visual.parseSettings(dataView);                    
                     this.updateSvgDimensions();                    
                     this.render(dataView);
@@ -61,17 +62,40 @@ module powerbi.extensibility.visual {
         private render(dv: DataView) {
             const data = this.convertDataView(dv);
             this.svgNode.innerHTML = "";
-            render(this.svgNode, data, {
+
+            const selections = this.unpackSelections(dv);
+            render(this.svgNode, data, selections, {
                 ...this.settings.rendering,
-                onClick: (cat, index) => this.handleCategoryClick(cat, index, dv),
+                onClick: (index, ctrlPressed) => this.handleCategoryClick(index, ctrlPressed, dv),
             });
         }
 
-        private handleCategoryClick(category: string, index: number, dv: DataView) {
+        private handleCategoryClick(categoryIndex: number, multiselect: boolean, dv: DataView) {            
             const selectionId = this.host.createSelectionIdBuilder()
-                .withCategory(dv.categorical.categories[0], index)
+                .withCategory(dv.categorical.categories[0], categoryIndex)
                 .createSelectionId();
-            this.selectionManager.select(selectionId, false);
+            this.selectionManager.select(selectionId, multiselect);            
+            this.render(dv);            
+        }
+
+        private unpackSelections(dv: DataView) {
+            const selection = this.selectionManager.getSelectionIds();            
+            const category = dv.categorical.categories[0];
+            const selectedCategories: string[] = [];
+            
+            selection.forEach(s => {
+                try {
+                    const selectorData = (<any>s).selector.data[0].expr;
+                    console.log("Checking Selection", selectorData.left.source, (<any>category).source.expr.source);
+                    if (_.isEqual(selectorData.left.source, (<any>category).source.expr.source)) {
+                        selectedCategories.push(selectorData.right.value);
+                    }
+                } catch (err) {
+                    console.log("Error Processing Selection", s, err);
+                }
+            });
+
+            return selectedCategories.map(s => category.values.indexOf(s));
         }
 
         private updateSvgDimensions() {

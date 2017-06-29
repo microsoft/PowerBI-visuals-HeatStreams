@@ -31,7 +31,7 @@ module essex.visuals.gantt {
         return result;
     }
 
-    export function render(element: SVGElement, data: GanttData, options: RenderOptions) {
+    export function render(element: SVGElement, data: GanttData, selections: number[], options: RenderOptions) {
         const negPosColorScale = d3Instance
             .scaleLinear()
             .domain([-1, 1])
@@ -43,7 +43,11 @@ module essex.visuals.gantt {
         const box = element.getBoundingClientRect();
         const timeRange = d3Instance.extent(data.timeSeries, ts => new Date(ts.date)) as [Date, Date];
         const { width, height } = box;
+        const { 
+            rowHeight
+        } = options;
         const maxCategories = Math.floor((height - options.axisHeight) / options.rowHeight);
+        const fontSize = +options.fontSize;
 
         const xScale = d3Instance.scaleTime()
             .domain(timeRange)
@@ -54,19 +58,27 @@ module essex.visuals.gantt {
             .append('g')
             .attr('class', 'category-list');
 
+        const isSelected = (index: number) => selections.indexOf(index) >= 0;
+
+        const catTextYPadAdjust = rowHeight > fontSize ? Math.floor((rowHeight - fontSize) / 2) : 0;
+        const categoryTextY = (index) => options.rowHeight * index + +options.fontSize + catTextYPadAdjust;
+
         // Create a container per category
         const category = categoryList
             .selectAll('.category')
             .data(data.categories.slice(0, maxCategories))
             .enter().append('g')
             .attr('class', 'category')
-            .on('click', (d) => options.onClick(d.name, d.index));
+            .attr('stroke', 'gray')
+            .attr('stroke-width', (d, index) => isSelected(index) ? 1 : 0)
+            .on('click', (d, ...args) => options.onClick(d.index, false)); // TODO: try to detect CTRL for multi-select
 
         // Write out category text
         category.append('text')
             .attr('class', 'category-text')
             .attr('font-size', `${options.fontSize}px`)
-            .attr('y', (d, index) => options.rowHeight * index + +options.fontSize + 5)
+            .attr('font-weight', (d, index) => isSelected(index) ? 'bold' : 'normal')
+            .attr('y', (d, index) => categoryTextY(index))
             .text(d => d.name);
 
         // Write out category chart area

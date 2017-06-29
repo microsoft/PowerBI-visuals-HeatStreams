@@ -32,6 +32,6 @@ declare module essex.visuals.gantt {
     }
 
     export interface RenderOptions extends VisualOptions {
-        onClick: (category: string, index: number) => void;
+        onClick: (index: number, ctrlPressed: boolean) => void;
     }
 }
