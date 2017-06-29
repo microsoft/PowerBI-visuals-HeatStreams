@@ -43,7 +43,8 @@ module essex.visuals.gantt {
         const box = element.getBoundingClientRect();
         const timeRange = d3Instance.extent(data.timeSeries, ts => new Date(ts.date)) as [Date, Date];
         const { width, height } = box;
-        
+        const maxCategories = Math.floor((height - options.axisHeight) / options.rowHeight);
+
         const xScale = d3Instance.scaleTime()
             .domain(timeRange)
             .range([width * textPercent, width]);
@@ -56,9 +57,10 @@ module essex.visuals.gantt {
         // Create a container per category
         const category = categoryList
             .selectAll('.category')
-            .data(data.categories)
+            .data(data.categories.slice(0, maxCategories))
             .enter().append('g')
-            .attr('class', 'category');
+            .attr('class', 'category')
+            .on('click', (d) => options.onClick(d.name, d.index));
 
         // Write out category text
         category.append('text')

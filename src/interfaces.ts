@@ -22,12 +22,16 @@ declare module essex.visuals.gantt {
         value: number;
     }
 
-    export interface RenderOptions {
+    export interface VisualOptions {
         positiveColor: string;
         negativeColor: string;
         fontSize: number;
         rowHeight: number;
         categoryTextPercent: number;
         axisHeight: number;
+    }
+
+    export interface RenderOptions extends VisualOptions {
+        onClick: (category: string, index: number) => void;
     }
 }

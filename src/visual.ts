@@ -33,10 +33,12 @@ module powerbi.extensibility.visual {
         private host: IVisualHost;
         private svgNode: SVGSVGElement;
         private settings: VisualSettings;
+        private selectionManager: ISelectionManager;
 
         constructor(options: VisualConstructorOptions) {
             this.target = options.element;
             this.host = options.host;
+            this.selectionManager = this.host.createSelectionManager();
             this.svgNode = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
             this.target.appendChild(this.svgNode);
             this.updateSvgDimensions();
@@ -59,7 +61,27 @@ module powerbi.extensibility.visual {
         private render(dv: DataView) {
             const data = this.convertDataView(dv);
             this.svgNode.innerHTML = "";
-            render(this.svgNode, data, this.settings.rendering);
+            render(this.svgNode, data, {
+                ...this.settings.rendering,
+                onClick: (cat, index) => this.handleCategoryClick(cat, index),
+            });
+        }
+
+        private handleCategoryClick(category: string, index: number) {
+            console.log("Selected Category", category);
+            
+            /*
+            const columnSelection: DataViewCategoryColumn = {
+                values: [ category ], 
+                source: { 
+                    displayName: 'entity'
+                },
+            };
+            const selectionId = this.host.createSelectionIdBuilder()
+                .withCategory(columnSelection, index)
+                .createSelectionId();
+            this.selectionManager.select(selectionId, false);
+            */
         }
 
         private updateSvgDimensions() {

@@ -27,13 +27,13 @@
 module powerbi.extensibility.visual {
   "use strict";
   import DataViewObjectsParser = powerbi.extensibility.utils.dataview.DataViewObjectsParser;
-  import RenderOptions = essex.visuals.gantt.RenderOptions;
+  import VisualOptions = essex.visuals.gantt.VisualOptions;
 
   export class VisualSettings extends DataViewObjectsParser {
-    public rendering: RenderOptions = new RenderOptionsImpl();
+    public rendering: VisualOptions = new RenderOptionsImpl();
   }
 
-  export class RenderOptionsImpl implements RenderOptions {
+  export class RenderOptionsImpl implements VisualOptions {
     public positiveColor = "#3494E6";
     public negativeColor = "#EC6EAD";
     public fontSize = 12;
