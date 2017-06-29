@@ -32,6 +32,12 @@ declare module essex.visuals.gantt {
     }
 
     export interface RenderOptions extends VisualOptions {
+        element: SVGElement;
+        data: GanttData;
+        selections: number[];
+        scrollOffset: number;
+        
         onClick: (index: number, ctrlPressed: boolean) => void;
+        onScroll: (offset: number) => void;
     }
 }

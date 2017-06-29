@@ -85,11 +85,6 @@
                 "categories": {
                     "for": {
                         "in": "category"
-                    },
-                    "dataReductionAlgorithm": {
-                        "sample": {
-                            "count": 40
-                        }
                     }
                 },
                 "dataVolume": 6,

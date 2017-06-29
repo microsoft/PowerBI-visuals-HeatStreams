@@ -31,7 +31,21 @@ module essex.visuals.gantt {
         return result;
     }
 
-    export function render(element: SVGElement, data: GanttData, selections: number[], options: RenderOptions) {
+    export function render(options: RenderOptions) {
+        const { 
+            element, 
+            data, 
+            selections,
+            scrollOffset,
+            rowHeight,
+            axisHeight,
+            onClick,
+            onScroll,
+        } = options;
+
+        // Clear the drawing surface
+        element.innerHTML = "";
+
         const negPosColorScale = d3Instance
             .scaleLinear()
             .domain([-1, 1])
@@ -39,15 +53,18 @@ module essex.visuals.gantt {
 
         const textPercent = Math.max(0, Math.min(100, options.categoryTextPercent)) / 100;
         const chartPercent = 1 - textPercent;
+        const fontSize = +options.fontSize;
+
         const svg = d3Instance.select(element);
         const box = element.getBoundingClientRect();
         const timeRange = d3Instance.extent(data.timeSeries, ts => new Date(ts.date)) as [Date, Date];
         const { width, height } = box;
-        const { 
-            rowHeight
-        } = options;
-        const maxCategories = Math.floor((height - options.axisHeight) / options.rowHeight);
-        const fontSize = +options.fontSize;
+        const maxCategories = Math.floor((height - axisHeight) / rowHeight);
+
+        let categoryOffsetStart = scrollOffset / rowHeight;
+        if (data.categories.length < categoryOffsetStart) {
+            categoryOffsetStart = data.categories.length - maxCategories;
+        }
 
         const xScale = d3Instance.scaleTime()
             .domain(timeRange)
@@ -56,27 +73,28 @@ module essex.visuals.gantt {
         // Create a container for all of the category drawings
         const categoryList = svg
             .append('g')
-            .attr('class', 'category-list');
+            .attr('class', 'category-list')
+            .on('wheel.zoom', () => onScroll(d3Instance.event.deltaY));
 
         const isSelected = (index: number) => selections.indexOf(index) >= 0;
 
         const catTextYPadAdjust = rowHeight > fontSize ? Math.floor((rowHeight - fontSize) / 2) : 0;
-        const categoryTextY = (index) => options.rowHeight * index + +options.fontSize + catTextYPadAdjust;
+        const categoryTextY = (index) => rowHeight * index + fontSize + catTextYPadAdjust;
 
         // Create a container per category
         const category = categoryList
             .selectAll('.category')
-            .data(data.categories.slice(0, maxCategories))
+            .data(data.categories.slice(categoryOffsetStart, categoryOffsetStart + maxCategories))
             .enter().append('g')
             .attr('class', 'category')
             .attr('stroke', 'gray')
             .attr('stroke-width', (d, index) => isSelected(index) ? 1 : 0)
-            .on('click', (d, ...args) => options.onClick(d.index, false)); // TODO: try to detect CTRL for multi-select
+            .on('click', (d, ...args) => onClick(d.index, d3Instance.event.ctrlKey));
 
         // Write out category text
         category.append('text')
             .attr('class', 'category-text')
-            .attr('font-size', `${options.fontSize}px`)
+            .attr('font-size', `${fontSize}px`)
             .attr('font-weight', (d, index) => isSelected(index) ? 'bold' : 'normal')
             .attr('y', (d, index) => categoryTextY(index))
             .text(d => d.name);
@@ -84,10 +102,10 @@ module essex.visuals.gantt {
         // Write out category chart area
         category.append('rect')
             .attr('class', 'category-chart')
-            .attr('height', options.rowHeight)
+            .attr('height', rowHeight)
             .attr('width', width * chartPercent)
             .attr('fill', 'none')
-            .attr('y', (d, index) => options.rowHeight * index)
+            .attr('y', (d, index) => rowHeight * index)
             .attr('x', width * textPercent)
             .each((d: any, i) => d.index = i);
 
@@ -100,12 +118,12 @@ module essex.visuals.gantt {
             .attr('fill', d => negPosColorScale(d.value))
             .attr('x', (d: any) => xScale(d.start))
             .attr('y', (d: any, index: number, nodes: SVGRectElement[]) => (
-                options.rowHeight * (d3Instance.select(nodes[index].parentElement).datum() as any).index
+                rowHeight * (d3Instance.select(nodes[index].parentElement).datum() as any).index
             ))
-            .attr('height', options.rowHeight)
+            .attr('height', rowHeight)
             .attr('width', (d: any) => xScale(d.end) - xScale(d.start));
 
-        const axisOffset = Math.min(height - options.axisHeight, data.categories.length * options.rowHeight + options.axisHeight);
+        const axisOffset = Math.min(height - axisHeight, data.categories.length * rowHeight + axisHeight);
 
         // Add the x Axis
         svg.append('g')

@@ -35,6 +35,7 @@ module powerbi.extensibility.visual {
         private svgNode: SVGSVGElement;
         private settings: VisualSettings;
         private selectionManager: ISelectionManager;
+        private scrollOffset: number = 0;
         
         constructor(options: VisualConstructorOptions) {
             this.target = options.element;
@@ -61,12 +62,15 @@ module powerbi.extensibility.visual {
 
         private render(dv: DataView) {
             const data = this.convertDataView(dv);
-            this.svgNode.innerHTML = "";
-
             const selections = this.unpackSelections(dv);
-            render(this.svgNode, data, selections, {
+            render({
                 ...this.settings.rendering,
+                element: this.svgNode, 
+                data, 
+                selections, 
+                scrollOffset: this.scrollOffset,
                 onClick: (index, ctrlPressed) => this.handleCategoryClick(index, ctrlPressed, dv),
+                onScroll: (offset) => this.handleScroll(offset, dv),                
             });
         }
 
@@ -76,6 +80,11 @@ module powerbi.extensibility.visual {
                 .createSelectionId();
             this.selectionManager.select(selectionId, multiselect);            
             this.render(dv);            
+        }
+
+        private handleScroll(offset: number, dv: DataView) {
+            this.scrollOffset = Math.max(0, this.scrollOffset + offset);
+            this.render(dv);
         }
 
         private unpackSelections(dv: DataView) {
