@@ -27,8 +27,10 @@ module powerbi.extensibility.visual {
     "use strict";
     import render = essex.visuals.gantt.render;
     import GanttData = essex.visuals.gantt.interfaces.GanttData;
+
     export class Visual implements IVisual {
         private target: HTMLElement;
+        private host: IVisualHost;
         private svgNode: SVGSVGElement;
         private updateCount: number;
         private settings: VisualSettings;
@@ -36,23 +38,27 @@ module powerbi.extensibility.visual {
         constructor(options: VisualConstructorOptions) {
             console.log('Visual constructor', options);
             this.target = options.element;
+            this.host = options.host;
             this.updateCount = 0;
         }
 
         public update(options: VisualUpdateOptions) {
             try {
-                this.settings = Visual.parseSettings(options && options.dataViews && options.dataViews[0]);
-                const { width, height } = this.target.getBoundingClientRect();
+                const dataView = options && options.dataViews && options.dataViews[0];
+                console.log('Visual Update', options.type, options, dataView);
+                this.settings = Visual.parseSettings(dataView);
 
-                this.target.innerHTML = "";
+                if (dataView) {
+                    const { width, height } = this.target.getBoundingClientRect();
+                    this.target.innerHTML = "";
 
-                // Create the SVG Node we'll render into
-                this.svgNode = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-                this.svgNode.setAttributeNS(null, 'width', `${width}`);
-                this.svgNode.setAttributeNS(null, 'height', `${height}`);
-                this.target.appendChild(this.svgNode);
-
-                render(this.svgNode, this.convertDataView(options.dataViews[0]));
+                    // Create the SVG Node we'll render into
+                    this.svgNode = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+                    this.svgNode.setAttributeNS(null, 'width', `${width}`);
+                    this.svgNode.setAttributeNS(null, 'height', `${height}`);
+                    this.target.appendChild(this.svgNode);
+                    render(this.svgNode, this.convertDataView(options.dataViews[0]), this.settings.rendering);
+                }
             } catch (err) {
                 console.log('Error Updating Visual', err);
             }
@@ -90,7 +96,6 @@ module powerbi.extensibility.visual {
         /** 
          * This function gets called for each of the objects defined in the capabilities files and allows you to select which of the 
          * objects and properties you want to expose to the users in the property pane.
-         * 
          */
         public enumerateObjectInstances(options: EnumerateVisualObjectInstancesOptions): VisualObjectInstance[] | VisualObjectInstanceEnumerationObject {
             return VisualSettings.enumerateObjectInstances(this.settings || VisualSettings.getDefault(), options);

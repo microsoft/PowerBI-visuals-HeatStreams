@@ -2,7 +2,7 @@ module essex.visuals.gantt {
     import GanttData = essex.visuals.gantt.interfaces.GanttData;
     import Category = essex.visuals.gantt.interfaces.Category;
     import CategoryData = essex.visuals.gantt.interfaces.CategoryData;
-    const d3 = (<any>window).d3;
+    const d3Instance = (<any>window).d3;
 
     export interface ValueSlice {
         start: Date;
@@ -10,7 +10,14 @@ module essex.visuals.gantt {
         value: number;
     }
 
-    const AXIS_HEIGHT = 20;
+    export interface RenderOptions {
+        positiveColor: string;
+        negativeColor: string;
+        fontSize: number;
+        rowHeight: number;
+        categoryTextPercent: number;
+        axisHeight: number;
+    }
 
     function addDays(date: Date, days: number): Date {
         var result = new Date(date);
@@ -42,27 +49,31 @@ module essex.visuals.gantt {
         return result;
     }
 
-    const CATEGORY_HEIGHT = 30;
-    const CATEGORY_TEXT_FONT_SIZE = 16;
+    export function render(element: SVGElement, data: GanttData, options: RenderOptions) {
+        const negPosColorScale = d3Instance
+            .scaleLinear()
+            .domain([-1, 1])
+            .range([options.negativeColor, options.positiveColor] as any);
 
-    export function render(element: SVGElement, data: GanttData) {
-        console.log('render!', d3);
-        
-        const svg = d3.select(element);
+        const textPercent = Math.max(0, Math.min(100, options.categoryTextPercent)) / 100;
+        const chartPercent = 1 - options.categoryTextPercent;
+
+        console.log('render!', options);
+
+        const svg = d3Instance.select(element);
         const box = element.getBoundingClientRect();
-        const timeRange = d3.extent(data.timeSeries, ts => new Date(ts.date)) as [Date, Date];
+        const timeRange = d3Instance.extent(data.timeSeries, ts => new Date(ts.date)) as [Date, Date];
         const { width, height } = box;
         console.log('%sx%s', width, height);
 
-        const xScale = d3.scaleTime()
+        const xScale = d3Instance.scaleTime()
             .domain(timeRange)
-            .range([width * 0.2, width]);
+            .range([width * textPercent, width]);
 
         // Create a container for all of the category drawings
         const categoryList = svg
             .append('g')
-            .attr('class', 'category-list')
-            .attr('transform', 'translate(10,10)');
+            .attr('class', 'category-list');
 
         // Create a container per category
         const category = categoryList
@@ -74,18 +85,18 @@ module essex.visuals.gantt {
         // Write out category text
         category.append('text')
             .attr('class', 'category-text')
-            .attr('font-size', `${CATEGORY_TEXT_FONT_SIZE}px`)
-            .attr('y', (d, index) => CATEGORY_HEIGHT * index + CATEGORY_TEXT_FONT_SIZE + 5)
+            .attr('font-size', `${options.fontSize}px`)
+            .attr('y', (d, index) => options.rowHeight * index + +options.fontSize + 5)
             .text(d => d.name);
 
         // Write out category chart area
         category.append('rect')
             .attr('class', 'category-chart')
-            .attr('height', CATEGORY_HEIGHT)
-            .attr('width', width * 0.8)
+            .attr('height', options.rowHeight)
+            .attr('width', width * chartPercent)
             .attr('fill', 'none')
-            .attr('y', (d, index) => CATEGORY_HEIGHT * index)
-            .attr('x', width * 0.2)
+            .attr('y', (d, index) => options.rowHeight * index)
+            .attr('x', width * textPercent)
             .each((d: any, i) => d.index = i);
 
         // Draw each value run in the chart area
@@ -94,19 +105,19 @@ module essex.visuals.gantt {
             .data(d => getCategoryValues(d, data.timeSeries))
             .enter().append('rect')
             .attr('class', 'value-run')
-            .attr('fill', d => d.value <= 0 ? d3.interpolateInferno(-d.value) : d3.interpolateCool(d.value))
+            .attr('fill', d => negPosColorScale(d.value))
             .attr('x', (d: any) => xScale(d.start))
             .attr('y', (d: any, index: number, nodes: SVGRectElement[]) => (
-                CATEGORY_HEIGHT * (d3.select(nodes[index].parentElement).datum() as any).index
+                options.rowHeight * (d3Instance.select(nodes[index].parentElement).datum() as any).index
             ))
-            .attr('height', 30)
+            .attr('height', options.rowHeight)
             .attr('width', (d: any) => xScale(d.end) - xScale(d.start));
 
-        const axisOffset = Math.min(height - AXIS_HEIGHT, data.categories.length * CATEGORY_HEIGHT + AXIS_HEIGHT);
+        const axisOffset = Math.min(height - options.axisHeight, data.categories.length * options.rowHeight + options.axisHeight);
 
         // Add the x Axis
         svg.append('g')
             .attr('transform', `translate(0, ${axisOffset})`)
-            .call(d3.axisBottom(xScale));
+            .call(d3Instance.axisBottom(xScale));
     }
 }

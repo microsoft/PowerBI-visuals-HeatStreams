@@ -27,11 +27,11 @@
         }
     ],
     "objects": {
-        "dataPoint": {
-            "displayName": "Data colors",
+        "rendering": {
+            "displayName": "Rendering",
             "properties": {
-                "defaultColor": {
-                    "displayName": "Default color",
+                "positiveColor": {
+                    "displayName": "Positive color",
                     "type": {
                         "fill": {
                             "solid": {
@@ -40,26 +40,14 @@
                         }
                     }
                 },
-                "showAllDataPoints": {
-                    "displayName": "Show all",
-                    "type": {
-                        "bool": true
-                    }
-                },
-                "fill": {
-                    "displayName": "Fill",
+                "negativeColor": {
+                    "displayName": "Negative color",
                     "type": {
                         "fill": {
                             "solid": {
                                 "color": true
                             }
                         }
-                    }
-                },
-                "fillRule": {
-                    "displayName": "Color saturation",
-                    "type": {
-                        "fill": {}
                     }
                 },
                 "fontSize": {
@@ -68,6 +56,24 @@
                         "formatting": {
                             "fontSize": true
                         }
+                    }
+                },
+                "rowHeight": {
+                    "displayName": "Row Height",
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "categoryTextPercent": {
+                    "displayName": "Category Text % Size",
+                    "type":{
+                        "numeric": true
+                    }
+                },
+                "axisHeight": {
+                    "displayName": "Axis Height",
+                    "type": {
+                        "numeric": true
                     }
                 }
             }
@@ -79,6 +85,11 @@
                 "categories": {
                     "for": {
                         "in": "category"
+                    },
+                    "dataReductionAlgorithm": {
+                        "window": {
+                            "count": 5
+                        }
                     }
                 },
                 "values": {

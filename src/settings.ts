@@ -25,24 +25,20 @@
  */
 
 module powerbi.extensibility.visual {
-    "use strict";
-    import DataViewObjectsParser = powerbi.extensibility.utils.dataview.DataViewObjectsParser;
+  "use strict";
+  import DataViewObjectsParser = powerbi.extensibility.utils.dataview.DataViewObjectsParser;
+  import RenderOptions = essex.visuals.gantt.RenderOptions;
 
-    export class VisualSettings extends DataViewObjectsParser {
-      public dataPoint: dataPointSettings = new dataPointSettings();
-      }
+  export class VisualSettings extends DataViewObjectsParser {
+    public rendering: RenderOptions = new RenderOptionsImpl();
+  }
 
-    export class dataPointSettings {
-     // Default color
-      public defaultColor: string = "";
-     // Show all
-      public showAllDataPoints: boolean = true;
-     // Fill
-      public fill: string = "";
-     // Color saturation
-      public fillRule: string = "";
-     // Text Size
-      public fontSize: number = 12;
-     }
-
+  export class RenderOptionsImpl implements RenderOptions {
+    public positiveColor = "#3494E6";
+    public negativeColor = "#EC6EAD";
+    public fontSize = 12;
+    public rowHeight = 20;
+    public categoryTextPercent = 20;
+    public axisHeight = 20;
+  }
 }
