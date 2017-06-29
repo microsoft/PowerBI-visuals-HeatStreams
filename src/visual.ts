@@ -63,25 +63,15 @@ module powerbi.extensibility.visual {
             this.svgNode.innerHTML = "";
             render(this.svgNode, data, {
                 ...this.settings.rendering,
-                onClick: (cat, index) => this.handleCategoryClick(cat, index),
+                onClick: (cat, index) => this.handleCategoryClick(cat, index, dv),
             });
         }
 
-        private handleCategoryClick(category: string, index: number) {
-            console.log("Selected Category", category);
-            
-            /*
-            const columnSelection: DataViewCategoryColumn = {
-                values: [ category ], 
-                source: { 
-                    displayName: 'entity'
-                },
-            };
+        private handleCategoryClick(category: string, index: number, dv: DataView) {
             const selectionId = this.host.createSelectionIdBuilder()
-                .withCategory(columnSelection, index)
+                .withCategory(dv.categorical.categories[0], index)
                 .createSelectionId();
             this.selectionManager.select(selectionId, false);
-            */
         }
 
         private updateSvgDimensions() {
