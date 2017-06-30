@@ -61,7 +61,7 @@ module essex.visuals.gantt {
         const { width, height } = box;
         const maxCategories = Math.floor((height - axisHeight) / rowHeight);
 
-        let categoryOffsetStart = scrollOffset / rowHeight;
+        let categoryOffsetStart = Math.floor(scrollOffset / rowHeight);
         if (data.categories.length < categoryOffsetStart) {
             categoryOffsetStart = data.categories.length - maxCategories;
         }
@@ -76,7 +76,7 @@ module essex.visuals.gantt {
             .attr('class', 'category-list')
             .on('wheel.zoom', () => onScroll(d3Instance.event.deltaY));
 
-        const isSelected = (index: number) => selections.indexOf(index) >= 0;
+        const isSelected = (index: number) => selections.indexOf(categoryOffsetStart + index) >= 0;
 
         const catTextYPadAdjust = rowHeight > fontSize ? Math.floor((rowHeight - fontSize) / 2) : 0;
         const categoryTextY = (index) => rowHeight * index + fontSize + catTextYPadAdjust;
@@ -87,7 +87,10 @@ module essex.visuals.gantt {
             .data(data.categories.slice(categoryOffsetStart, categoryOffsetStart + maxCategories))
             .enter().append('g')
             .attr('class', 'category')
-            .on('click', (d, ...args) => onClick(d.index, d3Instance.event.ctrlKey));
+            .on('click', d => {
+                const categoryIndex = categoryOffsetStart + d.index;
+                onClick(categoryIndex, d3Instance.event.ctrlKey);
+            });
 
         category.append('rect')
             .attr('class', 'category-view')
