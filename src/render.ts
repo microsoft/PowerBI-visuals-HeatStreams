@@ -48,7 +48,7 @@ module essex.visuals.gantt {
 
         const negPosColorScale = d3Instance
             .scaleLinear()
-            .domain([-1, 1])
+            .domain([options.valueMin, options.valueMax])
             .range([options.negativeColor, options.positiveColor] as any);
 
         const textPercent = Math.max(0, Math.min(100, options.categoryTextPercent)) / 100;
@@ -87,9 +87,16 @@ module essex.visuals.gantt {
             .data(data.categories.slice(categoryOffsetStart, categoryOffsetStart + maxCategories))
             .enter().append('g')
             .attr('class', 'category')
-            .attr('stroke', 'gray')
-            .attr('stroke-width', (d, index) => isSelected(index) ? 1 : 0)
             .on('click', (d, ...args) => onClick(d.index, d3Instance.event.ctrlKey));
+
+        category.append('rect')
+            .attr('class', 'category-view')
+            .attr('height', rowHeight)
+            .attr('fill', 'none')
+            .attr('stroke', options.highlightColor)
+            .attr('y', (d, index) => rowHeight * index)
+            .attr('stroke-width', (d, index) => isSelected(index) ? 1 : 0)
+            .attr('width', width - 2); // reserve 2px for border select
 
         // Write out category text
         category.append('text')
@@ -103,7 +110,7 @@ module essex.visuals.gantt {
         category.append('rect')
             .attr('class', 'category-chart')
             .attr('height', rowHeight)
-            .attr('width', width * chartPercent)
+            .attr('width', Math.floor(width * chartPercent) - 1)
             .attr('fill', 'none')
             .attr('y', (d, index) => rowHeight * index)
             .attr('x', width * textPercent)

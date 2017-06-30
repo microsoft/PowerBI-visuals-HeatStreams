@@ -95,7 +95,6 @@ module powerbi.extensibility.visual {
             selection.forEach(s => {
                 try {
                     const selectorData = (<any>s).selector.data[0].expr;
-                    console.log("Checking Selection", selectorData.left.source, (<any>category).source.expr.source);
                     if (_.isEqual(selectorData.left.source, (<any>category).source.expr.source)) {
                         selectedCategories.push(selectorData.right.value);
                     }

@@ -36,9 +36,12 @@ module powerbi.extensibility.visual {
   export class RenderOptionsImpl implements VisualOptions {
     public positiveColor = "#3494E6";
     public negativeColor = "#EC6EAD";
+    public highlightColor = "gray";
     public fontSize = 12;
     public rowHeight = 15;
     public categoryTextPercent = 10;
     public axisHeight = 20;
+    public valueMin = -1.0;
+    public valueMax = 1.0;
   }
 }

@@ -28,7 +28,7 @@
     ],
     "objects": {
         "rendering": {
-            "displayName": "Rendering",
+            "displayName": "Customize",
             "properties": {
                 "positiveColor": {
                     "displayName": "Positive color",
@@ -48,6 +48,28 @@
                                 "color": true
                             }
                         }
+                    }
+                },
+                "highlightColor": {
+                    "displayName": "Highlight color",
+                    "type": {
+                        "fill": {
+                            "solid": {
+                                "color": true
+                            }
+                        }
+                    }
+                },
+                "valueMin": {
+                    "displayName": "Min Value",
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "valueMax": {
+                    "displayName": "Max Value",
+                    "type": {
+                        "numeric": true
                     }
                 },
                 "fontSize": {

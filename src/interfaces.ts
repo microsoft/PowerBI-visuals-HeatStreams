@@ -25,10 +25,13 @@ declare module essex.visuals.gantt {
     export interface VisualOptions {
         positiveColor: string;
         negativeColor: string;
+        highlightColor: string;
         fontSize: number;
         rowHeight: number;
         categoryTextPercent: number;
         axisHeight: number;
+        valueMin: number;
+        valueMax: number;
     }
 
     export interface RenderOptions extends VisualOptions {
