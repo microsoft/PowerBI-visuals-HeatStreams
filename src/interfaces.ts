@@ -1,4 +1,4 @@
-declare module essex.visuals.gantt {
+module essex.visuals.gantt {
     export interface Category {
         id: number;
         name: string;

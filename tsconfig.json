@@ -5,6 +5,7 @@
     "experimentalDecorators": true,
     "target": "ES5",
     "sourceMap": true,
+    "noUnusedLocals": true,
     "out": "./.tmp/build/visual.js"
   },
   "files": [
@@ -13,6 +14,7 @@
     "node_modules/@types/d3/index.d.ts",
     "src/settings.ts",
     "src/interfaces.ts",
+    "src/colorizer.ts",
     "src/render.ts",
     "src/visual.ts"
   ]

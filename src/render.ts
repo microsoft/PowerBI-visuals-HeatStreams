@@ -32,26 +32,17 @@ module essex.visuals.gantt {
     }
 
     export function render(options: RenderOptions) {
-        const { 
-            element, 
-            data, 
+        const {
+            element,
+            data,
             selections,
             scrollOffset,
             rowHeight,
             axisHeight,
             onClick,
             onScroll,
-            valueMin,
-            valueMax,
-            negativeColor,
-            positiveColor,
-            chromaMin,
-            chromaMax,
-            luminanceMin,
-            luminanceMax,
         } = options;
 
-        const valueMid = (valueMax + valueMin) / 2;
         const textPercent = Math.max(0, Math.min(100, options.categoryTextPercent)) / 100;
         const chartPercent = 1 - textPercent;
         const fontSize = +options.fontSize;
@@ -66,30 +57,10 @@ module essex.visuals.gantt {
         const catTextYPadAdjust = rowHeight > fontSize ? Math.floor((rowHeight - fontSize) / 2) : 0;
         const isSelected = (index: number) => selections.indexOf(categoryOffsetStart + index) >= 0;
         const categoryTextY = (index) => rowHeight * index + fontSize + catTextYPadAdjust;
+        const colorizer = new Colorizer(options);
 
         // Clear the drawing surface
         element.innerHTML = "";
-
-        const minHcl = d3Instance.hcl(options.negativeColor);
-        const maxHcl = d3Instance.hcl(options.positiveColor);
-
-        const chromaScale = d3Instance
-            .scaleLinear()
-            .domain([valueMin, valueMid, valueMax])
-            .range([chromaMax, chromaMin, chromaMax]);
-
-        const luminanceScale = d3Instance
-            .scaleLinear()
-            .domain([valueMin, valueMid, valueMax])
-            .range([luminanceMin, luminanceMax, luminanceMin]);
-
-        const makeColor = (value: number) => {
-            const sanitized = Math.max(valueMin, Math.min(valueMax, value));
-            const h = sanitized < valueMid ? minHcl.h : maxHcl.h;
-            const c = chromaScale(sanitized);
-            const l = luminanceScale(sanitized);
-            return d3Instance.hcl(h, c, l).toString();
-        }
 
         const timeRange = d3Instance.extent(data.timeSeries, ts => new Date(ts.date)) as [Date, Date];
         const xScale = d3Instance
@@ -147,7 +118,7 @@ module essex.visuals.gantt {
             .data(d => getCategoryValues(d, data.timeSeries))
             .enter().append('rect')
             .attr('class', 'value-run')
-            .attr('fill', d => makeColor(d.value))
+            .attr('fill', d => colorizer.color(d.value).toString())
             .attr('x', (d: any) => xScale(d.start))
             .attr('y', (d: any, index: number, nodes: SVGRectElement[]) => (
                 rowHeight * (d3Instance.select(nodes[index].parentElement).datum() as any).index
