@@ -97,6 +97,30 @@
                     "type": {
                         "numeric": true
                     }
+                },
+                "chromaMin": {
+                    "displayName": "Chroma Min",
+                    "type":{
+                        "numeric": true
+                    }
+                },
+                "chromaMax": {
+                    "displayName": "Chroma Max",
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "luminanceMin": {
+                    "displayName": "Luminance Min",
+                    "type":{
+                        "numeric": true
+                    }
+                },
+                "luminanceMax": {
+                    "displayName": "Luminance Max",
+                    "type": {
+                        "numeric": true
+                    }
                 }
             }
         }

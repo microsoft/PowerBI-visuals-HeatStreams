@@ -32,6 +32,10 @@ declare module essex.visuals.gantt {
         axisHeight: number;
         valueMin: number;
         valueMax: number;
+        chromaMin: number;
+        chromaMax: number;
+        luminanceMin: number;
+        luminanceMax: number;
     }
 
     export interface RenderOptions extends VisualOptions {

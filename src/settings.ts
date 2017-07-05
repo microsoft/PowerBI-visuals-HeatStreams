@@ -43,5 +43,9 @@ module powerbi.extensibility.visual {
     public axisHeight = 20;
     public valueMin = -1.0;
     public valueMax = 1.0;
+    public chromaMin = 5;
+    public chromaMax = 45;
+    public luminanceMin = 35;
+    public luminanceMax = 100; 
   }
 }
