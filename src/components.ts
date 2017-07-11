@@ -1,197 +1,242 @@
-module essex.d3components {
-    export type BasicSelection = d3.Selection<any, any, any, any>;
-    export const ON_PREFIX = '__ON_EVENT__';
-    export const on = (event: string) => `${ON_PREFIX}${event}`;
+declare namespace JSX {
+    interface IntrinsicElements {
+        [key: string]: any;
+    }
+    interface Element {
+        type: string;
+        props: any;
+        content: any[];
+    }
+}
+module D3Components {
+    type D3Selection = d3.Selection<any, any, any, any>;
+    type D3Primitive = d3.ValueFn<any, any, string | number | boolean>;
 
-    export interface D3Props {
-        parent?: BasicSelection;
-        children?: D3Component<any>[];
-
-        /**
-         * Raw props to map over
-         */
+    /**
+     * A property map for a component
+     */
+    export interface ElementProps {
+        each?: Function;
         [key: string]: any;
     }
 
-    export interface RenderResults {
-        selection: BasicSelection;
-        continuation?: D3Component<any> | D3Component<any>[] | null;
-    }
-
-    export interface D3Component<P extends D3Props> {
-        props: P;
-        render(): RenderResults;
-    }
-
-    export class BaseComponent<P extends D3Props> implements D3Component<P> {
-        constructor(public props: P) {
-        }
-
-        public render(): RenderResults {
-            console.error('You must override the render() method in your component');
-            return { selection: this.props.parent };
-        }
-    }
-
-    export interface SelectProps extends D3Props {
-        /**
-         * The selector string used to define the selection
-         */
-        selector: string;
-    }
-
-    export class Select extends BaseComponent<SelectProps> {
-        public props: SelectProps;
-
-        render(): RenderResults {
-            return {
-                selection: this.props.parent.select(this.props.selector),
-            };
-        }
-    }
-
-    export interface SelectAllComponentProps extends D3Props {
-        /**
-         * The selector string used to define the selection
-         */
-        selector: string;
-    }
-
-    export class SelectAll extends BaseComponent<SelectAllComponentProps> {
-        public props: SelectAllComponentProps;
-
-        render(): RenderResults {
-            return {
-                selection: this.props.parent.selectAll(this.props.selector),
-            };
-        }
-    }
-
-    export interface EnterProps extends D3Props {
-    }
-
-    export class Enter extends BaseComponent<EnterProps> {
-        public props: EnterProps;
-
-        render(): RenderResults {
-            return {
-                selection: this.props.parent.enter(),
-            };
-        }
-    }
-
-    export interface ExitProps extends D3Props {
-    }
-
-    export class Exit extends BaseComponent<ExitProps> {
-        public props: ExitProps;
-
-        render(): RenderResults {
-            return {
-                selection: this.props.parent.exit(),
-            };
-        }
-    }
-
-    export interface DataProps extends D3Props {
-        data: d3.ValueFn<any, any, {}[]>;
-        key?: any; // Function
-    }
-
-    export class Data extends BaseComponent<DataProps> {
-        public props: DataProps;
-
-        render(): RenderResults {
-            return {
-                selection: this.props.parent.data(this.props.data, this.props.key),
-            };
-        }
-    }
-
-
-    export interface DomProps extends D3Props {
-        /**
-         * The tag type to us{e
-         */
-        type: string;
-
-        call?: any;
-        each?: any;
-
-        /**
-         * The inner text of the Dom node
-         */
-        text?: d3.ValueFn<any, any, string | number | boolean>;
+    export interface InjectedElementProps extends ElementProps{
+        selection: D3Selection;
+        children: ElementContent[];
     }
 
     /**
-     * Prop keys excluded from being folded over to attributes
+     * Child content types in JSX elements
      */
-    const EXCLUDED_KEYS = {
-        'type': true,
-        'text': true,
-        'call': true,
-        'each': true,
-        'children': true,
-        'parent': true,
-    };
+    export type ElementContent = Element | D3Primitive;
 
-    export class Dom extends BaseComponent<DomProps> {
-        public props: DomProps;
-
-        render(): RenderResults {
-            console.log("Render DOM Node", this.props);
-            let result = this.props.parent.append(this.props.type);
-
-            Object.keys(this.props).forEach(key => {
-                if (!EXCLUDED_KEYS[key]) {
-                    if (key.indexOf(ON_PREFIX) === 0) {
-                        const eventName = key.slice(ON_PREFIX.length);
-                        result = result.on(eventName, this.props[key]);
-                    } else {
-                        result = result.attr(key, this.props[key]);
-                    }
-                }
-            });
-
-            if (this.props.call) {
-                result = result.call(this.props.call);
-            }
-
-            if (this.props.each) {
-                result = result.each(this.props.each);
-            }
-
-            if (this.props.text) {
-                result = result.text(this.props.text);
-            }
-
-            return {selection: result};
+    /**
+     * Rendering results from a custom element. This is only necessary when the selection
+     * is mutated.
+     */
+    export class RenderResult {
+        constructor(
+            public rendered: Element | Element[],
+            public selection: D3Selection,
+        ) {
+            this.rendered = rendered;
+            this.selection = selection;
         }
     }
 
-    export function createComponent<P extends D3Props>(componentClass: any, props: P, children: any[] = []) {
-        props.children = !children ? null : children;
-        const result = new componentClass(props);
+    /**
+     * The function interface for a custom element function
+     */
+    interface CustomElementFunction {
+        (props: ElementProps): Element | RenderResult;
+    }
+
+    /**
+     * An interface for a JSX element
+     */
+    export interface Element {
+        type: string | CustomElementFunction;
+        props: ElementProps;
+        content: ElementContent[];
+    }
+
+    /**
+     * Represents an element in a JSX tree
+     */
+    class ElementImpl implements Element {
+        constructor(
+            public type: string,
+            public props: ElementProps,
+            public content: ElementContent[],
+        ) {
+        }
+    }
+
+    /**
+     * The JSX Element Factor
+     * @param type The element type
+     * @param props The element property map
+     * @param content The child elements or content
+     */
+    export function createElement(
+        type: string,
+        props: ElementProps,
+        ...content: ElementContent[],
+    ) {
+        return new ElementImpl(type, props || {} as ElementProps, content || []);
+    }
+
+    /**
+     * Properties that are not transmitted to DOM elements
+     */
+    interface FlagMap {
+        [key: string]: boolean
+    }
+    const EXCLUDED_PROPS: FlagMap = {
+        text: true,
+        each: true,
+        call: true,
+        on: true,
+        style: true,
+    };
+
+    function renderBasicElement(element: Element, selection: D3Selection): D3Selection | D3Selection[] {
+        let result = selection.append(element.type as string);
+
+        Object.keys(element.props).forEach(key => {
+            if (!EXCLUDED_PROPS[key]) {
+                result = result.attr(key, element.props[key]);
+            }
+        });
+
+        if (element.props['style']) {
+            Object.keys(element.props['style']).forEach(styleKey => {
+                result = result.style(styleKey, element.props['style'][styleKey]);
+            });
+        }
+
+        if (element.props['on']) {
+            Object.keys(element.props['on']).forEach(onKey => {
+                result = result.on(onKey, element.props['on'][onKey]);
+            });
+        }
+        if (element.props['call']) {
+            result = result.call(element.props['call']);
+        }
+
+        if (element.props['each']) {
+            result = result.each(element.props['each'] as any);
+        }
+
+        if (element.props['text']) {
+            result = result.text(element.props['text']);
+        }
+
+        if (element.content.length > 0) {
+            element.content.forEach(c => {
+                const contentType = typeof c;
+                if (c instanceof ElementImpl) {
+                    render(c as Element, result);
+                } else if (contentType === 'string' || contentType === 'function') {
+                    result = result.text(c as D3Primitive);
+                }
+            });
+        }
+
         return result;
     }
 
-    export function render(component: D3Component<any>, root: BasicSelection) {
-        component.props.parent = root;
-        const { selection, continuation } = component.render(); // should return either a raw selection or a component
+    function renderFunctionElement(element: Element, selection: D3Selection): D3Selection | D3Selection[] {
+        const props = {
+            ...element.props,
+            children: element.content,
+            selection,
+        };
+        const renderResult = (element.type as CustomElementFunction)(props);
 
-        if (!continuation) {
-            if (component.props.children) {
-                console.log(`Null Continuation, checking ${component.props.children.length} children`);
-                return component.props.children.map(c => render(c, selection));
-            }
-            return null;
-        } else if (Array.isArray(continuation)) {
-            console.log("Array Continuation");
-            return continuation.map(c => render(c, selection));
+        let rendered = null;
+        if (renderResult instanceof RenderResult) {
+            rendered = renderResult.rendered;
+            selection = renderResult.selection;
         } else {
-            console.log("Render", continuation);
-            return render(continuation, selection);
+            rendered = renderResult;
+        }
+        
+        const assembleChildProps = (rendered) => {
+            // Pass d3 directives down until they hit a DOM node
+            Object.keys(EXCLUDED_PROPS).forEach(excludedProp => {
+                if (element.props[excludedProp]) {
+                    rendered.props[excludedProp] = element.props[excludedProp];
+                }
+            });
+        };
+
+        if (Array.isArray(rendered)) {
+            rendered.forEach(r => assembleChildProps(r));
+            return rendered.map(r => render(r, selection)) as D3Selection[];
+        } else {
+            assembleChildProps(rendered);
+            return render(rendered, selection);
         }
     }
+
+    export function render(element: Element, selection: D3Selection): D3Selection | D3Selection[] {
+        const elementTypeType = typeof element.type;
+        if (elementTypeType === "string") {
+            return renderBasicElement(element, selection);
+        } else if (elementTypeType === "function") {
+            return renderFunctionElement(element, selection);
+        }
+
+        return selection;
+    }
+
+    export const Select: CustomElementFunction = ({
+        selection,
+        children,
+        selector,
+        data,
+        all,
+    }) => {
+        if (!selector) {
+            throw new Error('Select must have a selector prop defined');
+        }
+        let newSelection = all ?
+            selection.selectAll(selector) :
+            selection.select(selector);
+
+        if (data) {
+            newSelection = newSelection.data(data);
+        }
+
+        return new RenderResult(children as Element[], newSelection);
+    };
+
+    export const Data: CustomElementFunction = ({
+        selection,
+        children,
+        data,
+    }) => {
+        if (!data) {
+            throw new Error('Data must have data defined');
+        }
+        const newSelection = selection.data(data);
+        return new RenderResult(children as Element[], newSelection);
+    };
+
+    export const Enter: CustomElementFunction = ({
+        selection,
+        children,
+    }) => {
+        let newSelection = selection.enter();
+        return new RenderResult(children as Element[], newSelection);
+    };
+
+    export const Exit: CustomElementFunction = ({
+        selection,
+        children,
+    }) => {
+        let newSelection = selection.exit();
+        return new RenderResult(children as Element[], newSelection);
+    };
 }

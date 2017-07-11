@@ -29,6 +29,10 @@ module powerbi.extensibility.visual {
     import GanttData = essex.visuals.gantt.GanttData;
     const _ = (<any>window)._;
 
+    function coalesceDate(d: PrimitiveValue): Date {
+        return (d instanceof Date) ? d : new Date(d);
+    }
+
     export class Visual implements IVisual {
         private target: HTMLElement;
         private host: IVisualHost;
@@ -48,7 +52,7 @@ module powerbi.extensibility.visual {
 
         public update(options: VisualUpdateOptions) {
             try {
-                const dataView = options && options.dataViews && options.dataViews[0];
+                const dataView = _.get(options, 'dataViews[0]');
                 if (dataView) {
                     console.log('Visual Update', options, this.selectionManager.getSelectionIds());
                     this.settings = Visual.parseSettings(dataView);                    
@@ -76,7 +80,7 @@ module powerbi.extensibility.visual {
 
         private handleCategoryClick(categoryIndex: number, multiselect: boolean, dv: DataView) {            
             const selectionId = this.host.createSelectionIdBuilder()
-                .withCategory(dv.categorical.categories[0], categoryIndex)
+                .withCategory(_.get(dv, 'categorical.categories[0]', []), categoryIndex)
                 .createSelectionId();
             this.selectionManager.select(selectionId, multiselect);            
             this.render(dv);            
@@ -89,9 +93,13 @@ module powerbi.extensibility.visual {
 
         private unpackSelections(dv: DataView) {
             const selection = this.selectionManager.getSelectionIds();            
-            const category = dv.categorical.categories[0];
-            const selectedCategories: string[] = [];
+            const category = _.get(dv, 'categorical.categories[0]');
             
+            if (!category) {
+                return [];
+            }
+
+            const selectedCategories: string[] = [];
             selection.forEach(s => {
                 try {
                     const selectorData = (<any>s).selector.data[0].expr;
@@ -113,14 +121,15 @@ module powerbi.extensibility.visual {
         }
 
         private convertDataView(dataView: DataView): GanttData {
-            const categories = dataView.categorical.categories[0].values.map((t, index) => ({
+            const categories = _.get(dataView, 'categorical.categories[0].values', [])
+            .map((t, index) => ({
                 id: index,
-                name: t.toString(),
+                name: (t || '').toString(),
             }));
 
             const timeSeries: essex.visuals.gantt.CategoryData[] = [];
             dataView.categorical.values.forEach(topLevelValue => {
-                const date = topLevelValue.source.groupName as Date;
+                const date = coalesceDate(topLevelValue.source.groupName);
                 topLevelValue.values.forEach((nestedValue, index) => {
                     if (nestedValue !== null && nestedValue !== 0) {
                         timeSeries.push({

@@ -1,6 +1,8 @@
 {
   "compilerOptions": {
     "allowJs": true,
+    "jsx": "react",
+    "jsxFactory": "D3Components.createElement",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "target": "ES5",
@@ -13,12 +15,12 @@
     "node_modules/powerbi-visuals-utils-dataviewutils/lib/index.d.ts",
     "node_modules/@types/d3/index.d.ts",
     "src/components.ts",
-    "src/ganttComponents.ts",
+    "src/ganttComponents.tsx",
     "src/d3Append.ts",
     "src/settings.ts",
     "src/interfaces.ts",
     "src/colorizer.ts",
-    "src/render.ts",
+    "src/render.tsx",
     "src/visual.ts"
   ]
 }
