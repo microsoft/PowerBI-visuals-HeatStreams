@@ -15,7 +15,6 @@ module essex.visuals.gantt {
         timeSeries: CategoryData[];
     }
 
-
     export interface ValueSlice {
         start: Date;
         end: Date;

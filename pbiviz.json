@@ -20,7 +20,8 @@
   "externalJS": [
     "node_modules/powerbi-visuals-utils-dataviewutils/lib/index.js",
     "node_modules/d3/build/d3.js",
-    "node_modules/lodash/lodash.min.js"
+    "node_modules/lodash/lodash.min.js",
+    "lib/components.js"
   ],
   "style": "style/visual.less",
   "capabilities": "capabilities.json",
