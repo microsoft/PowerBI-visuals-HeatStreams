@@ -4,11 +4,7 @@
   "files.eol": "\n",
   "files.watcherExclude": {
     "**/.git/objects/**": true,
-    "**/node_modules/**": true,
-    ".tmp": true
-  },
-  "files.exclude": {
-    ".tmp": true
+    "**/node_modules/**": true
   },
   "search.exclude": {
     ".tmp": true,

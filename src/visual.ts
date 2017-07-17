@@ -25,29 +25,24 @@
  */
 module powerbi.extensibility.visual {
     "use strict";
-    import render = essex.visuals.gantt.render;
+    import Category = essex.visuals.gantt.Category;
     import GanttData = essex.visuals.gantt.GanttData;
-    const _ = (<any>window)._;
-
-    function coalesceDate(d: PrimitiveValue): Date {
-        return (d instanceof Date) ? d : new Date(d);
-    }
+    import GanttChart = essex.visuals.gantt.GanttChart;
+    const _ = window['_'];
 
     export class Visual implements IVisual {
         private target: HTMLElement;
         private host: IVisualHost;
-        private svgNode: SVGSVGElement;
         private settings: VisualSettings;
         private selectionManager: ISelectionManager;
         private scrollOffset: number = 0;
+        private chart: GanttChart;
         
         constructor(options: VisualConstructorOptions) {
             this.target = options.element;
             this.host = options.host;
             this.selectionManager = this.host.createSelectionManager();
-            this.svgNode = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-            this.target.appendChild(this.svgNode);
-            this.updateSvgDimensions();
+            this.chart = new GanttChart();
         }
 
         public update(options: VisualUpdateOptions) {
@@ -55,8 +50,7 @@ module powerbi.extensibility.visual {
                 const dataView = _.get(options, 'dataViews[0]');
                 if (dataView) {
                     console.log('Visual Update', options, this.selectionManager.getSelectionIds());
-                    this.settings = Visual.parseSettings(dataView);                    
-                    this.updateSvgDimensions();                    
+                    this.settings = Visual.parseSettings(dataView);                  
                     this.render(dataView);
                 }
             } catch (err) {
@@ -67,15 +61,16 @@ module powerbi.extensibility.visual {
         private render(dv: DataView) {
             const data = this.convertDataView(dv);
             const selections = this.unpackSelections(dv);
-            render({
+            const options = {
                 ...this.settings.rendering,
-                element: this.svgNode, 
+                element: this.target,
                 data, 
                 selections, 
-                scrollOffset: this.scrollOffset,
-                onClick: (index, ctrlPressed) => this.handleCategoryClick(index, ctrlPressed, dv),
-                onScroll: (offset) => this.handleScroll(offset, dv),                
-            });
+                scrollOffset: this.scrollOffset,                
+            };
+            this.chart.options = options;
+            this.chart.onSelectionChanged((catIndex: number, multi: boolean) => this.handleCategoryClick(catIndex, multi, dv));
+            this.chart.render();
         }
 
         private handleCategoryClick(categoryIndex: number, multiselect: boolean, dv: DataView) {            
@@ -86,38 +81,27 @@ module powerbi.extensibility.visual {
             this.render(dv);            
         }
 
-        private handleScroll(offset: number, dv: DataView) {
-            this.scrollOffset = Math.max(0, this.scrollOffset + offset);
-            this.render(dv);
-        }
-
-        private unpackSelections(dv: DataView) {
+        private unpackSelections(dv: DataView): {[key: string]: Category} {
             const selection = this.selectionManager.getSelectionIds();            
             const category = _.get(dv, 'categorical.categories[0]');
             
             if (!category) {
-                return [];
+                return {};
             }
 
-            const selectedCategories: string[] = [];
+            const selectedCategories = {};
             selection.forEach(s => {
                 try {
                     const selectorData = (<any>s).selector.data[0].expr;
                     if (_.isEqual(selectorData.left.source, (<any>category).source.expr.source)) {
-                        selectedCategories.push(selectorData.right.value);
+                        selectedCategories[selectorData.right.value] = true;
                     }
                 } catch (err) {
                     console.log("Error Processing Selection", s, err);
                 }
             });
 
-            return selectedCategories.map(s => category.values.indexOf(s));
-        }
-
-        private updateSvgDimensions() {
-            const dimensions = this.target.getBoundingClientRect();
-            this.svgNode.setAttributeNS(null, 'width', `${dimensions.width}`);
-            this.svgNode.setAttributeNS(null, 'height', `${dimensions.height}`);
+            return selectedCategories;
         }
 
         private convertDataView(dataView: DataView): GanttData {
@@ -127,14 +111,14 @@ module powerbi.extensibility.visual {
                 name: (t || '').toString(),
             }));
 
-            const timeSeries: essex.visuals.gantt.CategoryData[] = [];
+            const values: essex.visuals.gantt.CategoryData[] = [];
             dataView.categorical.values.forEach(topLevelValue => {
-                const date = coalesceDate(topLevelValue.source.groupName);
+                const position = topLevelValue.source.groupName as Date;
                 topLevelValue.values.forEach((nestedValue, index) => {
                     if (nestedValue !== null && nestedValue !== 0) {
-                        timeSeries.push({
+                        values.push({
                             category: index,
-                            date,
+                            position,
                             value: +nestedValue,
                         });
                     }
@@ -142,7 +126,7 @@ module powerbi.extensibility.visual {
             });
             return {
                 categories,
-                timeSeries,
+                values,
             };
         }
 

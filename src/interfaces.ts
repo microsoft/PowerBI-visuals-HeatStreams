@@ -6,13 +6,13 @@ module essex.visuals.gantt {
 
     export interface CategoryData {
         category: number;
-        date: Date;
+        position: Date;
         value: number;
     }
 
     export interface GanttData {
         categories: Category[];
-        timeSeries: CategoryData[];
+        values: CategoryData[];
     }
 
     export interface ValueSlice {
@@ -38,12 +38,26 @@ module essex.visuals.gantt {
     }
 
     export interface RenderOptions extends VisualOptions {
-        element: SVGElement;
+        element: HTMLElement;
         data: GanttData;
-        selections: number[];
+        selections: { [key: string]: Category };
         scrollOffset: number;
-        
-        onClick: (index: number, ctrlPressed: boolean) => void;
-        onScroll: (offset: number) => void;
+    }
+
+    export interface GanttChartProps {
+        options: RenderOptions;
+    }
+
+    export interface CategoryDataMap {
+        [key: string]: CategoryData[];
+    }
+
+    export interface CategoryValueMap {
+        [key: string]: ValueSlice[];
+    }
+
+    export interface ProcessedGanttData {
+        categoryValues: CategoryValueMap;
+        positionDomain: [Date, Date];
     }
 }
