@@ -27,8 +27,36 @@
         }
     ],
     "objects": {
+        "data": {
+            "displayName": "Data Handling",
+            "properties": {
+                "dateAggregation": {
+                    "displayName": "Date Aggregation",
+                    "type": {
+                        "enumeration": [
+                            { "displayName": "Hourly", "value": "hours" },
+                            { "displayName": "Daily", "value": "days" },
+                            { "displayName": "Monthly", "value": "months" },
+                            { "displayName": "Yearly", "value": "years" }
+                        ]
+                    }
+                },
+                "valueMin": {
+                    "displayName": "Min Value",
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "valueMax": {
+                    "displayName": "Max Value",
+                    "type": {
+                        "numeric": true
+                    }
+                }
+            }
+        },
         "rendering": {
-            "displayName": "Customize",
+            "displayName": "Customize View",
             "properties": {
                 "positiveColor": {
                     "displayName": "Positive color",
@@ -58,18 +86,6 @@
                                 "color": true
                             }
                         }
-                    }
-                },
-                "valueMin": {
-                    "displayName": "Min Value",
-                    "type": {
-                        "numeric": true
-                    }
-                },
-                "valueMax": {
-                    "displayName": "Max Value",
-                    "type": {
-                        "numeric": true
                     }
                 },
                 "fontSize": {

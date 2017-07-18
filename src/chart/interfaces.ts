@@ -1,18 +1,21 @@
 module essex.visuals.gantt {
+    export type GanttXDomain = [number, number] | [Date, Date];
+    
     export interface Category {
         id: number;
         name: string;
     }
 
     export interface CategoryData {
-        category: number;
         position: Date;
         value: number;
     }
 
     export interface GanttData {
         categories: Category[];
-        values: CategoryData[];
+        categoryData: CategoryDataMap;    
+        categoryValues: CategoryValueMap;
+        positionDomain: GanttXDomain;
     }
 
     export interface ValueSlice {
@@ -21,7 +24,13 @@ module essex.visuals.gantt {
         value: number;
     }
 
-    export interface VisualOptions {
+    export interface VisualDataOptions {
+        valueMin: number;
+        valueMax: number;
+        dateAggregation: string;
+    }
+
+    export interface VisualRenderingOptions {
         positiveColor: string;
         negativeColor: string;
         highlightColor: string;
@@ -29,23 +38,14 @@ module essex.visuals.gantt {
         rowHeight: number;
         categoryTextPercent: number;
         axisHeight: number;
-        valueMin: number;
-        valueMax: number;
         chromaMin: number;
         chromaMax: number;
         luminanceMin: number;
         luminanceMax: number;
     }
 
-    export interface RenderOptions extends VisualOptions {
-        element: HTMLElement;
-        data: GanttData;
-        selections: { [key: string]: Category };
-        scrollOffset: number;
-    }
-
     export interface GanttChartProps {
-        options: RenderOptions;
+        options: GanttOptions;
     }
 
     export interface CategoryDataMap {
@@ -59,5 +59,12 @@ module essex.visuals.gantt {
     export interface ProcessedGanttData {
         categoryValues: CategoryValueMap;
         positionDomain: [Date, Date];
+    }
+
+    export interface GanttOptions extends VisualRenderingOptions, VisualDataOptions {
+        element: HTMLElement;
+        data: GanttData;
+        selections: { [key: string]: Category };
+        scrollOffset: number;
     }
 }

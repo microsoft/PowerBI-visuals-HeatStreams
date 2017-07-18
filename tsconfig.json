@@ -14,12 +14,13 @@
     ".api/v1.7.0/PowerBI-visuals.d.ts",
     "node_modules/powerbi-visuals-utils-dataviewutils/lib/index.d.ts",
     "node_modules/@types/d3/index.d.ts",
-    "src/dataProcessor.ts",
-    "src/ganttComponents.tsx",
-    "src/gantt.tsx",
+    "src/data/convertCategoricalDataView.ts",
+    "src/data/DataViewConverter.ts",
+    "src/chart/ganttComponents.tsx",
+    "src/chart/colorizer.ts",
+    "src/chart/gantt.tsx",
+    "src/chart/interfaces.ts",
     "src/settings.ts",
-    "src/interfaces.ts",
-    "src/colorizer.ts",
     "src/visual.ts"
   ]
 }

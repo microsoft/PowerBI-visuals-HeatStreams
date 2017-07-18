@@ -3,7 +3,7 @@
     "name": "gantt",
     "displayName": "gantt",
     "guid": "gantt74779FE5319F4655BE62C4C5FD0ABFB1",
-    "visualClassName": "Visual",
+    "visualClassName": "GanttVisual",
     "version": "1.0.0",
     "description": "",
     "supportUrl": "",

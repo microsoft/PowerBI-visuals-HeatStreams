@@ -25,24 +25,27 @@
  */
 module powerbi.extensibility.visual {
     "use strict";
-    import Category = essex.visuals.gantt.Category;
-    import GanttData = essex.visuals.gantt.GanttData;
     import GanttChart = essex.visuals.gantt.GanttChart;
+    import DataViewConverter = essex.visuals.gantt.dataconvert.DataViewConverter;
     const _ = window['_'];
 
-    export class Visual implements IVisual {
+    export class GanttVisual implements IVisual {
         private target: HTMLElement;
         private host: IVisualHost;
         private settings: VisualSettings;
         private selectionManager: ISelectionManager;
+        private converter: DataViewConverter;
         private scrollOffset: number = 0;
         private chart: GanttChart;
-        
+
         constructor(options: VisualConstructorOptions) {
             this.target = options.element;
             this.host = options.host;
             this.selectionManager = this.host.createSelectionManager();
             this.chart = new GanttChart();
+            this.converter = new DataViewConverter(
+                this.selectionManager,
+            );
         }
 
         public update(options: VisualUpdateOptions) {
@@ -50,7 +53,7 @@ module powerbi.extensibility.visual {
                 const dataView = _.get(options, 'dataViews[0]');
                 if (dataView) {
                     console.log('Visual Update', options, this.selectionManager.getSelectionIds());
-                    this.settings = Visual.parseSettings(dataView);                  
+                    this.settings = GanttVisual.parseSettings(dataView);
                     this.render(dataView);
                 }
             } catch (err) {
@@ -59,75 +62,29 @@ module powerbi.extensibility.visual {
         }
 
         private render(dv: DataView) {
-            const data = this.convertDataView(dv);
-            const selections = this.unpackSelections(dv);
+            const { scrollOffset, target: element } = this;
+            const data = this.converter.convertDataView(dv, this.settings.data);
+            const selections = this.converter.unpackSelectedCategories(dv);
             const options = {
                 ...this.settings.rendering,
-                element: this.target,
-                data, 
-                selections, 
-                scrollOffset: this.scrollOffset,                
+                ...this.settings.data,
+                element,
+                data,
+                selections,
+                scrollOffset,
             };
+
             this.chart.options = options;
             this.chart.onSelectionChanged((catIndex: number, multi: boolean) => this.handleCategoryClick(catIndex, multi, dv));
             this.chart.render();
         }
 
-        private handleCategoryClick(categoryIndex: number, multiselect: boolean, dv: DataView) {            
+        private handleCategoryClick(categoryIndex: number, multiselect: boolean, dv: DataView) {
             const selectionId = this.host.createSelectionIdBuilder()
                 .withCategory(_.get(dv, 'categorical.categories[0]', []), categoryIndex)
                 .createSelectionId();
-            this.selectionManager.select(selectionId, multiselect);            
-            this.render(dv);            
-        }
-
-        private unpackSelections(dv: DataView): {[key: string]: Category} {
-            const selection = this.selectionManager.getSelectionIds();            
-            const category = _.get(dv, 'categorical.categories[0]');
-            
-            if (!category) {
-                return {};
-            }
-
-            const selectedCategories = {};
-            selection.forEach(s => {
-                try {
-                    const selectorData = (<any>s).selector.data[0].expr;
-                    if (_.isEqual(selectorData.left.source, (<any>category).source.expr.source)) {
-                        selectedCategories[selectorData.right.value] = true;
-                    }
-                } catch (err) {
-                    console.log("Error Processing Selection", s, err);
-                }
-            });
-
-            return selectedCategories;
-        }
-
-        private convertDataView(dataView: DataView): GanttData {
-            const categories = _.get(dataView, 'categorical.categories[0].values', [])
-            .map((t, index) => ({
-                id: index,
-                name: (t || '').toString(),
-            }));
-
-            const values: essex.visuals.gantt.CategoryData[] = [];
-            dataView.categorical.values.forEach(topLevelValue => {
-                const position = topLevelValue.source.groupName as Date;
-                topLevelValue.values.forEach((nestedValue, index) => {
-                    if (nestedValue !== null && nestedValue !== 0) {
-                        values.push({
-                            category: index,
-                            position,
-                            value: +nestedValue,
-                        });
-                    }
-                });
-            });
-            return {
-                categories,
-                values,
-            };
+            this.selectionManager.select(selectionId, multiselect);
+            this.render(dv);
         }
 
         private static parseSettings(dataView: DataView): VisualSettings {

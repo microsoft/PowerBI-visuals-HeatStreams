@@ -27,13 +27,21 @@
 module powerbi.extensibility.visual {
   "use strict";
   import DataViewObjectsParser = powerbi.extensibility.utils.dataview.DataViewObjectsParser;
-  import VisualOptions = essex.visuals.gantt.VisualOptions;
+  import VisualRenderingOptions = essex.visuals.gantt.VisualRenderingOptions;
+  import VisualDataOptions = essex.visuals.gantt.VisualDataOptions;
 
   export class VisualSettings extends DataViewObjectsParser {
-    public rendering: VisualOptions = new RenderOptionsImpl();
+    public rendering: VisualRenderingOptions = new VisualRenderingOptionsImpl();
+    public data: VisualDataOptions = new VisualDataOptionsImpl();
   }
 
-  export class RenderOptionsImpl implements VisualOptions {
+  export class VisualDataOptionsImpl implements VisualDataOptions {
+    public dateAggregation = "daily";    
+    public valueMin = -1.0;
+    public valueMax = 1.0;
+  }
+
+  export class VisualRenderingOptionsImpl implements VisualRenderingOptions {
     public positiveColor = "#3494E6";
     public negativeColor = "#EC6EAD";
     public highlightColor = "gray";
@@ -41,8 +49,6 @@ module powerbi.extensibility.visual {
     public rowHeight = 15;
     public categoryTextPercent = 10;
     public axisHeight = 20;
-    public valueMin = -1.0;
-    public valueMax = 1.0;
     public chromaMin = 5;
     public chromaMax = 45;
     public luminanceMin = 35;

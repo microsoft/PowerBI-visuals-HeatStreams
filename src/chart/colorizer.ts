@@ -12,9 +12,9 @@ module essex.visuals.gantt {
         private valueMin: number;
         private valueMax: number;
 
-        constructor(private options: RenderOptions) {
+        constructor(private options: GanttOptions) {
             const {
-        negativeColor,
+                negativeColor,
                 positiveColor,
                 chromaMin,
                 chromaMax,
@@ -22,7 +22,7 @@ module essex.visuals.gantt {
                 luminanceMax,
                 valueMin,
                 valueMax,
-        } = this.options;
+            } = this.options;
             this.minHcl = d3.hcl(negativeColor);
             this.maxHcl = d3.hcl(positiveColor);
             this.valueMin = valueMin;

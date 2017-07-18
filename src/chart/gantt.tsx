@@ -6,15 +6,14 @@ module essex.visuals.gantt {
 
     export class GanttChart {
         public scrollPosition: number = 0;
-        private optionsInternal: RenderOptions;
+        private optionsInternal: GanttOptions;
         private categoryRebinder: any;
         private svgSelection: any;
         private colorizer: Colorizer;
         private selectionChangedHandler: SelectionChangedHandler;
-        private dataProcessor: DataProcessor = new DataProcessor();
         private renderedScale: {width: number, height: number};
 
-        public set options(value: RenderOptions) {
+        public set options(value: GanttOptions) {
             this.optionsInternal = value;
             this.colorizer = new Colorizer(value);
         }
@@ -119,19 +118,18 @@ module essex.visuals.gantt {
                 fontSize,
                 highlightColor,
                 rowHeight,
-                valueMax,
-                valueMin,
                 width, 
                 height,
                 element,
+                data,
             } = this;
             const isCategorySelected = (name: string) => !!this.selections[name];
             const categoryTextY = (d: IndexedCategory) => rowHeight * d.index + fontSize + categoryTextYPad;
-            const processed = this.dataProcessor.processData(this.options.data, [valueMin, valueMax]);
-            const xScale = this.getXScale(processed.positionDomain);
+            const xScale = this.getXScale(data.positionDomain);
             
             this.renderedScale = {width, height};
             element.innerHTML = "";
+
             D3Components.render(d3.select(element),
                 <svg
                     selectionRef={(e: any) => this.svgSelection = e}
@@ -144,7 +142,7 @@ module essex.visuals.gantt {
                     <g class="category-list">
                         <TimeAxis axisOffset={axisOffset} xScale={xScale} />
                         <Categories
-                            categoryValues={processed.categoryValues}
+                            categoryValues={data.categoryValues}
                             xScale={xScale}
                             colorizer={(value: number) => this.colorizer.color(value).toString()}
                             categories={categoriesInView}
@@ -187,7 +185,7 @@ module essex.visuals.gantt {
             this.selectionChangedHandler(catIndex, ctrl);
         }
 
-        private getXScale(domain: [Date, Date]): d3.ScaleTime<number, number> {
+        private getXScale(domain: GanttXDomain): d3.ScaleTime<number, number> {
             const range = [this.width * this.textPercent, this.width];
             return d3.scaleTime().domain(domain).range(range);
         }
