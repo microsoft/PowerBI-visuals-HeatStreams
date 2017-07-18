@@ -29,6 +29,7 @@ module powerbi.extensibility.visual {
   import DataViewObjectsParser = powerbi.extensibility.utils.dataview.DataViewObjectsParser;
   import VisualRenderingOptions = essex.visuals.gantt.VisualRenderingOptions;
   import VisualDataOptions = essex.visuals.gantt.VisualDataOptions;
+  import DateAggregation = essex.visuals.gantt.DateAggregation;
 
   export class VisualSettings extends DataViewObjectsParser {
     public rendering: VisualRenderingOptions = new VisualRenderingOptionsImpl();
@@ -36,7 +37,7 @@ module powerbi.extensibility.visual {
   }
 
   export class VisualDataOptionsImpl implements VisualDataOptions {
-    public dateAggregation = "daily";    
+    public dateAggregation: DateAggregation = "days";    
     public valueMin = -1.0;
     public valueMax = 1.0;
   }

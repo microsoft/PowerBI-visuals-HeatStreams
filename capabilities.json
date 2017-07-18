@@ -28,7 +28,7 @@
     ],
     "objects": {
         "data": {
-            "displayName": "Data Handling",
+            "displayName": "Data Settings",
             "properties": {
                 "dateAggregation": {
                     "displayName": "Date Aggregation",

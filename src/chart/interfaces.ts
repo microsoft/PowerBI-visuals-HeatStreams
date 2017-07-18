@@ -27,7 +27,7 @@ module essex.visuals.gantt {
     export interface VisualDataOptions {
         valueMin: number;
         valueMax: number;
-        dateAggregation: string;
+        dateAggregation: DateAggregation;
     }
 
     export interface VisualRenderingOptions {
@@ -67,4 +67,6 @@ module essex.visuals.gantt {
         selections: { [key: string]: Category };
         scrollOffset: number;
     }
+
+    export type DateAggregation = 'hours' | 'days' | 'months' | 'years';
 }

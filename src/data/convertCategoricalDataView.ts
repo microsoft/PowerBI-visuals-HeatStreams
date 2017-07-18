@@ -29,18 +29,10 @@ module essex.visuals.gantt.dataconvert {
     import CategoryData = essex.visuals.gantt.CategoryData;
     import CategoryDataMap = essex.visuals.gantt.CategoryDataMap;
     import CategoryValueMap = essex.visuals.gantt.CategoryValueMap;
-    import ValueSlice = essex.visuals.gantt.ValueSlice;
-    import GanttData = essex.visuals.gantt.GanttData;
     import GanttXDomain = essex.visuals.gantt.GanttXDomain;
-    import VisualDataOptions = essex.visuals.gantt.VisualDataOptions;
+    import DateAggregation = essex.visuals.gantt.DateAggregation;
     const _ = window['_'];
     const d3 = window['d3'];
-
-    function addDays(date: Date, days: number): Date {
-        const result = new Date(date);
-        result.setDate(result.getDate() + days);
-        return result;
-    }
 
     function determinePositionDomain(data: CategoryDataMap): GanttXDomain {
         const domainsByCategory = Object.keys(data).map(category => (
@@ -50,35 +42,104 @@ module essex.visuals.gantt.dataconvert {
         return d3.extent(mergedDomains) as GanttXDomain;
     }
 
-    function coalesceValueSlices(data: CategoryDataMap, valueDomain: [number, number]): CategoryValueMap {
-        return Object.keys(data)
-            .reduce((agg: CategoryValueMap, current: string) => {
-                // sort the category data ascending
-                const catData = data[current]
-                    .sort((a: any, b: any) => a.position.getTime() - b.position.getTime());
-                const bucketed = d3.scaleQuantile().domain(valueDomain).range([-1, -0.75, -0.5, -0.25, 0, 0.25, 0.5, 0.75, 1]);
-                const catVals: ValueSlice[] = [];
-                let currentSlice: ValueSlice;
-                const shouldDataBeInserted = (d: CategoryData) => (
-                    !currentSlice ||
-                    bucketed(d.value) !== currentSlice.value ||
-                    d.position.getTime() !== currentSlice.end.getTime()
-                );
-                catData.forEach((datum: CategoryData) => {
-                    if (shouldDataBeInserted(datum)) {
-                        currentSlice = {
-                            end: addDays(datum.position as Date, 1),
-                            start: datum.position as Date,
-                            value: bucketed(datum.value),
-                        };
-                        catVals.push(currentSlice);
-                    } else {
-                        currentSlice.end = addDays(datum.position as Date, 1);
+    function sliceStart(date: Date, dateAggregation: DateAggregation, positionDomain: [Date, Date]): Date {
+        const result = new Date(date);
+        result.setUTCMilliseconds(0);
+        result.setUTCSeconds(0);
+        result.setUTCMinutes(0);
+        
+        if (dateAggregation === 'days') {
+            result.setUTCHours(0);
+        } else if (dateAggregation === 'months') {
+            result.setUTCHours(0);
+            result.setUTCDate(0);
+        } else if (dateAggregation === 'years') {
+            result.setUTCHours(0);
+            result.setUTCDate(0);
+            result.setUTCMonth(0);
+        }
+
+        if (result.getTime() < positionDomain[0].getTime()) {
+            return positionDomain[0];
+        }
+        return result;
+    }
+
+    function addHours(date: Date, num: number): Date {
+        const result = new Date(date);
+        result.setUTCHours(result.getUTCHours() + num);
+        return result;
+    }
+
+    function addDays(date: Date, num: number): Date {
+        const result = new Date(date);
+        result.setUTCDate(result.getUTCDate() + num);
+        return result;
+    }
+
+    function addMonths(date: Date, num: number): Date {
+        const result = new Date(date);
+        result.setUTCMonth(result.getUTCMonth() + num);
+        return result;
+    }
+
+    function addYears(date: Date, num: number): Date {
+        const result = new Date(date);
+        result.setUTCFullYear(result.getUTCFullYear() + num);
+        return result;
+    }
+    
+    function sliceEnd(start: Date, dateAggregation: DateAggregation): Date {
+        if (dateAggregation === 'hours') {
+            return addHours(start, 1);
+        } else if (dateAggregation === 'days') {
+            return addDays(start, 1);
+        } else if (dateAggregation === 'months') {
+            return addMonths(start, 1);
+        } else if (dateAggregation === 'years') {
+            return addYears(start, 1);
+        } else {
+            throw new Error('unknown aggregation: ' + dateAggregation);
+        }
+    }
+
+    function coalesceValueSlices(
+        data: CategoryDataMap, 
+        valueDomain: [number, number],
+        positionDomain: GanttXDomain,
+        dateAggregation: DateAggregation
+    ): CategoryValueMap {
+        const bucketed = d3.scaleQuantile().domain(valueDomain).range([-1, -0.75, -0.5, -0.25, 0, 0.25, 0.5, 0.75, 1]);
+
+        const categoryIds = Object.keys(data);
+        return categoryIds.reduce((agg: CategoryValueMap, current: string) => {
+            // sort the category data ascending
+            const categoryData = data[current];
+            
+            // Bucket out the values by their aggregated position (within day, within year, etc..)
+            const valuePositions: {[dateCode: string]: number[]} = {};
+            categoryData.forEach(cd => {
+                if (cd.value !== undefined && cd.value !== null) {
+                    const start = sliceStart(cd.position, dateAggregation, positionDomain as [Date, Date]);
+                    const utc = start.toUTCString();
+                    if (!valuePositions[utc]) {
+                        valuePositions[utc] = [];
                     }
-                });
-                agg[current] = catVals;
-                return agg;
-            }, {} as CategoryValueMap) as CategoryValueMap;
+                    valuePositions[utc].push(cd.value);
+                }
+            });
+
+            const slices = Object.keys(valuePositions).map(vp => {
+                const start = new Date(vp);
+                return {
+                    start,
+                    end: sliceEnd(start, dateAggregation),
+                    value: bucketed(d3.mean(valuePositions[vp])),
+                };
+            });
+            agg[current] = slices;
+            return agg;
+        }, {} as CategoryValueMap) as CategoryValueMap;
     }
 
     export function convertCategoricalDataView(dataView: DataView, options: VisualDataOptions): GanttData {
@@ -100,7 +161,12 @@ module essex.visuals.gantt.dataconvert {
         });
 
         const positionDomain = determinePositionDomain(categoryData);
-        const categoryValues = coalesceValueSlices(categoryData, [options.valueMin, options.valueMax]);
+        const categoryValues = coalesceValueSlices(
+            categoryData, 
+            [options.valueMin, options.valueMax], 
+            positionDomain, 
+            options.dateAggregation,
+        );
         return {
             categories,
             categoryData,

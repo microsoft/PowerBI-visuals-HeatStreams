@@ -44,6 +44,7 @@ module essex.visuals.gantt {
         } = props;
 
         const renderProps = {
+            'data-value': (d: ValueSlice) => d.value,
             fill: (d: ValueSlice) => colorizer(d.value),
             height: rowHeight,
             width: (d: ValueSlice) => xScale(d.end) - xScale(d.start),
