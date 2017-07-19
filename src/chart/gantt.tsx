@@ -181,8 +181,10 @@ module essex.visuals.gantt {
             const pos = d3.mouse(this.svgSelection.node());
             const ctrl = d3.event.ctrlKey;
             const category = this.categoriesInView[Math.floor(pos[1] / this.rowHeight)];
-            const { id: catIndex } = category;
-            this.selectionChangedHandler(catIndex, ctrl);
+            if (category) {
+                const { id: catIndex } = category;
+                this.selectionChangedHandler(catIndex, ctrl);
+            }
         }
 
         private getXScale(domain: GanttXDomain): d3.ScaleTime<number, number> {
