@@ -40,6 +40,7 @@ module powerbi.extensibility.visual {
     public dateAggregation: DateAggregation = "days";    
     public valueMin = -1.0;
     public valueMax = 1.0;
+    public isDivergent = true;
   }
 
   export class VisualRenderingOptionsImpl implements VisualRenderingOptions {
@@ -54,5 +55,6 @@ module powerbi.extensibility.visual {
     public chromaMax = 45;
     public luminanceMin = 35;
     public luminanceMax = 100; 
+    public rowGap = true;
   }
 }

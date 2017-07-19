@@ -66,6 +66,10 @@ module essex.visuals.gantt {
             return this.options.data;
         }
 
+        private get rowGap() {
+            return this.options.rowGap;
+        }
+
         private get highlightColor() {
             return this.options.highlightColor;
         }
@@ -122,6 +126,7 @@ module essex.visuals.gantt {
                 height,
                 element,
                 data,
+                rowGap,
             } = this;
             const isCategorySelected = (name: string) => !!this.selections[name];
             const categoryTextY = (d: IndexedCategory) => rowHeight * d.index + fontSize + categoryTextYPad;
@@ -155,6 +160,7 @@ module essex.visuals.gantt {
                             categoryTextY={categoryTextY}
                             width={width}
                             rebind={(r: any) => this.categoryRebinder = r}
+                            rowGap={rowGap}
                         />
                     </g>
                 </svg>,

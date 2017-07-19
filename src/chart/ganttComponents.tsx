@@ -29,6 +29,7 @@ module essex.visuals.gantt {
         xScale: d3.ScaleTime<number, number>;
         rowHeight: number;
         colorizer: (value: number) => string;
+        rowGap: boolean;
     }
 
     export interface ValuesProps extends ValueProps {
@@ -41,12 +42,15 @@ module essex.visuals.gantt {
             colorizer,
             xScale,
             rowHeight,
+            rowGap,
         } = props;
 
         const renderProps = {
             'data-value': (d: ValueSlice) => d.value,
             fill: (d: ValueSlice) => colorizer(d.value),
-            height: rowHeight,
+            'shape-rendering': "crispEdges",
+            stroke: 'none',
+            height: rowGap ? rowHeight - 1 : rowHeight,
             width: (d: ValueSlice) => xScale(d.end) - xScale(d.start),
             x: (d: ValueSlice) => xScale(d.start),
             y: (d: ValueSlice, i: number, e: any) => {
@@ -74,10 +78,10 @@ module essex.visuals.gantt {
     }
 
     export const CategoryText = ({
-    fontSize,
+        fontSize,
         isCategorySelected,
         categoryTextY,
-    }: any) => {
+    }: CategoryProps) => {
         const renderProps = {
             'font-size': `${fontSize}px`,
             'font-weight': (d: IndexedCategory) => isCategorySelected(d.name) ? 'bold' : 'normal',
@@ -94,11 +98,11 @@ module essex.visuals.gantt {
     };
 
     export const CategoryView = ({
-    rowHeight,
+        rowHeight,
         highlightColor,
         width,
         isCategorySelected,
-    }: any) => {
+    }: CategoryProps) => {
         const renderProps = {
             'height': rowHeight,
             'stroke': highlightColor,
@@ -116,11 +120,11 @@ module essex.visuals.gantt {
     };
 
     export const CategoryChart = ({
-    rowHeight,
+        rowHeight,
         width,
         chartPercent,
         textPercent,
-    }: any) => {
+    }: CategoryProps) => {
         const renderProps = {
             height: rowHeight,
             width: Math.floor(width * chartPercent) - 1,
@@ -149,6 +153,7 @@ module essex.visuals.gantt {
         isCategorySelected: (category: string) => boolean;
         categoryTextY: (d: Category, index: number) => number;
         rebind: any;
+        rowGap: boolean;
     }
 
     export interface CategoriesProps extends CategoryProps {

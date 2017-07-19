@@ -27,6 +27,7 @@ module essex.visuals.gantt {
     export interface VisualDataOptions {
         valueMin: number;
         valueMax: number;
+        isDivergent: boolean;
         dateAggregation: DateAggregation;
     }
 
@@ -42,6 +43,7 @@ module essex.visuals.gantt {
         chromaMax: number;
         luminanceMin: number;
         luminanceMax: number;
+        rowGap: boolean;
     }
 
     export interface GanttChartProps {

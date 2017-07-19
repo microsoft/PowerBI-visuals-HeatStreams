@@ -52,6 +52,12 @@
                     "type": {
                         "numeric": true
                     }
+                },
+                "isDivergent": {
+                    "displayName": "Divergent?",
+                    "type": {
+                        "bool": true
+                    }   
                 }
             }
         },
@@ -136,6 +142,12 @@
                     "displayName": "Luminance Max",
                     "type": {
                         "numeric": true
+                    }
+                },
+                "rowGap": {
+                    "displayName": "Row Gap",
+                    "type": {
+                        "bool": true
                     }
                 }
             }
