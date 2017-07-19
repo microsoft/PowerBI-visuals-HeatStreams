@@ -52,11 +52,11 @@ module essex.visuals.gantt.dataconvert {
             result.setUTCHours(0);
         } else if (dateAggregation === 'months') {
             result.setUTCHours(0);
-            result.setUTCDate(0);
+            result.setUTCDate(1);
         } else if (dateAggregation === 'years') {
             result.setUTCHours(0);
-            result.setUTCDate(0);
-            result.setUTCMonth(0);
+            result.setUTCDate(1);
+            result.setUTCMonth(1);
         }
 
         if (result.getTime() < positionDomain[0].getTime()) {
