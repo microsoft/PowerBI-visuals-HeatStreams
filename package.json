@@ -1,5 +1,9 @@
 {
-  "name": "visual",
+  "name": "powerbi-visual-gantt",
+  "scripts": {
+    "start": "pbiviz start",
+    "package": "pbiviz package"
+  },
   "dependencies": {
     "@types/d3": "^4.9.0",
     "d3": "^4.9.1",

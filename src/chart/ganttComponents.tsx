@@ -56,8 +56,12 @@ module essex.visuals.gantt {
         };
         return (
             <Select all selector='rect.value-run' data={(d: IndexedCategory) => categoryValues[d.id]}>
-                <Enter append="rect" class="value-run" {...renderProps} />
-                <Update {...renderProps} />
+                <Enter append="rect" class="value-run" {...renderProps}>
+                    <title>{d => d.value.toFixed(2)}</title>
+                </Enter>
+                <Update {...renderProps}>
+                    <title>{d => d.value.toFixed(2)}</title>
+                </Update>
                 <Exit remove />
             </Select>
         );
