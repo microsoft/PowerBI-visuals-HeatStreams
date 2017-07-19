@@ -50,12 +50,12 @@ module essex.visuals.gantt {
             fill: (d: ValueSlice) => colorizer(d.value),
             'shape-rendering': "crispEdges",
             stroke: 'none',
-            height: rowGap ? rowHeight - 1 : rowHeight,
+            height: rowHeight,
             width: (d: ValueSlice) => xScale(d.end) - xScale(d.start),
             x: (d: ValueSlice) => xScale(d.start),
             y: (d: ValueSlice, i: number, e: any) => {
                 const catIndex = e[i].parentNode.__data__.index;
-                return rowHeight * catIndex;
+                return rowHeight * catIndex + (rowGap ? catIndex : 0);
             },
         };
         return (
@@ -86,6 +86,7 @@ module essex.visuals.gantt {
             'font-size': `${fontSize}px`,
             'font-weight': (d: IndexedCategory) => isCategorySelected(d.name) ? 'bold' : 'normal',
             'text': (d: Category) => d.name,
+            'x': 2,
             'y': categoryTextY,
         };
         return (
@@ -102,13 +103,17 @@ module essex.visuals.gantt {
         highlightColor,
         width,
         isCategorySelected,
+        rowGap,
     }: CategoryProps) => {
         const renderProps = {
             'height': rowHeight,
+            'shape-rendering': "geometricPrecision",
             'stroke': highlightColor,
             'stroke-width': (d: IndexedCategory) => isCategorySelected(d.name) ? 1 : 0,
-            'width': width - 2, // reserve 2px for border select
-            'y': (d: IndexedCategory) => rowHeight * d.index,
+            'width': width - 2,
+            'x': 1,
+            'y': (d: IndexedCategory) => rowHeight * d.index + (rowGap ? d.index : 0),
+            'z-index': 1,
         };
         return (
             <Select all selector="rect.category-view" data={(d: Category) => [d]}>
@@ -124,12 +129,13 @@ module essex.visuals.gantt {
         width,
         chartPercent,
         textPercent,
+        rowGap,
     }: CategoryProps) => {
         const renderProps = {
             height: rowHeight,
-            width: Math.floor(width * chartPercent) - 1,
+            width: Math.floor(width * chartPercent),
             x: width * textPercent,
-            y: (d: IndexedCategory) => rowHeight * d.index,
+            y: (d: IndexedCategory) => rowHeight * d.index + (rowGap ? d.index : 0),
         };
         return (
             <Select all selector="rect.category-chart" data={(d: Category) => [d]}>
@@ -163,45 +169,33 @@ module essex.visuals.gantt {
     export const Categories = (props: CategoriesProps) => {
         const chartContent = (
             <Grouping>
-                <CategoryView
-                    rowHeight={props.rowHeight}
-                    highlightColor={props.highlightColor}
-                    width={props.width}
-                    isCategorySelected={props.isCategorySelected}
-                />
-                <CategoryText
-                    fontSize={props.fontSize}
-                    isCategorySelected={props.isCategorySelected}
-                    categoryTextY={props.categoryTextY}
-                />
-                <CategoryChart
-                    rowHeight={props.rowHeight}
-                    width={props.width}
-                    chartPercent={props.chartPercent}
-                    textPercent={props.textPercent}
-                />
+                <CategoryText {...props} />
+                <CategoryChart {...props} />
                 <Values {...props} />
+                <CategoryView {...props} />
             </Grouping>
         );
         return (
-            <Select
-                all
-                selector=".category"
-                selectionRef="categories"
-                data={props.categories}
-                data-key={(d: Category) => d.name}
-                rebind={props.rebind}
-            >
-                <Enter>
-                    <g selectionRef="categoryGroup" class="category" each={(d: IndexedCategory, i: number) => d.index = i}>
+            <Grouping>
+                <Select
+                    all
+                    selector=".category"
+                    selectionRef="categories"
+                    data={props.categories}
+                    data-key={(d: Category) => d.name}
+                    rebind={props.rebind}
+                >
+                    <Enter>
+                        <g selectionRef="categoryGroup" class="category" each={(d: IndexedCategory, i: number) => d.index = i}>
+                            {chartContent}
+                        </g>
+                    </Enter>
+                    <Update each={(d: IndexedCategory, i: number) => d.index = i}>
                         {chartContent}
-                    </g>
-                </Enter>
-                <Update each={(d: IndexedCategory, i: number) => d.index = i}>
-                    {chartContent}
-                </Update>
-                <Exit remove />
-            </Select>
+                    </Update>
+                    <Exit remove />
+                </Select>
+            </Grouping>
         );
     };
 }

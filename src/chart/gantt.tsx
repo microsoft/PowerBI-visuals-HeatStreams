@@ -80,7 +80,9 @@ module essex.visuals.gantt {
         }
 
         private get maxCategories(): number {
-            return Math.floor((this.height - this.axisHeight) / this.rowHeight);
+            const { axisHeight, height, rowGap, rowHeight } = this;
+            const gap = rowGap ? 1 : 0;
+            return Math.floor((height - axisHeight) / (rowHeight + gap));
         }
 
         private get categoryTextYPad(): number {
@@ -129,7 +131,7 @@ module essex.visuals.gantt {
                 rowGap,
             } = this;
             const isCategorySelected = (name: string) => !!this.selections[name];
-            const categoryTextY = (d: IndexedCategory) => rowHeight * d.index + fontSize + categoryTextYPad;
+            const categoryTextY = (d: IndexedCategory) => (rowHeight * d.index) + (rowGap ? d.index : 0) + fontSize + categoryTextYPad;
             const xScale = this.getXScale(data.positionDomain);
             
             this.renderedScale = {width, height};
@@ -186,7 +188,8 @@ module essex.visuals.gantt {
         private onClick() {
             const pos = d3.mouse(this.svgSelection.node());
             const ctrl = d3.event.ctrlKey;
-            const category = this.categoriesInView[Math.floor(pos[1] / this.rowHeight)];
+            const gap = this.rowGap ? 1 : 0;
+            const category = this.categoriesInView[Math.floor(pos[1] / (this.rowHeight + gap))];
             if (category) {
                 const { id: catIndex } = category;
                 this.selectionChangedHandler(catIndex, ctrl);
