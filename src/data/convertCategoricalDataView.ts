@@ -109,8 +109,6 @@ module essex.visuals.gantt.dataconvert {
         positionDomain: GanttXDomain,
         dateAggregation: DateAggregation
     ): CategoryValueMap {
-        const bucketed = d3.scaleQuantile().domain(valueDomain).range([-1, -0.75, -0.5, -0.25, 0, 0.25, 0.5, 0.75, 1]);
-
         const categoryIds = Object.keys(data);
         return categoryIds.reduce((agg: CategoryValueMap, current: string) => {
             // sort the category data ascending
@@ -134,7 +132,7 @@ module essex.visuals.gantt.dataconvert {
                 return {
                     start,
                     end: sliceEnd(start, dateAggregation),
-                    value: bucketed(d3.mean(valuePositions[vp])),
+                    value: d3.mean(valuePositions[vp]),
                 };
             });
             agg[current] = slices;
