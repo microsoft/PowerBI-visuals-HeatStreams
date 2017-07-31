@@ -1,7 +1,5 @@
 module essex.visuals.gantt {
     const d3: any = window['d3'];
-    const D3Components: any = window['D3Components'];
-
     type SelectionChangedHandler = (category: number, multiselect: boolean) => void;
 
     export class GanttChart {
@@ -137,7 +135,7 @@ module essex.visuals.gantt {
             this.renderedScale = {width, height};
             element.innerHTML = "";
 
-            D3Components.render(d3.select(element),
+            d3.jsx.render(d3.select(element),
                 <svg
                     selectionRef={(e: any) => this.svgSelection = e}
                     height={height} width={width}

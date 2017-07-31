@@ -2,7 +2,7 @@
   "compilerOptions": {
     "allowJs": true,
     "jsx": "react",
-    "jsxFactory": "D3Components.createElement",
+    "jsxFactory": "d3.jsx.createElement",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "target": "ES5",

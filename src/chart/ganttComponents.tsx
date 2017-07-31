@@ -1,9 +1,7 @@
 module essex.visuals.gantt {
     const d3: any = window['d3'];
-    const D3Components: any = window['D3Components'];
-
-    const { Select, Enter, Exit, Update, Grouping } = D3Components;
-
+    const { Select, Enter, Exit, Update, Grouping } = d3.jsx;
+    
     export interface IndexedCategory extends Category {
         index: number;
     }
