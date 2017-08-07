@@ -72,7 +72,7 @@ module essex.visuals.gantt {
 
         public color(value: number): d3.HCLColor {
             const sanitized = this.valueScale(value);
-            const h = this.hue(sanitized);
+            const h = this.hue(value);
             const c = this.chroma(sanitized);
             const l = this.luminance(sanitized);
             return d3.hcl(h, c, l);
