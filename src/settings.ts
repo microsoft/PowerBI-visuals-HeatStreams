@@ -30,6 +30,7 @@ module powerbi.extensibility.visual {
   import VisualRenderingOptions = essex.visuals.gantt.VisualRenderingOptions;
   import VisualDataOptions = essex.visuals.gantt.VisualDataOptions;
   import DateAggregation = essex.visuals.gantt.DateAggregation;
+  import PositionDomainType = essex.visuals.gantt.PositionDomainType;
 
   export class VisualSettings extends DataViewObjectsParser {
     public rendering: VisualRenderingOptions = new VisualRenderingOptionsImpl();
@@ -38,9 +39,11 @@ module powerbi.extensibility.visual {
 
   export class VisualDataOptionsImpl implements VisualDataOptions {
     public dateAggregation: DateAggregation = "days";    
-    public valueMin = -1.0;
-    public valueMax = 1.0;
+    public valueMin = undefined;
+    public valueMax = undefined;
     public isDivergent = true;
+    public positionDomainType: PositionDomainType = 'date';
+    public isLogScale: boolean = false;
   }
 
   export class VisualRenderingOptionsImpl implements VisualRenderingOptions {

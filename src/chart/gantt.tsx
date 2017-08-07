@@ -1,6 +1,7 @@
 module essex.visuals.gantt {
     const d3: any = window['d3'];
     type SelectionChangedHandler = (category: number, multiselect: boolean) => void;
+    import dateSliceEnd = essex.visuals.gantt.dataconvert.dateSliceEnd;
 
     export class GanttChart {
         public scrollPosition: number = 0;
@@ -13,7 +14,13 @@ module essex.visuals.gantt {
 
         public set options(value: GanttOptions) {
             this.optionsInternal = value;
-            this.colorizer = new Colorizer(value);
+            this.colorizer = new Colorizer(
+                value, 
+                this.valueMin, 
+                this.valueMax, 
+                this.options.isDivergent,
+                this.options.isLogScale,
+            );
         }
 
         public get options() {
@@ -33,11 +40,13 @@ module essex.visuals.gantt {
         }
 
         private get valueMin(): number {
-            return this.options.valueMin;
+            const valueMin = this.options.valueMin;
+            return (valueMin !== null && valueMin != undefined) ? valueMin : this.options.data.valueDomain[0];
         }
 
         private get valueMax(): number {
-            return this.options.valueMax;
+            const valueMax = this.options.valueMax;
+            return (valueMax !== null && valueMax != undefined) ? valueMax : this.options.data.valueDomain[1];
         }
 
         private get rowHeight(): number {
@@ -131,6 +140,7 @@ module essex.visuals.gantt {
             const isCategorySelected = (name: string) => !!this.selections[name];
             const categoryTextY = (d: IndexedCategory) => (rowHeight * d.index) + (rowGap ? d.index : 0) + fontSize + categoryTextYPad;
             const xScale = this.getXScale(data.positionDomain);
+            const sliceWidth = this.sliceWidth(xScale);
             
             this.renderedScale = {width, height};
             element.innerHTML = "";
@@ -161,10 +171,18 @@ module essex.visuals.gantt {
                             width={width}
                             rebind={(r: any) => this.categoryRebinder = r}
                             rowGap={rowGap}
+                            sliceWidth={sliceWidth}
                         />
                     </g>
                 </svg>,
             );
+        }
+
+        private sliceWidth(xScale: (input: number | Date) => number): number {
+            const start = this.data.positionDomain[0];
+            const { dateAggregation } = this.options;
+            const end = (typeof start === 'number') ? (start as number) + 1 : dateSliceEnd(start, dateAggregation);
+            return xScale(end) - xScale(start);
         }
 
         private rerender() {
@@ -196,7 +214,11 @@ module essex.visuals.gantt {
 
         private getXScale(domain: GanttXDomain): d3.ScaleTime<number, number> {
             const range = [this.width * this.textPercent, this.width];
-            return d3.scaleTime().domain(domain).range(range);
+            if (this.options.positionDomainType === 'date') {
+                return d3.scaleTime().domain(domain).range(range);
+            } else {
+                return d3.scaleLinear().domain(domain).range(range);
+            }
         }
     }
 }

@@ -16,11 +16,11 @@ module essex.visuals.gantt {
         categoryData: CategoryDataMap;    
         categoryValues: CategoryValueMap;
         positionDomain: GanttXDomain;
+        valueDomain: [number, number];
     }
 
     export interface ValueSlice {
-        start: Date;
-        end: Date;
+        start: Date | number;
         value: number;
     }
 
@@ -29,7 +29,11 @@ module essex.visuals.gantt {
         valueMax: number;
         isDivergent: boolean;
         dateAggregation: DateAggregation;
+        positionDomainType: PositionDomainType;
+        isLogScale: boolean;
     }
+
+    export type PositionDomainType = 'date' | 'number';
 
     export interface VisualRenderingOptions {
         positiveColor: string;

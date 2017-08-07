@@ -65,52 +65,17 @@ module essex.visuals.gantt.dataconvert {
         return result;
     }
 
-    function addHours(date: Date, num: number): Date {
-        const result = new Date(date);
-        result.setUTCHours(result.getUTCHours() + num);
-        return result;
-    }
-
-    function addDays(date: Date, num: number): Date {
-        const result = new Date(date);
-        result.setUTCDate(result.getUTCDate() + num);
-        return result;
-    }
-
-    function addMonths(date: Date, num: number): Date {
-        const result = new Date(date);
-        result.setUTCMonth(result.getUTCMonth() + num);
-        return result;
-    }
-
-    function addYears(date: Date, num: number): Date {
-        const result = new Date(date);
-        result.setUTCFullYear(result.getUTCFullYear() + num);
-        return result;
-    }
-    
-    function sliceEnd(start: Date, dateAggregation: DateAggregation): Date {
-        if (dateAggregation === 'hours') {
-            return addHours(start, 1);
-        } else if (dateAggregation === 'days') {
-            return addDays(start, 1);
-        } else if (dateAggregation === 'months') {
-            return addMonths(start, 1);
-        } else if (dateAggregation === 'years') {
-            return addYears(start, 1);
-        } else {
-            throw new Error('unknown aggregation: ' + dateAggregation);
-        }
-    }
-
     function coalesceValueSlices(
         data: CategoryDataMap, 
-        valueDomain: [number, number],
         positionDomain: GanttXDomain,
+        domainType: PositionDomainType,
         dateAggregation: DateAggregation
-    ): CategoryValueMap {
+    ) {
+        let valueMin: number = undefined;
+        let valueMax: number = undefined;
+
         const categoryIds = Object.keys(data);
-        return categoryIds.reduce((agg: CategoryValueMap, current: string) => {
+        const result = categoryIds.reduce((agg: CategoryValueMap, current: string) => {
             // sort the category data ascending
             const categoryData = data[current];
             
@@ -118,26 +83,37 @@ module essex.visuals.gantt.dataconvert {
             const valuePositions: {[dateCode: string]: number[]} = {};
             categoryData.forEach(cd => {
                 if (cd.value !== undefined && cd.value !== null) {
-                    const start = sliceStart(cd.position, dateAggregation, positionDomain as [Date, Date]);
-                    const utc = start.toUTCString();
-                    if (!valuePositions[utc]) {
-                        valuePositions[utc] = [];
+                    const start = domainType === 'date' ? 
+                        sliceStart(cd.position, dateAggregation, positionDomain as [Date, Date]).toUTCString() :
+                        `${cd.position}`;
+                    if (!valuePositions[start]) {
+                        valuePositions[start] = [];
                     }
-                    valuePositions[utc].push(cd.value);
+                    if (valueMin === undefined || cd.value < valueMin) {
+                        valueMin = cd.value;
+                    }
+                    if (valueMax === undefined || cd.value > valueMax) {
+                        valueMax = cd.value;
+                    }
+                    valuePositions[start].push(cd.value);
                 }
             });
 
             const slices = Object.keys(valuePositions).map(vp => {
-                const start = new Date(vp);
+                const start = domainType === 'date' ? new Date(vp) : parseInt(vp, 10);
                 return {
                     start,
-                    end: sliceEnd(start, dateAggregation),
                     value: d3.mean(valuePositions[vp]),
                 };
             });
             agg[current] = slices;
             return agg;
         }, {} as CategoryValueMap) as CategoryValueMap;
+
+        return { 
+            categoryValues: result, 
+            valueDomain: [valueMin, valueMax] as [number, number],
+        };
     }
 
     export function convertCategoricalDataView(dataView: DataView, options: VisualDataOptions): GanttData {
@@ -159,17 +135,19 @@ module essex.visuals.gantt.dataconvert {
         });
 
         const positionDomain = determinePositionDomain(categoryData);
-        const categoryValues = coalesceValueSlices(
+        const valueSlices = coalesceValueSlices(
             categoryData, 
-            [options.valueMin, options.valueMax], 
-            positionDomain, 
+            positionDomain,
+            options.positionDomainType,
             options.dateAggregation,
         );
-        return {
+        const result = {
             categories,
             categoryData,
-            categoryValues,
+            ...valueSlices,
             positionDomain,
         };
+        console.log("Data Conversion Result", result);
+        return result;
     }
 }

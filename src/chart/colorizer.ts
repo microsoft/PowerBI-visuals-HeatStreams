@@ -1,25 +1,16 @@
 module essex.visuals.gantt {
     const d3: any = window['d3'];
-
+    const VALUE_DOMAIN = [0.1, 1000];
+    const DIVERGENT_VALUE_DOMAIN = [0.1, 500, 1000];
+    
     // NOTE: The coloring uses the "Diverging" HCL Pattern described here
     // http://hclwizard.org:64230/hclwizard/
     export class Colorizer {
         private minHcl: d3.HCLColor;
         private maxHcl: d3.HCLColor;
+        private valueScale: d3.ScaleLinear<number, number>;
         private chroma: d3.ScaleLinear<number, number>;
         private luminance: d3.ScaleLinear<number, number>;
-
-        private get isDivergent(): boolean {
-            return this.options.isDivergent;
-        }
-
-        private get valueMin(): number {
-            return this.options.valueMin;
-        }
-
-        private get valueMax(): number {
-            return this.options.valueMax;
-        }
 
         private get valueMid(): number {
             return (this.valueMax + this.valueMin) / 2;
@@ -42,26 +33,32 @@ module essex.visuals.gantt {
         }
 
         private getChromaScale() {
-            const { isDivergent, valueMin, valueMid, valueMax, chromaMin, chromaMax } = this;
-            const domain = isDivergent ? [valueMin, valueMid, valueMax] : [valueMin, valueMax];
+            const { isDivergent, chromaMin, chromaMax } = this;
+            const domain = isDivergent ? DIVERGENT_VALUE_DOMAIN : VALUE_DOMAIN;
             const range = isDivergent ? [chromaMax, chromaMin, chromaMax] : [chromaMin, chromaMax];
-            return d3
-                .scaleLinear()
+            return ((this.isLogScaled ? d3.scaleLog() : d3.scaleLinear())
                 .domain(domain)
-                .range(range);
+                .range(range)
+                .clamp(true));
         }
 
         private getLuminanceScale() {
-            const { isDivergent, valueMin, valueMid, valueMax, luminanceMin, luminanceMax } = this;
-            const domain = isDivergent ? [valueMin, valueMid, valueMax] : [valueMin, valueMax];
+            const { isDivergent, luminanceMin, luminanceMax } = this;
+            const domain = isDivergent ? DIVERGENT_VALUE_DOMAIN : VALUE_DOMAIN;
             const range = isDivergent ? [luminanceMin, luminanceMax, luminanceMin] : [luminanceMax, luminanceMin];
-            return d3
-                .scaleLinear()
+            return ((this.isLogScaled ? d3.scaleLog() : d3.scaleLinear())
                 .domain(domain)
-                .range(range);
+                .range(range)
+                .clamp(true));
         }
 
-        constructor(private options: GanttOptions) {
+        constructor(
+            private options: VisualRenderingOptions, 
+            private valueMin, 
+            private valueMax, 
+            private isDivergent,
+            private isLogScaled,
+        ) {
             const {
                 negativeColor,
                 positiveColor,
@@ -70,10 +67,11 @@ module essex.visuals.gantt {
             this.maxHcl = d3.hcl(positiveColor);
             this.chroma = this.getChromaScale();
             this.luminance = this.getLuminanceScale();
+            this.valueScale = d3.scaleLinear().domain([valueMin, valueMax]).range([0.1, 1000]).clamp(true);
         }
 
         public color(value: number): d3.HCLColor {
-            const sanitized = this.sanitizeValue(value);
+            const sanitized = this.valueScale(value);
             const h = this.hue(sanitized);
             const c = this.chroma(sanitized);
             const l = this.luminance(sanitized);
@@ -86,10 +84,6 @@ module essex.visuals.gantt {
             } else {
                 return value < this.valueMid ? this.minHcl.h : this.maxHcl.h;
             }
-        }
-
-        private sanitizeValue(value: number) {
-            return Math.max(this.valueMin, Math.min(this.valueMax, value));
         }
     }
 }

@@ -30,8 +30,26 @@
         "data": {
             "displayName": "Data Settings",
             "properties": {
+                "positionDomainType": {
+                    "displayName": "Domain",
+                    "description": "The type of values that exist in the domain.",
+                    "type": {
+                        "enumeration": [ 
+                            { "displayName": "Dates", "value": "date" },
+                            { "displayName": "Numbers", "value": "number" }                            
+                        ]
+                    }
+                },
+                "isLogScale": {
+                    "displayName": "Log-Scale",
+                    "description": "Apply a log-scale to the data coloration.",
+                    "type": {
+                        "bool": true
+                    }
+                },
                 "dateAggregation": {
-                    "displayName": "Date Aggregation",
+                    "displayName": "Date Aggregate",
+                    "description": "When a date domain is used, this specifies date bucket granularity.",
                     "type": {
                         "enumeration": [
                             { "displayName": "Hourly", "value": "hours" },
@@ -43,18 +61,21 @@
                 },
                 "valueMin": {
                     "displayName": "Min Value",
+                    "description": "The minimum value, inferred if not present",
                     "type": {
                         "numeric": true
                     }
                 },
                 "valueMax": {
                     "displayName": "Max Value",
+                    "description": "The maximum value, inferred if not present",
                     "type": {
                         "numeric": true
                     }
                 },
                 "isDivergent": {
-                    "displayName": "Divergent?",
+                    "displayName": "Divergent",
+                    "description": "Is data divergent? This changes the color scheme. Color polarity switches at the midpoint between max and min values.",
                     "type": {
                         "bool": true
                     }   
@@ -62,10 +83,11 @@
             }
         },
         "rendering": {
-            "displayName": "Customize View",
+            "displayName": "View Settings",
             "properties": {
                 "positiveColor": {
                     "displayName": "Positive color",
+                    "description": "The positive color value. This will be normalized using a perceputally equivalent hue.",
                     "type": {
                         "fill": {
                             "solid": {
@@ -76,6 +98,7 @@
                 },
                 "negativeColor": {
                     "displayName": "Negative color",
+                    "description": "The negative color value. This will be normalized using a perceputally equivalent hue.",
                     "type": {
                         "fill": {
                             "solid": {
@@ -86,6 +109,7 @@
                 },
                 "highlightColor": {
                     "displayName": "Highlight color",
+                    "description": "The selected category highlight color value",
                     "type": {
                         "fill": {
                             "solid": {
@@ -96,6 +120,7 @@
                 },
                 "fontSize": {
                     "displayName": "Text Size",
+                    "description": "The category text size",
                     "type": {
                         "formatting": {
                             "fontSize": true
@@ -104,48 +129,28 @@
                 },
                 "rowHeight": {
                     "displayName": "Row Height",
+                    "description": "The height allocated per category row",
                     "type": {
                         "numeric": true
                     }
                 },
                 "categoryTextPercent": {
-                    "displayName": "Category Text % Size",
+                    "displayName": "Category Text Percent",
+                    "description": "Percentage of the visual to allocate to category text",
                     "type":{
                         "numeric": true
                     }
                 },
                 "axisHeight": {
                     "displayName": "Axis Height",
+                    "description": "The height of the domain axis",
                     "type": {
-                        "numeric": true
-                    }
-                },
-                "chromaMin": {
-                    "displayName": "Chroma Min",
-                    "type":{
-                        "numeric": true
-                    }
-                },
-                "chromaMax": {
-                    "displayName": "Chroma Max",
-                    "type": {
-                        "numeric": true
-                    }
-                },
-                "luminanceMin": {
-                    "displayName": "Luminance Min",
-                    "type":{
-                        "numeric": true
-                    }
-                },
-                "luminanceMax": {
-                    "displayName": "Luminance Max",
-                    "type": {
-                        "numeric": true
+                        "numeric": true    
                     }
                 },
                 "rowGap": {
                     "displayName": "Row Gap",
+                    "description": "Whether to show a small gap between rows",
                     "type": {
                         "bool": true
                     }

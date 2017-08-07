@@ -28,6 +28,7 @@ module essex.visuals.gantt {
         rowHeight: number;
         colorizer: (value: number) => string;
         rowGap: boolean;
+        sliceWidth: number;
     }
 
     export interface ValuesProps extends ValueProps {
@@ -49,7 +50,7 @@ module essex.visuals.gantt {
             'shape-rendering': "crispEdges",
             stroke: 'none',
             height: rowHeight,
-            width: (d: ValueSlice) => xScale(d.end) - xScale(d.start),
+            width: props.sliceWidth,
             x: (d: ValueSlice) => xScale(d.start),
             y: (d: ValueSlice, i: number, e: any) => {
                 const catIndex = e[i].parentNode.__data__.index;
