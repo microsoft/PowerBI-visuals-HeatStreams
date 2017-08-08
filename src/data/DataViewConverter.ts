@@ -23,19 +23,20 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *  THE SOFTWARE.
  */
-module essex.visuals.gantt.dataconvert {
+module essex.visuals.heatStreams.dataconvert {
     "use strict";
     import DataView = powerbi.DataView;
     import ISelectionManager = powerbi.extensibility.ISelectionManager;
-    import GanttData = essex.visuals.gantt.GanttData;
-    import VisualDataOptions = essex.visuals.gantt.VisualDataOptions;
+    import ChartData = essex.visuals.heatStreams.ChartData;
+    import Category = essex.visuals.heatStreams.Category;
+    import VisualDataOptions = essex.visuals.heatStreams.VisualDataOptions;
     const _ = window['_'];
 
     export class DataViewConverter {
         constructor(private selectionManager: ISelectionManager) {
         }
 
-        public convertDataView(dataView: DataView, options: VisualDataOptions): GanttData {
+        public convertDataView(dataView: DataView, options: VisualDataOptions): ChartData {
             // TODO: when we support date-based drilldown, we have to process the matrix-form data view
             return convertCategoricalDataView(dataView, options);
         }

@@ -1,4 +1,4 @@
-module essex.visuals.gantt {
+module essex.visuals.heatStreams {
     const d3: any = window['d3'];
     const { Select, Enter, Exit, Update, Grouping } = d3.jsx;
     

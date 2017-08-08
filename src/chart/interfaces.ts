@@ -1,5 +1,5 @@
-module essex.visuals.gantt {
-    export type GanttXDomain = [number, number] | [Date, Date];
+module essex.visuals.heatStreams {
+    export type XDomain = [number, number] | [Date, Date];
     
     export interface Category {
         id: number;
@@ -11,11 +11,11 @@ module essex.visuals.gantt {
         value: number;
     }
 
-    export interface GanttData {
+    export interface ChartData {
         categories: Category[];
         categoryData: CategoryDataMap;    
         categoryValues: CategoryValueMap;
-        positionDomain: GanttXDomain;
+        positionDomain: XDomain;
         valueDomain: [number, number];
     }
 
@@ -27,7 +27,6 @@ module essex.visuals.gantt {
     export interface VisualDataOptions {
         valueMin: number;
         valueMax: number;
-        isDivergent: boolean;
         dateAggregation: DateAggregation;
         positionDomainType: PositionDomainType;
         isLogScale: boolean;
@@ -36,22 +35,17 @@ module essex.visuals.gantt {
     export type PositionDomainType = 'date' | 'number';
 
     export interface VisualRenderingOptions {
-        positiveColor: string;
-        negativeColor: string;
         highlightColor: string;
         fontSize: number;
         rowHeight: number;
         categoryTextPercent: number;
         axisHeight: number;
-        chromaMin: number;
-        chromaMax: number;
-        luminanceMin: number;
-        luminanceMax: number;
         rowGap: boolean;
+        colorScheme: string;
     }
 
-    export interface GanttChartProps {
-        options: GanttOptions;
+    export interface ChartProps {
+        options: ChartOptions;
     }
 
     export interface CategoryDataMap {
@@ -62,14 +56,14 @@ module essex.visuals.gantt {
         [key: string]: ValueSlice[];
     }
 
-    export interface ProcessedGanttData {
+    export interface ProcessedChartsData {
         categoryValues: CategoryValueMap;
         positionDomain: [Date, Date];
     }
 
-    export interface GanttOptions extends VisualRenderingOptions, VisualDataOptions {
+    export interface ChartOptions extends VisualRenderingOptions, VisualDataOptions {
         element: HTMLElement;
-        data: GanttData;
+        data: ChartData;
         selections: { [key: string]: Category };
         scrollOffset: number;
     }

@@ -27,10 +27,10 @@
 module powerbi.extensibility.visual {
   "use strict";
   import DataViewObjectsParser = powerbi.extensibility.utils.dataview.DataViewObjectsParser;
-  import VisualRenderingOptions = essex.visuals.gantt.VisualRenderingOptions;
-  import VisualDataOptions = essex.visuals.gantt.VisualDataOptions;
-  import DateAggregation = essex.visuals.gantt.DateAggregation;
-  import PositionDomainType = essex.visuals.gantt.PositionDomainType;
+  import VisualRenderingOptions = essex.visuals.heatStreams.VisualRenderingOptions;
+  import VisualDataOptions = essex.visuals.heatStreams.VisualDataOptions;
+  import DateAggregation = essex.visuals.heatStreams.DateAggregation;
+  import PositionDomainType = essex.visuals.heatStreams.PositionDomainType;
 
   export class VisualSettings extends DataViewObjectsParser {
     public rendering: VisualRenderingOptions = new VisualRenderingOptionsImpl();
@@ -41,23 +41,17 @@ module powerbi.extensibility.visual {
     public dateAggregation: DateAggregation = "days";    
     public valueMin = undefined;
     public valueMax = undefined;
-    public isDivergent = true;
     public positionDomainType: PositionDomainType = 'date';
     public isLogScale: boolean = false;
   }
 
   export class VisualRenderingOptionsImpl implements VisualRenderingOptions {
-    public positiveColor = "#3494E6";
-    public negativeColor = "#EC6EAD";
     public highlightColor = "gray";
     public fontSize = 12;
     public rowHeight = 15;
     public categoryTextPercent = 10;
     public axisHeight = 20;
-    public chromaMin = 5;
-    public chromaMax = 45;
-    public luminanceMin = 35;
-    public luminanceMax = 100; 
     public rowGap = true;
+    public colorScheme = "RdBu";
   }
 }

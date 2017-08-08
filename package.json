@@ -1,5 +1,6 @@
 {
-  "name": "powerbi-visual-gantt",
+  "name": "powerbi-visual-heat-streams",
+  "license": "MIT",
   "scripts": {
     "start": "pbiviz start",
     "package": "pbiviz package"
@@ -7,10 +8,12 @@
   "dependencies": {
     "@types/d3": "^4.9.0",
     "d3": "^4.9.1",
+    "d3-scale-chromatic": "^1.1.1",
     "lodash": "^4.17.4",
     "powerbi-visuals-utils-dataviewutils": "1.2.0"
   },
   "devDependencies": {
-    "tslint": "^5.4.3"
+    "tslint": "^5.4.3",
+    "typescript": "^2.4.2"
   }
 }

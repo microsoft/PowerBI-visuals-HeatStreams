@@ -25,24 +25,24 @@
  */
 module powerbi.extensibility.visual {
     "use strict";
-    import GanttChart = essex.visuals.gantt.GanttChart;
-    import DataViewConverter = essex.visuals.gantt.dataconvert.DataViewConverter;
+    import Chart = essex.visuals.heatStreams.Chart;
+    import DataViewConverter = essex.visuals.heatStreams.dataconvert.DataViewConverter;
     const _ = window['_'];
 
-    export class GanttVisual implements IVisual {
+    export class Visual implements IVisual {
         private target: HTMLElement;
         private host: IVisualHost;
         private settings: VisualSettings;
         private selectionManager: ISelectionManager;
         private converter: DataViewConverter;
         private scrollOffset: number = 0;
-        private chart: GanttChart;
+        private chart: Chart;
 
         constructor(options: VisualConstructorOptions) {
             this.target = options.element;
             this.host = options.host;
             this.selectionManager = this.host.createSelectionManager();
-            this.chart = new GanttChart();
+            this.chart = new Chart();
             this.converter = new DataViewConverter(
                 this.selectionManager,
             );
@@ -53,7 +53,7 @@ module powerbi.extensibility.visual {
                 const dataView = _.get(options, 'dataViews[0]');
                 if (dataView) {
                     console.log('Visual Update', options, this.selectionManager.getSelectionIds());
-                    this.settings = GanttVisual.parseSettings(dataView);
+                    this.settings = Visual.parseSettings(dataView);
                     this.render(dataView);
                 }
             } catch (err) {

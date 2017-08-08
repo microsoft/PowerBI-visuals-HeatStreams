@@ -23,23 +23,23 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *  THE SOFTWARE.
  */
-module essex.visuals.gantt.dataconvert {
+module essex.visuals.heatStreams.dataconvert {
     "use strict";
     import DataView = powerbi.DataView;
-    import CategoryData = essex.visuals.gantt.CategoryData;
-    import CategoryDataMap = essex.visuals.gantt.CategoryDataMap;
-    import CategoryValueMap = essex.visuals.gantt.CategoryValueMap;
-    import GanttXDomain = essex.visuals.gantt.GanttXDomain;
-    import DateAggregation = essex.visuals.gantt.DateAggregation;
+    import CategoryData = essex.visuals.heatStreams.CategoryData;
+    import CategoryDataMap = essex.visuals.heatStreams.CategoryDataMap;
+    import CategoryValueMap = essex.visuals.heatStreams.CategoryValueMap;
+    import XDomain = essex.visuals.heatStreams.XDomain;
+    import DateAggregation = essex.visuals.heatStreams.DateAggregation;
     const _ = window['_'];
     const d3 = window['d3'];
 
-    function determinePositionDomain(data: CategoryDataMap): GanttXDomain {
+    function determinePositionDomain(data: CategoryDataMap): XDomain {
         const domainsByCategory = Object.keys(data).map(category => (
             d3.extent(data[category], (pv: { position: Date | number }) => pv.position)
-        )) as GanttXDomain[];
+        )) as XDomain[];
         const mergedDomains = [].concat.apply([], domainsByCategory);
-        return d3.extent(mergedDomains) as GanttXDomain;
+        return d3.extent(mergedDomains) as XDomain;
     }
 
     function sliceStart(date: Date, dateAggregation: DateAggregation, positionDomain: [Date, Date]): Date {
@@ -67,7 +67,7 @@ module essex.visuals.gantt.dataconvert {
 
     function coalesceValueSlices(
         data: CategoryDataMap, 
-        positionDomain: GanttXDomain,
+        positionDomain: XDomain,
         domainType: PositionDomainType,
         dateAggregation: DateAggregation
     ) {
@@ -116,7 +116,7 @@ module essex.visuals.gantt.dataconvert {
         };
     }
 
-    export function convertCategoricalDataView(dataView: DataView, options: VisualDataOptions): GanttData {
+    export function convertCategoricalDataView(dataView: DataView, options: VisualDataOptions): ChartData {
         const { categorical } = dataView;
 
         const categories = _.get(categorical, 'categories[0].values', [])

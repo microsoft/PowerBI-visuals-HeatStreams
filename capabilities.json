@@ -72,41 +72,12 @@
                     "type": {
                         "numeric": true
                     }
-                },
-                "isDivergent": {
-                    "displayName": "Divergent",
-                    "description": "Is data divergent? This changes the color scheme. Color polarity switches at the midpoint between max and min values.",
-                    "type": {
-                        "bool": true
-                    }   
                 }
             }
         },
         "rendering": {
             "displayName": "View Settings",
             "properties": {
-                "positiveColor": {
-                    "displayName": "Positive color",
-                    "description": "The positive color value. This will be normalized using a perceputally equivalent hue.",
-                    "type": {
-                        "fill": {
-                            "solid": {
-                                "color": true
-                            }
-                        }
-                    }
-                },
-                "negativeColor": {
-                    "displayName": "Negative color",
-                    "description": "The negative color value. This will be normalized using a perceputally equivalent hue.",
-                    "type": {
-                        "fill": {
-                            "solid": {
-                                "color": true
-                            }
-                        }
-                    }
-                },
                 "highlightColor": {
                     "displayName": "Highlight color",
                     "description": "The selected category highlight color value",
@@ -153,6 +124,29 @@
                     "description": "Whether to show a small gap between rows",
                     "type": {
                         "bool": true
+                    }
+                },
+                "colorScheme": {
+                    "displayName": "Color Scheme",
+                    "description": "The data color scheme",
+                    "type": {
+                        "enumeration": [
+                            { "displayName": "Diverging - BrBG", "value": "BrBG" },
+                            { "displayName": "Diverging - PRGn", "value": "PRGn" },
+                            { "displayName": "Diverging - PiYG", "value": "PiYG" },
+                            { "displayName": "Diverging - PuOr", "value": "PuOr" },
+                            { "displayName": "Diverging - RdBu", "value": "RdBu" },
+                            { "displayName": "Diverging - RdGy", "value": "PiYG" },
+                            { "displayName": "Diverging - RdYlBu", "value": "RdYlBu" },
+                            { "displayName": "Diverging - RdYlGn", "value": "RdYlGn" },
+                            { "displayName": "Diverging - Spectral", "value": "Spectral" },
+                            { "displayName": "Sequential - Blues", "value": "Blues" },
+                            { "displayName": "Sequential - Greens", "value": "Greens" },
+                            { "displayName": "Sequential - Greys", "value": "Greys" },
+                            { "displayName": "Sequential - Oranges", "value": "Oranges" },
+                            { "displayName": "Sequential - Purples", "value": "Purples" },
+                            { "displayName": "Sequential - Reds", "value": "Reds" }
+                        ]
                     }
                 }
             }

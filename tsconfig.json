@@ -19,7 +19,7 @@
     "src/data/DataViewConverter.ts",
     "src/chart/components.tsx",
     "src/chart/colorizer.ts",
-    "src/chart/gantt.tsx",
+    "src/chart/chart.tsx",
     "src/chart/interfaces.ts",
     "src/settings.ts",
     "src/visual.ts"

@@ -1,9 +1,9 @@
 {
   "visual": {
-    "name": "gantt",
-    "displayName": "gantt",
-    "guid": "gantt74779FE5319F4655BE62C4C5FD0ABFB1",
-    "visualClassName": "GanttVisual",
+    "name": "heat-streams",
+    "displayName": "Heat Streams",
+    "guid": "heatStreams74779FE5319F4655BE62C4C5FD0ABFB1",
+    "visualClassName": "Visual",
     "version": "1.0.0",
     "description": "",
     "supportUrl": "",
@@ -11,8 +11,8 @@
   },
   "apiVersion": "1.7.0",
   "author": {
-    "name": "",
-    "email": ""
+    "name": "Chris Trevino",
+    "email": "chtrevin@microsoft.com"
   },
   "assets": {
     "icon": "assets/icon.png"
@@ -20,6 +20,7 @@
   "externalJS": [
     "node_modules/powerbi-visuals-utils-dataviewutils/lib/index.js",
     "node_modules/d3/build/d3.js",
+    "node_modules/d3-scale-chromatic/build/d3-scale-chromatic.js",
     "node_modules/lodash/lodash.min.js",
     "lib/d3-jsx.min.js"
   ],

@@ -1,89 +1,41 @@
-module essex.visuals.gantt {
+module essex.visuals.heatStreams {
     const d3: any = window['d3'];
-    const VALUE_DOMAIN = [0.1, 1000];
-    const DIVERGENT_VALUE_DOMAIN = [0.1, 500, 1000];
+    /**
+     * The domain of normalized values. Avoid zero so that log-scaling situations won't explode.
+     */
+    const VALUE_DOMAIN = [0.0001, 1];
     
     // NOTE: The coloring uses the "Diverging" HCL Pattern described here
     // http://hclwizard.org:64230/hclwizard/
     export class Colorizer {
-        private minHcl: d3.HCLColor;
-        private maxHcl: d3.HCLColor;
-        private valueScale: d3.ScaleLinear<number, number>;
-        private chroma: d3.ScaleLinear<number, number>;
-        private luminance: d3.ScaleLinear<number, number>;
-
-        private get valueMid(): number {
-            return (this.valueMax + this.valueMin) / 2;
-        }
-
-        private get chromaMin() {
-            return this.options.chromaMin;
-        }
-
-        private get chromaMax() {
-            return this.options.chromaMax;
-        }
-
-        private get luminanceMin() {
-            return this.options.luminanceMin;
-        }
-
-        private get luminanceMax() {
-            return this.options.luminanceMax;
-        }
-
-        private getChromaScale() {
-            const { isDivergent, chromaMin, chromaMax } = this;
-            const domain = isDivergent ? DIVERGENT_VALUE_DOMAIN : VALUE_DOMAIN;
-            const range = isDivergent ? [chromaMax, chromaMin, chromaMax] : [chromaMin, chromaMax];
-            return ((this.isLogScaled ? d3.scaleLog() : d3.scaleLinear())
-                .domain(domain)
-                .range(range)
-                .clamp(true));
-        }
-
-        private getLuminanceScale() {
-            const { isDivergent, luminanceMin, luminanceMax } = this;
-            const domain = isDivergent ? DIVERGENT_VALUE_DOMAIN : VALUE_DOMAIN;
-            const range = isDivergent ? [luminanceMin, luminanceMax, luminanceMin] : [luminanceMax, luminanceMin];
-            return ((this.isLogScaled ? d3.scaleLog() : d3.scaleLinear())
-                .domain(domain)
-                .range(range)
-                .clamp(true));
-        }
+        private valueSanitizer: d3.ScaleLinear<number, number>;
+        private logScaler: d3.ScaleLogarithmic<number, number>;
+        private colorScale: d3.ScaleSequential<string>;
+        private valueMid: number;
 
         constructor(
-            private options: VisualRenderingOptions, 
-            private valueMin, 
-            private valueMax, 
-            private isDivergent,
-            private isLogScaled,
+            options: VisualRenderingOptions, 
+            private valueMin: number, 
+            private valueMax: number,
+            private isLogScaled: boolean,
         ) {
-            const {
-                negativeColor,
-                positiveColor,
-            } = this.options;
-            this.minHcl = d3.hcl(negativeColor);
-            this.maxHcl = d3.hcl(positiveColor);
-            this.chroma = this.getChromaScale();
-            this.luminance = this.getLuminanceScale();
-            this.valueScale = d3.scaleLinear().domain([valueMin, valueMax]).range([0.1, 1000]).clamp(true);
+            this.valueMid = (this.valueMax + this.valueMin) / 2;
+            this.valueSanitizer = d3.scaleLinear().domain([valueMin, valueMax]).range(VALUE_DOMAIN).clamp(true);
+            this.logScaler = d3.scaleLog().domain(VALUE_DOMAIN).range(VALUE_DOMAIN);
+
+            const colorInterpolator = d3[`interpolate${options.colorScheme}`];
+            this.colorScale = d3.scaleSequential(colorInterpolator);
         }
 
-        public color(value: number): d3.HCLColor {
-            const sanitized = this.valueScale(value);
-            const h = this.hue(value);
-            const c = this.chroma(sanitized);
-            const l = this.luminance(sanitized);
-            return d3.hcl(h, c, l);
+        private sanitize(value: number) {
+            let result = this.valueSanitizer(value);
+            return this.isLogScaled ? this.logScaler(result) : result;
         }
 
-        private hue(value: number) {
-            if (!this.isDivergent) {
-                return this.maxHcl.h;
-            } else {
-                return value < this.valueMid ? this.minHcl.h : this.maxHcl.h;
-            }
+        public color(value: number) {
+            const v = this.sanitize(value);
+            const color = this.colorScale(v);
+            return color;
         }
     }
 }

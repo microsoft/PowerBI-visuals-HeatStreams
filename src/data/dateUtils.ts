@@ -23,9 +23,9 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *  THE SOFTWARE.
  */
-module essex.visuals.gantt.dataconvert {
+module essex.visuals.heatStreams.dataconvert {
     "use strict";
-    import DateAggregation = essex.visuals.gantt.DateAggregation;
+    import DateAggregation = essex.visuals.heatStreams.DateAggregation;
     
     export function addHours(date: Date, num: number): Date {
         const result = new Date(date);

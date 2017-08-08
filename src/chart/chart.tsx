@@ -1,24 +1,23 @@
-module essex.visuals.gantt {
+module essex.visuals.heatStreams {
     const d3: any = window['d3'];
     type SelectionChangedHandler = (category: number, multiselect: boolean) => void;
-    import dateSliceEnd = essex.visuals.gantt.dataconvert.dateSliceEnd;
+    import dateSliceEnd = essex.visuals.heatStreams.dataconvert.dateSliceEnd;
 
-    export class GanttChart {
+    export class Chart {
         public scrollPosition: number = 0;
-        private optionsInternal: GanttOptions;
+        private optionsInternal: ChartOptions;
         private categoryRebinder: any;
         private svgSelection: any;
         private colorizer: Colorizer;
         private selectionChangedHandler: SelectionChangedHandler;
         private renderedScale: {width: number, height: number};
 
-        public set options(value: GanttOptions) {
+        public set options(value: ChartOptions) {
             this.optionsInternal = value;
             this.colorizer = new Colorizer(
                 value, 
                 this.valueMin, 
                 this.valueMax, 
-                this.options.isDivergent,
                 this.options.isLogScale,
             );
         }
@@ -212,7 +211,7 @@ module essex.visuals.gantt {
             }
         }
 
-        private getXScale(domain: GanttXDomain): d3.ScaleTime<number, number> {
+        private getXScale(domain: XDomain): d3.ScaleTime<number, number> {
             const range = [this.width * this.textPercent, this.width];
             if (this.options.positionDomainType === 'date') {
                 return d3.scaleTime().domain(domain).range(range);
