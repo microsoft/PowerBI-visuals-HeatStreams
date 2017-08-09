@@ -38,7 +38,7 @@
                     }
                 },
                 "dateAggregation": {
-                    "displayName": "Date Aggregate",
+                    "displayName": "Date Buckets",
                     "description": "When a date domain is used, this specifies date bucket granularity.",
                     "type": {
                         "enumeration": [
@@ -69,7 +69,7 @@
             "displayName": "View Settings",
             "properties": {
                 "highlightColor": {
-                    "displayName": "Highlight color",
+                    "displayName": "Highlight Color",
                     "description": "The selected category highlight color value",
                     "type": {
                         "fill": {
