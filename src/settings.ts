@@ -30,7 +30,6 @@ module powerbi.extensibility.visual {
   import VisualRenderingOptions = essex.visuals.heatStreams.VisualRenderingOptions;
   import VisualDataOptions = essex.visuals.heatStreams.VisualDataOptions;
   import DateAggregation = essex.visuals.heatStreams.DateAggregation;
-  import PositionDomainType = essex.visuals.heatStreams.PositionDomainType;
 
   export class VisualSettings extends DataViewObjectsParser {
     public rendering: VisualRenderingOptions = new VisualRenderingOptionsImpl();
@@ -41,13 +40,11 @@ module powerbi.extensibility.visual {
     public dateAggregation: DateAggregation = "days";    
     public valueMin = undefined;
     public valueMax = undefined;
-    public positionDomainType: PositionDomainType = 'date';
     public isLogScale: boolean = false;
   }
 
   export class VisualRenderingOptionsImpl implements VisualRenderingOptions {
     public highlightColor = "gray";
-    public fontSize = 12;
     public rowHeight = 15;
     public categoryTextPercent = 10;
     public axisHeight = 20;

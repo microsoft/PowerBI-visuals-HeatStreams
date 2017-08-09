@@ -30,16 +30,6 @@
         "data": {
             "displayName": "Data Settings",
             "properties": {
-                "positionDomainType": {
-                    "displayName": "Domain",
-                    "description": "The type of values that exist in the domain.",
-                    "type": {
-                        "enumeration": [ 
-                            { "displayName": "Dates", "value": "date" },
-                            { "displayName": "Numbers", "value": "number" }                            
-                        ]
-                    }
-                },
                 "isLogScale": {
                     "displayName": "Log-Scale",
                     "description": "Apply a log-scale to the data coloration.",
@@ -89,15 +79,6 @@
                         }
                     }
                 },
-                "fontSize": {
-                    "displayName": "Text Size",
-                    "description": "The category text size",
-                    "type": {
-                        "formatting": {
-                            "fontSize": true
-                        }
-                    }
-                },
                 "rowHeight": {
                     "displayName": "Row Height",
                     "description": "The height allocated per category row",
@@ -106,17 +87,10 @@
                     }
                 },
                 "categoryTextPercent": {
-                    "displayName": "Category Text Percent",
+                    "displayName": "Text %",
                     "description": "Percentage of the visual to allocate to category text",
                     "type":{
                         "numeric": true
-                    }
-                },
-                "axisHeight": {
-                    "displayName": "Axis Height",
-                    "description": "The height of the domain axis",
-                    "type": {
-                        "numeric": true    
                     }
                 },
                 "rowGap": {
@@ -127,18 +101,18 @@
                     }
                 },
                 "colorScheme": {
-                    "displayName": "Color Scheme",
+                    "displayName": "Theme",
                     "description": "The data color scheme",
                     "type": {
                         "enumeration": [
-                            { "displayName": "Diverging - BrBG", "value": "BrBG" },
-                            { "displayName": "Diverging - PRGn", "value": "PRGn" },
-                            { "displayName": "Diverging - PiYG", "value": "PiYG" },
-                            { "displayName": "Diverging - PuOr", "value": "PuOr" },
-                            { "displayName": "Diverging - RdBu", "value": "RdBu" },
-                            { "displayName": "Diverging - RdGy", "value": "PiYG" },
-                            { "displayName": "Diverging - RdYlBu", "value": "RdYlBu" },
-                            { "displayName": "Diverging - RdYlGn", "value": "RdYlGn" },
+                            { "displayName": "Diverging - Brown - Green", "value": "BrBG" },
+                            { "displayName": "Diverging - Purple - Green", "value": "PRGn" },
+                            { "displayName": "Diverging - Pink - Green", "value": "PiYG" },
+                            { "displayName": "Diverging - Purple - Orange", "value": "PuOr" },
+                            { "displayName": "Diverging - Red - Blue", "value": "RdBu" },
+                            { "displayName": "Diverging - Red - Grey", "value": "PiYG" },
+                            { "displayName": "Diverging - Red - Yellow - Blue", "value": "RdYlBu" },
+                            { "displayName": "Diverging - Red - Yellow- Green", "value": "RdYlGn" },
                             { "displayName": "Diverging - Spectral", "value": "Spectral" },
                             { "displayName": "Sequential - Blues", "value": "Blues" },
                             { "displayName": "Sequential - Greens", "value": "Greens" },

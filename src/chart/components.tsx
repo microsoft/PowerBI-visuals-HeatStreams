@@ -71,18 +71,17 @@ module essex.visuals.heatStreams {
     };
 
     export interface CategoryTextProps {
-        fontSize: number;
         isCategorySelected: boolean;
         categoryTextY: (d: IndexedCategory) => number;
     }
 
     export const CategoryText = ({
-        fontSize,
         isCategorySelected,
         categoryTextY,
+        rowHeight,
     }: CategoryProps) => {
         const renderProps = {
-            'font-size': `${fontSize}px`,
+            'font-size': `${rowHeight - 2}px`,
             'font-weight': (d: IndexedCategory) => isCategorySelected(d.name) ? 'bold' : 'normal',
             'text': (d: Category) => d.name,
             'x': 2,
@@ -149,7 +148,6 @@ module essex.visuals.heatStreams {
         xScale: d3.ScaleTime<number, number>;
         rowHeight: number;
         width: number;
-        fontSize: number;
         highlightColor: string;
         chartPercent: number;
         textPercent: number;

@@ -64,10 +64,6 @@ module essex.visuals.heatStreams {
             return 1 - this.textPercent;
         }
 
-        private get fontSize(): number {
-            return +this.options.fontSize;
-        }
-
         private get data() {
             return this.options.data;
         }
@@ -89,11 +85,6 @@ module essex.visuals.heatStreams {
             const { axisHeight, height, rowGap, rowHeight } = this;
             const gap = rowGap ? 1 : 0;
             return Math.floor((height - axisHeight) / (rowHeight + gap));
-        }
-
-        private get categoryTextYPad(): number {
-            const { rowHeight, fontSize } = this;
-            return rowHeight > fontSize ? Math.floor((rowHeight - fontSize) / 2) : 0;
         }
 
         private get categoryOffsetStart(): number {
@@ -126,8 +117,6 @@ module essex.visuals.heatStreams {
             const {
                 axisOffset,
                 categoriesInView,
-                categoryTextYPad,
-                fontSize,
                 highlightColor,
                 rowHeight,
                 width, 
@@ -137,7 +126,8 @@ module essex.visuals.heatStreams {
                 rowGap,
             } = this;
             const isCategorySelected = (name: string) => !!this.selections[name];
-            const categoryTextY = (d: IndexedCategory) => (rowHeight * d.index) + (rowGap ? d.index : 0) + fontSize + categoryTextYPad;
+            // 1 px vertical pad on top and bottom of text
+            const categoryTextY = (d: IndexedCategory) => (rowHeight * d.index) + (rowGap ? d.index : 0) + rowHeight - 1;
             const xScale = this.getXScale(data.positionDomain);
             const sliceWidth = this.sliceWidth(xScale);
             
@@ -165,7 +155,6 @@ module essex.visuals.heatStreams {
                             isCategorySelected={isCategorySelected}
                             rowHeight={rowHeight}
                             highlightColor={highlightColor}
-                            fontSize={fontSize}
                             categoryTextY={categoryTextY}
                             width={width}
                             rebind={(r: any) => this.categoryRebinder = r}
@@ -213,11 +202,12 @@ module essex.visuals.heatStreams {
 
         private getXScale(domain: XDomain): d3.ScaleTime<number, number> {
             const range = [this.width * this.textPercent, this.width];
-            if (this.options.positionDomainType === 'date') {
-                return d3.scaleTime().domain(domain).range(range);
-            } else {
+            const isNumberDomain = typeof domain[0] === 'number';
+            if (isNumberDomain) {
                 return d3.scaleLinear().domain(domain).range(range);
-            }
+            } else {
+                return d3.scaleTime().domain(domain).range(range);
+            }   
         }
     }
 }

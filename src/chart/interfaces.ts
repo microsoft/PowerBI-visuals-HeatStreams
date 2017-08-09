@@ -28,15 +28,11 @@ module essex.visuals.heatStreams {
         valueMin: number;
         valueMax: number;
         dateAggregation: DateAggregation;
-        positionDomainType: PositionDomainType;
         isLogScale: boolean;
     }
 
-    export type PositionDomainType = 'date' | 'number';
-
     export interface VisualRenderingOptions {
         highlightColor: string;
-        fontSize: number;
         rowHeight: number;
         categoryTextPercent: number;
         axisHeight: number;

@@ -68,11 +68,11 @@ module essex.visuals.heatStreams.dataconvert {
     function coalesceValueSlices(
         data: CategoryDataMap, 
         positionDomain: XDomain,
-        domainType: PositionDomainType,
         dateAggregation: DateAggregation
     ) {
         let valueMin: number = undefined;
         let valueMax: number = undefined;
+        const isNumericDomain = typeof positionDomain[0] === 'number';
 
         const categoryIds = Object.keys(data);
         const result = categoryIds.reduce((agg: CategoryValueMap, current: string) => {
@@ -83,9 +83,10 @@ module essex.visuals.heatStreams.dataconvert {
             const valuePositions: {[dateCode: string]: number[]} = {};
             categoryData.forEach(cd => {
                 if (cd.value !== undefined && cd.value !== null) {
-                    const start = domainType === 'date' ? 
-                        sliceStart(cd.position, dateAggregation, positionDomain as [Date, Date]).toUTCString() :
-                        `${cd.position}`;
+                    const start = isNumericDomain ? 
+                        `${cd.position}` :  
+                        sliceStart(cd.position, dateAggregation, positionDomain as [Date, Date]).toUTCString();
+                        
                     if (!valuePositions[start]) {
                         valuePositions[start] = [];
                     }
@@ -100,7 +101,7 @@ module essex.visuals.heatStreams.dataconvert {
             });
 
             const slices = Object.keys(valuePositions).map(vp => {
-                const start = domainType === 'date' ? new Date(vp) : parseInt(vp, 10);
+                const start = isNumericDomain ? parseInt(vp, 10) : new Date(vp);
                 return {
                     start,
                     value: d3.mean(valuePositions[vp]),
@@ -138,7 +139,6 @@ module essex.visuals.heatStreams.dataconvert {
         const valueSlices = coalesceValueSlices(
             categoryData, 
             positionDomain,
-            options.positionDomainType,
             options.dateAggregation,
         );
         const result = {
