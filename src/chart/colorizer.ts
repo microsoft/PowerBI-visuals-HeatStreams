@@ -4,7 +4,7 @@ module essex.visuals.heatStreams {
      * The domain of normalized values. Avoid zero so that log-scaling situations won't explode.
      */
     const VALUE_DOMAIN = [0.0001, 1];
-    
+
     // NOTE: The coloring uses the "Diverging" HCL Pattern described here
     // http://hclwizard.org:64230/hclwizard/
     export class Colorizer {
@@ -14,8 +14,8 @@ module essex.visuals.heatStreams {
         private valueMid: number;
 
         constructor(
-            options: VisualRenderingOptions, 
-            private valueMin: number, 
+            options: VisualRenderingOptions,
+            private valueMin: number,
             private valueMax: number,
             private isLogScaled: boolean,
         ) {

@@ -37,7 +37,7 @@ module powerbi.extensibility.visual {
   }
 
   export class VisualDataOptionsImpl implements VisualDataOptions {
-    public dateAggregation: DateAggregation = "days";    
+    public dateAggregation: DateAggregation = "days";
     public valueMin = undefined;
     public valueMax = undefined;
     public isLogScale: boolean = false;
