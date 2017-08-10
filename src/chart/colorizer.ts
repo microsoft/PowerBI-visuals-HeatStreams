@@ -3,39 +3,48 @@ module essex.visuals.heatStreams {
     /**
      * The domain of normalized values. Avoid zero so that log-scaling situations won't explode.
      */
-    const VALUE_DOMAIN = [0.0001, 1];
+    const DIVERGING_SCHEMES = {
+        "BrBG": true,
+        "PRGn": true,
+        "PiYG": true,
+        "PuOr": true,
+        "RdBu": true,
+        "RdGy": true,
+        "RdYlBu": true,
+        "RdYlGn": true,
+        "Spectral": true,
+    };
 
     // NOTE: The coloring uses the "Diverging" HCL Pattern described here
     // http://hclwizard.org:64230/hclwizard/
     export class Colorizer {
-        private valueSanitizer: d3.ScaleLinear<number, number>;
-        private logScaler: d3.ScaleLogarithmic<number, number>;
+        private scaler: any;
         private colorScale: d3.ScaleSequential<string>;
-        private valueMid: number;
 
         constructor(
-            options: VisualRenderingOptions,
-            private valueMin: number,
-            private valueMax: number,
-            private isLogScaled: boolean,
+            private options: ChartOptions,
+            valueMin,
+            valueMid,
+            valueMax,
         ) {
-            this.valueMid = (this.valueMax + this.valueMin) / 2;
-            this.valueSanitizer = d3.scaleLinear().domain([valueMin, valueMax]).range(VALUE_DOMAIN).clamp(true);
-            this.logScaler = d3.scaleLog().domain(VALUE_DOMAIN).range(VALUE_DOMAIN);
+            const isLogScaled = options.isLogScale;
 
-            const colorInterpolator = d3[`interpolate${options.colorScheme}`];
+            // Set up the value scalers
+            this.scaler = this.isDiverging ?
+                new DivergingScaler(d3, valueMin, valueMid, valueMax, isLogScaled) :
+                new LinearScaler(d3, valueMin, valueMax, isLogScaled);
+
+            // Set up the color scale
+            const colorInterpolator = d3[`interpolate${this.options.colorScheme}`];
             this.colorScale = d3.scaleSequential(colorInterpolator);
         }
 
-        private sanitize(value: number) {
-            let result = this.valueSanitizer(value);
-            return this.isLogScaled ? this.logScaler(result) : result;
+        private get isDiverging() {
+            return DIVERGING_SCHEMES[this.options.colorScheme];
         }
 
         public color(value: number) {
-            const v = this.sanitize(value);
-            const color = this.colorScale(v);
-            return color;
+            return this.colorScale(this.scaler.scale(value));
         }
     }
 }

@@ -14,7 +14,22 @@
     "powerbi-visuals-utils-dataviewutils": "1.2.0"
   },
   "devDependencies": {
+    "jest": "^20.0.4",
     "tslint": "^5.4.3",
     "typescript": "^2.4.2"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ],
+    "moduleNameMapper": {
+      "\\.(css|scss)$": "<rootDir>/scripts/stub.js"
+    },
+    "transform": {
+      "^.+\\.(ts|tsx)$": "<rootDir>/scripts/preprocessor.js"
+    },
+    "testRegex": "test/.*\\.spec\\.(ts|tsx|js)$"
   }
 }

@@ -50,15 +50,22 @@
                     }
                 },
                 "valueMin": {
-                    "displayName": "Min Value",
-                    "description": "The minimum value, inferred if not present",
+                    "displayName": "Min Score",
+                    "description": "The minimum score, inferred if not present",
                     "type": {
                         "numeric": true
                     }
                 },
                 "valueMax": {
-                    "displayName": "Max Value",
-                    "description": "The maximum value, inferred if not present",
+                    "displayName": "Max Score",
+                    "description": "The maximum score, inferred if not present",
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "scoreSplit": {
+                    "displayName": "Score Split",
+                    "description": "Score Split Point, midpoint between min and max if not present",
                     "type": {
                         "numeric": true
                     }
@@ -110,7 +117,7 @@
                             { "displayName": "Diverging - Pink - Green", "value": "PiYG" },
                             { "displayName": "Diverging - Purple - Orange", "value": "PuOr" },
                             { "displayName": "Diverging - Red - Blue", "value": "RdBu" },
-                            { "displayName": "Diverging - Red - Grey", "value": "PiYG" },
+                            { "displayName": "Diverging - Red - Grey", "value": "RdGy" },
                             { "displayName": "Diverging - Red - Yellow - Blue", "value": "RdYlBu" },
                             { "displayName": "Diverging - Red - Yellow- Green", "value": "RdYlGn" },
                             { "displayName": "Diverging - Spectral", "value": "Spectral" },

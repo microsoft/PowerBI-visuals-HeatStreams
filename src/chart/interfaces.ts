@@ -1,6 +1,6 @@
 module essex.visuals.heatStreams {
     export type XDomain = [number, number] | [Date, Date];
-    
+
     export interface Category {
         id: number;
         name: string;
@@ -13,7 +13,7 @@ module essex.visuals.heatStreams {
 
     export interface ChartData {
         categories: Category[];
-        categoryData: CategoryDataMap;    
+        categoryData: CategoryDataMap;
         categoryValues: CategoryValueMap;
         positionDomain: XDomain;
         valueDomain: [number, number];
@@ -27,6 +27,7 @@ module essex.visuals.heatStreams {
     export interface VisualDataOptions {
         valueMin: number;
         valueMax: number;
+        scoreSplit: number;
         dateAggregation: DateAggregation;
         isLogScale: boolean;
     }

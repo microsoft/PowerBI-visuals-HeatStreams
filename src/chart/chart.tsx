@@ -10,15 +10,15 @@ module essex.visuals.heatStreams {
         private svgSelection: any;
         private colorizer: Colorizer;
         private selectionChangedHandler: SelectionChangedHandler;
-        private renderedScale: {width: number, height: number};
+        private renderedScale: { width: number, height: number };
 
         public set options(value: ChartOptions) {
             this.optionsInternal = value;
             this.colorizer = new Colorizer(
-                value, 
-                this.valueMin, 
-                this.valueMax, 
-                this.options.isLogScale,
+                value,
+                this.valueMin,
+                this.valueMid,
+                this.valueMax,
             );
         }
 
@@ -40,13 +40,18 @@ module essex.visuals.heatStreams {
 
         private get valueMin(): number {
             const valueMin = this.options.valueMin;
-            return (valueMin !== null && valueMin != undefined) ? valueMin : this.options.data.valueDomain[0];
+            return (valueMin !== null && valueMin !== undefined) ? valueMin : this.options.data.valueDomain[0];
         }
 
         private get valueMax(): number {
             const valueMax = this.options.valueMax;
-            return (valueMax !== null && valueMax != undefined) ? valueMax : this.options.data.valueDomain[1];
+            return (valueMax !== null && valueMax !== undefined) ? valueMax : this.options.data.valueDomain[1];
         }
+
+        private get valueMid() {
+            console.log("DETERMINE MID", this.options.scoreSplit);
+            return this.options.scoreSplit  || (this.valueMax + this.valueMin) / 2;
+          }
 
         private get rowHeight(): number {
             return this.options.rowHeight;
@@ -119,7 +124,7 @@ module essex.visuals.heatStreams {
                 categoriesInView,
                 highlightColor,
                 rowHeight,
-                width, 
+                width,
                 height,
                 element,
                 data,
@@ -130,8 +135,8 @@ module essex.visuals.heatStreams {
             const categoryTextY = (d: IndexedCategory) => (rowHeight * d.index) + (rowGap ? d.index : 0) + rowHeight - 1;
             const xScale = this.getXScale(data.positionDomain);
             const sliceWidth = this.sliceWidth(xScale);
-            
-            this.renderedScale = {width, height};
+
+            this.renderedScale = { width, height };
             element.innerHTML = "";
 
             d3.jsx.render(d3.select(element),
@@ -207,7 +212,7 @@ module essex.visuals.heatStreams {
                 return d3.scaleLinear().domain(domain).range(range);
             } else {
                 return d3.scaleTime().domain(domain).range(range);
-            }   
+            }
         }
     }
 }

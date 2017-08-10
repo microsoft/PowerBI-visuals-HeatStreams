@@ -40,6 +40,7 @@ module powerbi.extensibility.visual {
     public dateAggregation: DateAggregation = "days";
     public valueMin = undefined;
     public valueMax = undefined;
+    public scoreSplit = undefined;
     public isLogScale: boolean = false;
   }
 

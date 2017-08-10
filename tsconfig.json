@@ -8,7 +8,11 @@
     "target": "ES5",
     "sourceMap": true,
     "noUnusedLocals": true,
-    "out": "./.tmp/build/visual.js"
+    "out": "./.tmp/build/visual.js",
+    "lib": [
+      "es2017",
+      "dom"
+    ]
   },
   "files": [
     ".api/v1.7.0/PowerBI-visuals.d.ts",
@@ -21,6 +25,8 @@
     "src/chart/colorizer.ts",
     "src/chart/chart.tsx",
     "src/chart/interfaces.ts",
+    "src/chart/DivergingScaler.ts",
+    "src/chart/LinearScaler.ts",
     "src/settings.ts",
     "src/visual.ts"
   ]
