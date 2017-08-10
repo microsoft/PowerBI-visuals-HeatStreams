@@ -47,7 +47,7 @@ module essex.visuals.heatStreams.dataconvert {
         result.setUTCMilliseconds(0);
         result.setUTCSeconds(0);
         result.setUTCMinutes(0);
-        
+
         if (dateAggregation === 'days') {
             result.setUTCHours(0);
         } else if (dateAggregation === 'months') {
@@ -66,7 +66,7 @@ module essex.visuals.heatStreams.dataconvert {
     }
 
     function coalesceValueSlices(
-        data: CategoryDataMap, 
+        data: CategoryDataMap,
         positionDomain: XDomain,
         dateAggregation: DateAggregation
     ) {
@@ -78,23 +78,25 @@ module essex.visuals.heatStreams.dataconvert {
         const result = categoryIds.reduce((agg: CategoryValueMap, current: string) => {
             // sort the category data ascending
             const categoryData = data[current];
-            
+
             // Bucket out the values by their aggregated position (within day, within year, etc..)
-            const valuePositions: {[dateCode: string]: number[]} = {};
+            const valuePositions: { [dateCode: string]: number[] } = {};
             categoryData.forEach(cd => {
                 if (cd.value !== undefined && cd.value !== null) {
-                    const start = isNumericDomain ? 
-                        `${cd.position}` :  
+                    const start = isNumericDomain ?
+                        `${cd.position}` :
                         sliceStart(cd.position, dateAggregation, positionDomain as [Date, Date]).toUTCString();
-                        
+
                     if (!valuePositions[start]) {
                         valuePositions[start] = [];
                     }
-                    if (valueMin === undefined || cd.value < valueMin) {
-                        valueMin = cd.value;
-                    }
-                    if (valueMax === undefined || cd.value > valueMax) {
-                        valueMax = cd.value;
+                    if (cd.value !== null) {
+                        if (valueMin === undefined || cd.value < valueMin) {
+                            valueMin = cd.value;
+                        }
+                        if (valueMax === undefined || cd.value > valueMax) {
+                            valueMax = cd.value;
+                        }
                     }
                     valuePositions[start].push(cd.value);
                 }
@@ -111,8 +113,8 @@ module essex.visuals.heatStreams.dataconvert {
             return agg;
         }, {} as CategoryValueMap) as CategoryValueMap;
 
-        return { 
-            categoryValues: result, 
+        return {
+            categoryValues: result,
             valueDomain: [valueMin, valueMax] as [number, number],
         };
     }
@@ -137,7 +139,7 @@ module essex.visuals.heatStreams.dataconvert {
 
         const positionDomain = determinePositionDomain(categoryData);
         const valueSlices = coalesceValueSlices(
-            categoryData, 
+            categoryData,
             positionDomain,
             options.dateAggregation,
         );

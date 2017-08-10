@@ -49,8 +49,8 @@ module essex.visuals.heatStreams {
         }
 
         private get valueMid() {
-            console.log("DETERMINE MID", this.options.scoreSplit);
-            return this.options.scoreSplit  || (this.valueMax + this.valueMin) / 2;
+            const scoreSplit = this.options.scoreSplit;
+            return (scoreSplit !== null && scoreSplit !== undefined) ? scoreSplit : (this.valueMax + this.valueMin) / 2;
           }
 
         private get rowHeight(): number {
