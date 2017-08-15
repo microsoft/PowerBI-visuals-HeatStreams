@@ -5,7 +5,7 @@ const MIN = 0.000001;
 const MID = 0.5;
 const MAX = 1;
 
-module essex.visuals.heatStreams {
+namespace essex.visuals.heatStreams {
     // NOTE: The coloring uses the "Diverging" HCL Pattern described here
     // http://hclwizard.org:64230/hclwizard/
     export class DivergingScaler {
@@ -29,16 +29,6 @@ module essex.visuals.heatStreams {
             this.linearScalerNeg = d3.scaleLinear().domain([MIN, MAX]).range([MID, MIN]);
         }
 
-        private scalePos(value: number) {
-            const sanitized = this.valueSanitizerPos(value);
-            return this.isLogScaled ? this.logScalerPos(sanitized) : sanitized;
-        }
-
-        private scaleNeg(value: number) {
-            const sanitized = this.valueSanitizerNeg(value);
-            return this.isLogScaled ? this.logScalerNeg(sanitized) : this.linearScalerNeg(sanitized);
-        }
-
         public scale(value: number) {
             if (value === null) {
                 return value;
@@ -47,6 +37,16 @@ module essex.visuals.heatStreams {
             return isPos ?
                 this.scalePos(value) :
                 this.scaleNeg(value);
+        }
+
+        private scalePos(value: number) {
+            const sanitized = this.valueSanitizerPos(value);
+            return this.isLogScaled ? this.logScalerPos(sanitized) : sanitized;
+        }
+
+        private scaleNeg(value: number) {
+            const sanitized = this.valueSanitizerNeg(value);
+            return this.isLogScaled ? this.logScalerNeg(sanitized) : this.linearScalerNeg(sanitized);
         }
     }
 }

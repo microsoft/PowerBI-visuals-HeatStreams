@@ -1,18 +1,18 @@
-module essex.visuals.heatStreams {
-    const d3: any = window['d3'];
+namespace essex.visuals.heatStreams {
+    const d3: any = (window as any).d3;
     type SelectionChangedHandler = (category: number, multiselect: boolean) => void;
     import dateSliceEnd = essex.visuals.heatStreams.dataconvert.dateSliceEnd;
 
     export class Chart {
         public scrollPosition: number = 0;
-        private optionsInternal: ChartOptions;
+        private optionsInternal: IChartOptions;
         private categoryRebinder: any;
         private svgSelection: any;
         private colorizer: Colorizer;
         private selectionChangedHandler: SelectionChangedHandler;
         private renderedScale: { width: number, height: number };
 
-        public set options(value: ChartOptions) {
+        public set options(value: IChartOptions) {
             this.optionsInternal = value;
             this.colorizer = new Colorizer(
                 value,
@@ -101,7 +101,7 @@ module essex.visuals.heatStreams {
             return categoryOffsetStart;
         }
 
-        private get categoriesInView(): Category[] {
+        private get categoriesInView(): ICategory[] {
             const { data, categoryOffsetStart, maxCategories } = this;
             return data.categories.slice(categoryOffsetStart, categoryOffsetStart + maxCategories);
         }
@@ -132,7 +132,11 @@ module essex.visuals.heatStreams {
             } = this;
             const isCategorySelected = (name: string) => !!this.selections[name];
             // 1 px vertical pad on top and bottom of text
-            const categoryTextY = (d: IndexedCategory) => (rowHeight * d.index) + (rowGap ? d.index : 0) + rowHeight - 1;
+            const categoryTextY = (d: IndexedCategory) =>
+                (rowHeight * d.index) +
+                (rowGap ? d.index : 0) +
+                rowHeight - 1;
+
             const xScale = this.getXScale(data.positionDomain);
             const sliceWidth = this.sliceWidth(xScale);
 
@@ -144,8 +148,8 @@ module essex.visuals.heatStreams {
                     selectionRef={(e: any) => this.svgSelection = e}
                     height={height} width={width}
                     on={{
-                        'click': this.onClick.bind(this),
-                        'wheel.scroll': this.onScroll.bind(this),
+                        "click": this.onClick.bind(this),
+                        "wheel.scroll": this.onScroll.bind(this),
                     }}
                 >
                     <g class="category-list">
@@ -174,13 +178,13 @@ module essex.visuals.heatStreams {
         private sliceWidth(xScale: (input: number | Date) => number): number {
             const start = this.data.positionDomain[0];
             const { dateAggregation } = this.options;
-            const end = (typeof start === 'number') ? (start as number) + 1 : dateSliceEnd(start, dateAggregation);
+            const end = (typeof start === "number") ? (start as number) + 1 : dateSliceEnd(start, dateAggregation);
             return xScale(end) - xScale(start);
         }
 
         private rerender() {
             const { categoriesInView } = this;
-            this.categoryRebinder((sel: any) => sel.data(categoriesInView, (d: Category) => d.name));
+            this.categoryRebinder((sel: any) => sel.data(categoriesInView, (d: ICategory) => d.name));
         }
 
         private get isFullRenderRequired() {
@@ -207,7 +211,7 @@ module essex.visuals.heatStreams {
 
         private getXScale(domain: XDomain): d3.ScaleTime<number, number> {
             const range = [this.width * this.textPercent, this.width];
-            const isNumberDomain = typeof domain[0] === 'number';
+            const isNumberDomain = typeof domain[0] === "number";
             if (isNumberDomain) {
                 return d3.scaleLinear().domain(domain).range(range);
             } else {

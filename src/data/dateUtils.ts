@@ -23,10 +23,10 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *  THE SOFTWARE.
  */
-module essex.visuals.heatStreams.dataconvert {
+namespace essex.visuals.heatStreams.dataconvert {
     "use strict";
     import DateAggregation = essex.visuals.heatStreams.DateAggregation;
-    
+
     export function addHours(date: Date, num: number): Date {
         const result = new Date(date);
         result.setUTCHours(result.getUTCHours() + num);
@@ -50,18 +50,18 @@ module essex.visuals.heatStreams.dataconvert {
         result.setUTCFullYear(result.getUTCFullYear() + num);
         return result;
     }
-    
+
     export function dateSliceEnd(start: Date, dateAggregation: DateAggregation): Date {
-        if (dateAggregation === 'hours') {
+        if (dateAggregation === "hours") {
             return addHours(start, 1);
-        } else if (dateAggregation === 'days') {
+        } else if (dateAggregation === "days") {
             return addDays(start, 1);
-        } else if (dateAggregation === 'months') {
+        } else if (dateAggregation === "months") {
             return addMonths(start, 1);
-        } else if (dateAggregation === 'years') {
+        } else if (dateAggregation === "years") {
             return addYears(start, 1);
         } else {
-            throw new Error('unknown aggregation: ' + dateAggregation);
+            throw new Error("unknown aggregation: " + dateAggregation);
         }
     }
 }

@@ -23,14 +23,15 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *  THE SOFTWARE.
  */
-module essex.visuals.heatStreams.dataconvert {
+// tslint:disable no-console
+namespace essex.visuals.heatStreams.dataconvert {
     "use strict";
     import DataView = powerbi.DataView;
     import ISelectionManager = powerbi.extensibility.ISelectionManager;
-    import ChartData = essex.visuals.heatStreams.ChartData;
-    import Category = essex.visuals.heatStreams.Category;
-    import VisualDataOptions = essex.visuals.heatStreams.VisualDataOptions;
-    const _ = window['_'];
+    import ChartData = essex.visuals.heatStreams.IChartData;
+    import Category = essex.visuals.heatStreams.ICategory;
+    import VisualDataOptions = essex.visuals.heatStreams.IVisualDataOptions;
+    const _ = (window as any)._;
 
     export class DataViewConverter {
         constructor(private selectionManager: ISelectionManager) {
@@ -43,14 +44,14 @@ module essex.visuals.heatStreams.dataconvert {
 
         public unpackSelectedCategories(dataView: DataView): { [key: string]: Category } {
             const selection = this.selectionManager.getSelectionIds();
-            const category = _.get(dataView, 'categorical.categories[0]');
+            const category = _.get(dataView, "categorical.categories[0]");
 
             const selectedCategories = {};
             if (category) {
-                selection.forEach(s => {
+                selection.forEach((s) => {
                     try {
-                        const selectorData = (<any>s).selector.data[0].expr;
-                        if (_.isEqual(selectorData.left.source, (<any>category).source.expr.source)) {
+                        const selectorData = (s as any).selector.data[0].expr;
+                        if (_.isEqual(selectorData.left.source, (category as any).source.expr.source)) {
                             selectedCategories[selectorData.right.value] = true;
                         }
                     } catch (err) {

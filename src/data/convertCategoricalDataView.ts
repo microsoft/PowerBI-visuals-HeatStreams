@@ -23,19 +23,19 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *  THE SOFTWARE.
  */
-module essex.visuals.heatStreams.dataconvert {
+namespace essex.visuals.heatStreams.dataconvert {
     "use strict";
     import DataView = powerbi.DataView;
-    import CategoryData = essex.visuals.heatStreams.CategoryData;
-    import CategoryDataMap = essex.visuals.heatStreams.CategoryDataMap;
-    import CategoryValueMap = essex.visuals.heatStreams.CategoryValueMap;
+    import CategoryData = essex.visuals.heatStreams.ICategoryData;
+    import CategoryDataMap = essex.visuals.heatStreams.ICategoryDataMap;
+    import CategoryValueMap = essex.visuals.heatStreams.ICategoryValueMap;
     import XDomain = essex.visuals.heatStreams.XDomain;
     import DateAggregation = essex.visuals.heatStreams.DateAggregation;
-    const _ = window['_'];
-    const d3 = window['d3'];
+    const _ = (window as any)._;
+    const d3 = (window as any).d3;
 
     function determinePositionDomain(data: CategoryDataMap): XDomain {
-        const domainsByCategory = Object.keys(data).map(category => (
+        const domainsByCategory = Object.keys(data).map((category) => (
             d3.extent(data[category], (pv: { position: Date | number }) => pv.position)
         )) as XDomain[];
         const mergedDomains = [].concat.apply([], domainsByCategory);
@@ -48,12 +48,12 @@ module essex.visuals.heatStreams.dataconvert {
         result.setUTCSeconds(0);
         result.setUTCMinutes(0);
 
-        if (dateAggregation === 'days') {
+        if (dateAggregation === "days") {
             result.setUTCHours(0);
-        } else if (dateAggregation === 'months') {
+        } else if (dateAggregation === "months") {
             result.setUTCHours(0);
             result.setUTCDate(1);
-        } else if (dateAggregation === 'years') {
+        } else if (dateAggregation === "years") {
             result.setUTCHours(0);
             result.setUTCDate(1);
             result.setUTCMonth(1);
@@ -68,11 +68,11 @@ module essex.visuals.heatStreams.dataconvert {
     function coalesceValueSlices(
         data: CategoryDataMap,
         positionDomain: XDomain,
-        dateAggregation: DateAggregation
+        dateAggregation: DateAggregation,
     ) {
-        let valueMin: number = undefined;
-        let valueMax: number = undefined;
-        const isNumericDomain = typeof positionDomain[0] === 'number';
+        let valueMin: number;
+        let valueMax: number;
+        const isNumericDomain = typeof positionDomain[0] === "number";
 
         const categoryIds = Object.keys(data);
         const result = categoryIds.reduce((agg: CategoryValueMap, current: string) => {
@@ -81,7 +81,7 @@ module essex.visuals.heatStreams.dataconvert {
 
             // Bucket out the values by their aggregated position (within day, within year, etc..)
             const valuePositions: { [dateCode: string]: number[] } = {};
-            categoryData.forEach(cd => {
+            categoryData.forEach((cd) => {
                 if (cd.value !== undefined && cd.value !== null) {
                     const start = isNumericDomain ?
                         `${cd.position}` :
@@ -102,7 +102,7 @@ module essex.visuals.heatStreams.dataconvert {
                 }
             });
 
-            const slices = Object.keys(valuePositions).map(vp => {
+            const slices = Object.keys(valuePositions).map((vp) => {
                 const start = isNumericDomain ? parseInt(vp, 10) : new Date(vp);
                 return {
                     start,
@@ -119,18 +119,18 @@ module essex.visuals.heatStreams.dataconvert {
         };
     }
 
-    export function convertCategoricalDataView(dataView: DataView, options: VisualDataOptions): ChartData {
+    export function convertCategoricalDataView(dataView: DataView, options: IVisualDataOptions): IChartData {
         const { categorical } = dataView;
 
-        const categories = _.get(categorical, 'categories[0].values', [])
+        const categories = _.get(categorical, "categories[0].values", [])
             .map((t, index) => ({
                 id: index,
-                name: (t || '').toString(),
+                name: (t || "").toString(),
             }));
 
         const categoryData: CategoryDataMap = {};
-        categories.forEach(category => {
-            categoryData[category.id] = categorical.values.map(categoricalValue => {
+        categories.forEach((category) => {
+            categoryData[category.id] = categorical.values.map((categoricalValue) => {
                 const position = categoricalValue.source.groupName;
                 const value = categoricalValue.values[category.id];
                 return { position, value } as CategoryData;
@@ -149,7 +149,6 @@ module essex.visuals.heatStreams.dataconvert {
             ...valueSlices,
             positionDomain,
         };
-        console.log("Data Conversion Result", result);
         return result;
     }
 }

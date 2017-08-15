@@ -27,7 +27,9 @@
     "src/chart/interfaces.ts",
     "src/chart/DivergingScaler.ts",
     "src/chart/LinearScaler.ts",
-    "src/settings.ts",
+    "src/settings/VisualDataOptionsImpl.ts",
+    "src/settings/VisualRenderingOptionsImpl.ts",
+    "src/settings/VisualSettings.ts",
     "src/visual.ts"
   ]
 }

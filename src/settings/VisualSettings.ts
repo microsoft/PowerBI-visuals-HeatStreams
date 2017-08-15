@@ -24,32 +24,14 @@
  *  THE SOFTWARE.
  */
 
-module powerbi.extensibility.visual {
+namespace powerbi.extensibility.visual {
   "use strict";
   import DataViewObjectsParser = powerbi.extensibility.utils.dataview.DataViewObjectsParser;
-  import VisualRenderingOptions = essex.visuals.heatStreams.VisualRenderingOptions;
-  import VisualDataOptions = essex.visuals.heatStreams.VisualDataOptions;
-  import DateAggregation = essex.visuals.heatStreams.DateAggregation;
+  import VisualRenderingOptions = essex.visuals.heatStreams.IVisualRenderingOptions;
+  import VisualDataOptions = essex.visuals.heatStreams.IVisualDataOptions;
 
   export class VisualSettings extends DataViewObjectsParser {
     public rendering: VisualRenderingOptions = new VisualRenderingOptionsImpl();
     public data: VisualDataOptions = new VisualDataOptionsImpl();
-  }
-
-  export class VisualDataOptionsImpl implements VisualDataOptions {
-    public dateAggregation: DateAggregation = "days";
-    public valueMin = undefined;
-    public valueMax = undefined;
-    public scoreSplit = undefined;
-    public isLogScale: boolean = false;
-  }
-
-  export class VisualRenderingOptionsImpl implements VisualRenderingOptions {
-    public highlightColor = "gray";
-    public rowHeight = 15;
-    public categoryTextPercent = 10;
-    public axisHeight = 20;
-    public rowGap = true;
-    public colorScheme = "RdBu";
   }
 }

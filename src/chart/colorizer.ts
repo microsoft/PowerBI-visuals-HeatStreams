@@ -1,18 +1,19 @@
-module essex.visuals.heatStreams {
-    const d3: any = window['d3'];
+namespace essex.visuals.heatStreams {
+    const d3: any = (window as any).d3;
+
     /**
      * The domain of normalized values. Avoid zero so that log-scaling situations won't explode.
      */
     const DIVERGING_SCHEMES = {
-        "BrBG": true,
-        "PRGn": true,
-        "PiYG": true,
-        "PuOr": true,
-        "RdBu": true,
-        "RdGy": true,
-        "RdYlBu": true,
-        "RdYlGn": true,
-        "Spectral": true,
+        BrBG: true,
+        PRGn: true,
+        PiYG: true,
+        PuOr: true,
+        RdBu: true,
+        RdGy: true,
+        RdYlBu: true,
+        RdYlGn: true,
+        Spectral: true,
     };
 
     // NOTE: The coloring uses the "Diverging" HCL Pattern described here
@@ -22,7 +23,7 @@ module essex.visuals.heatStreams {
         private colorScale: d3.ScaleSequential<string>;
 
         constructor(
-            private options: ChartOptions,
+            private options: IChartOptions,
             valueMin,
             valueMid,
             valueMax,

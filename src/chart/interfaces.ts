@@ -1,30 +1,30 @@
-module essex.visuals.heatStreams {
+namespace essex.visuals.heatStreams {
     export type XDomain = [number, number] | [Date, Date];
 
-    export interface Category {
+    export interface ICategory {
         id: number;
         name: string;
     }
 
-    export interface CategoryData {
+    export interface ICategoryData {
         position: Date;
         value: number;
     }
 
-    export interface ChartData {
-        categories: Category[];
-        categoryData: CategoryDataMap;
-        categoryValues: CategoryValueMap;
+    export interface IChartData {
+        categories: ICategory[];
+        categoryData: ICategoryDataMap;
+        categoryValues: ICategoryValueMap;
         positionDomain: XDomain;
         valueDomain: [number, number];
     }
 
-    export interface ValueSlice {
+    export interface IValueSlice {
         start: Date | number;
         value: number;
     }
 
-    export interface VisualDataOptions {
+    export interface IVisualDataOptions {
         valueMin: number;
         valueMax: number;
         scoreSplit: number;
@@ -32,7 +32,7 @@ module essex.visuals.heatStreams {
         isLogScale: boolean;
     }
 
-    export interface VisualRenderingOptions {
+    export interface IVisualRenderingOptions {
         highlightColor: string;
         rowHeight: number;
         categoryTextPercent: number;
@@ -41,29 +41,29 @@ module essex.visuals.heatStreams {
         colorScheme: string;
     }
 
-    export interface ChartProps {
-        options: ChartOptions;
+    export interface IChartProps {
+        options: IChartOptions;
     }
 
-    export interface CategoryDataMap {
-        [key: string]: CategoryData[];
+    export interface ICategoryDataMap {
+        [key: string]: ICategoryData[];
     }
 
-    export interface CategoryValueMap {
-        [key: string]: ValueSlice[];
+    export interface ICategoryValueMap {
+        [key: string]: IValueSlice[];
     }
 
-    export interface ProcessedChartsData {
-        categoryValues: CategoryValueMap;
+    export interface IProcessedChartsData {
+        categoryValues: ICategoryValueMap;
         positionDomain: [Date, Date];
     }
 
-    export interface ChartOptions extends VisualRenderingOptions, VisualDataOptions {
+    export interface IChartOptions extends IVisualRenderingOptions, IVisualDataOptions {
         element: HTMLElement;
-        data: ChartData;
-        selections: { [key: string]: Category };
+        data: IChartData;
+        selections: { [key: string]: ICategory };
         scrollOffset: number;
     }
 
-    export type DateAggregation = 'hours' | 'days' | 'months' | 'years';
+    export type DateAggregation = "hours" | "days" | "months" | "years";
 }

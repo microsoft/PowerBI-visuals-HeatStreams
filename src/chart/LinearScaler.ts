@@ -1,4 +1,4 @@
-module essex.visuals.heatStreams {
+namespace essex.visuals.heatStreams {
     /**
      * The domain of normalized values. Avoid zero so that log-scaling situations won't explode.
      */

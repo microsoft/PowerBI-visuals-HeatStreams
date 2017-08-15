@@ -4,7 +4,9 @@
   "license": "MIT",
   "scripts": {
     "start": "pbiviz start",
-    "package": "pbiviz package"
+    "package": "pbiviz package",
+    "lint": "tslint 'src/**/*.ts*'",
+    "test": "npm-run-all lint package"
   },
   "dependencies": {
     "@types/d3": "^4.9.0",
@@ -14,8 +16,9 @@
     "powerbi-visuals-utils-dataviewutils": "1.2.0"
   },
   "devDependencies": {
-    "jest": "^20.0.4",
-    "tslint": "^5.4.3",
+    "npm-run-all": "^4.0.2",
+    "powerbi-visuals-tools": "^1.7.2",
+    "tslint": "^5.6.0",
     "typescript": "^2.4.2"
   },
   "jest": {
