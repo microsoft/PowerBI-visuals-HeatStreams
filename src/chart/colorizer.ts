@@ -16,6 +16,17 @@ namespace essex.visuals.heatStreams {
         Spectral: true,
     };
 
+    const CATEGORICAL = {
+        Accent: true,
+        Dark2: true,
+        Paired: true,
+        Pastel1: true,
+        Pastel2: true,
+        Set1: true,
+        Set2: true,
+        Set3: true,
+    };
+
     // NOTE: The coloring uses the "Diverging" HCL Pattern described here
     // http://hclwizard.org:64230/hclwizard/
     export class Colorizer {
@@ -29,6 +40,7 @@ namespace essex.visuals.heatStreams {
             valueMax,
         ) {
             const isLogScaled = options.isLogScale;
+            const { colorScheme } = this.options;
 
             // Set up the value scalers
             this.scaler = this.isDiverging ?
@@ -36,8 +48,11 @@ namespace essex.visuals.heatStreams {
                 new LinearScaler(d3, valueMin, valueMax, isLogScaled);
 
             // Set up the color scale
-            const colorInterpolator = d3[`interpolate${this.options.colorScheme}`];
-            this.colorScale = d3.scaleSequential(colorInterpolator);
+            if (CATEGORICAL[colorScheme]) {
+                this.colorScale = d3.scaleOrdinal(d3[`scheme${colorScheme}`]);
+            } else {
+                this.colorScale = d3.scaleSequential(d3[`interpolate${colorScheme}`]);
+            }
         }
 
         private get isDiverging() {

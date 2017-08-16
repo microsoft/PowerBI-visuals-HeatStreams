@@ -126,7 +126,15 @@
                             { "displayName": "Sequential - Greys", "value": "Greys" },
                             { "displayName": "Sequential - Oranges", "value": "Oranges" },
                             { "displayName": "Sequential - Purples", "value": "Purples" },
-                            { "displayName": "Sequential - Reds", "value": "Reds" }
+                            { "displayName": "Sequential - Reds", "value": "Reds" },
+                            { "displayName": "Categorical - 8 Colors", "value": "Set2" },
+                            { "displayName": "Categorical - 9 Colors", "value": "Set1" },
+                            { "displayName": "Categorical - 12 Colors", "value": "Set3" },
+                            { "displayName": "Categorical - 8 Pastels", "value": "Pastel2" },
+                            { "displayName": "Categorical - 9 Pastels", "value": "Pastel1" },
+                            { "displayName": "Categorical - 8 Accent", "value": "Accent" },
+                            { "displayName": "Categorical - 8 Dark", "value": "Dark2" },
+                            { "displayName": "Categorical - 12 Paired", "value": "Paired" }
                         ]
                     }
                 }
