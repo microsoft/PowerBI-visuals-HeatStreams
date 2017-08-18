@@ -2,6 +2,13 @@ namespace essex.visuals.heatStreams {
     const d3: any = (window as any).d3;
     const { Select, Enter, Exit, Update, Grouping } = d3.jsx;
 
+    function printValue(v: number): string {
+        if (v === null || v === undefined) {
+            return "";
+        }
+        return Number.isInteger(v) ? `${v}` : v.toFixed(2);
+    }
+
     export interface IndexedCategory extends ICategory {
         index: number;
     }
@@ -60,10 +67,10 @@ namespace essex.visuals.heatStreams {
         return (
             <Select all selector="rect.value-run" data={(d: IndexedCategory) => categoryValues[d.id]}>
                 <Enter append="rect" class="value-run" {...renderProps}>
-                    <title>{(d) => d.value.toFixed(2)}</title>
+                    <title>{(d) => printValue(d.value)}</title>
                 </Enter>
                 <Update {...renderProps}>
-                    <title>{(d) => d.value.toFixed(2)}</title>
+                    <title>{(d) => printValue(d.value)}</title>
                 </Update>
                 <Exit remove />
             </Select>
