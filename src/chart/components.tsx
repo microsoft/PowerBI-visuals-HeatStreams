@@ -1,6 +1,8 @@
 namespace essex.visuals.heatStreams {
     const d3: any = (window as any).d3;
+    const _: any = (window as any)._;
     const { Select, Enter, Exit, Update, Grouping } = d3.jsx;
+    const SLICE_WIDTH_WITH_TEXT_MIN_WIDTH = 35;
 
     function printValue(v: number): string {
         if (v === null || v === undefined) {
@@ -18,17 +20,24 @@ namespace essex.visuals.heatStreams {
 
     export interface ITimeAxisProps {
         axisOffset: number;
+        numTicks: number;
         xScale: d3.ScaleTime<number, number>;
     }
     /**
      * The Time Axis Component
      */
-    export const TimeAxis = ({ axisOffset, xScale }: ITimeAxisProps) => (
-        <g
-            transform={`translate(0, ${axisOffset})`}
-            call={d3.axisBottom(xScale)}
-        />
-    );
+    export const TimeAxis = ({ axisOffset, xScale, numTicks }: ITimeAxisProps) => {
+        const axis = d3.axisBottom(xScale);
+        axis.ticks(numTicks);
+        return (
+            <g class="time-axis" selectionRef="timeAxis">
+                <g class="time-axis-point"
+                    transform={`translate(0, ${axisOffset})`}
+                    call={axis}
+                />
+            </g>
+        );
+    };
 
     export interface IValueProps {
         xScale: d3.ScaleTime<number, number>;
@@ -40,9 +49,10 @@ namespace essex.visuals.heatStreams {
 
     export interface IValuesProps extends IValueProps {
         categoryValues: ICategoryValueMap;
+        showValues: boolean;
     }
 
-    export const Values = (props: IValuesProps) => {
+    export const ValueRun = (props) => {
         const {
             categoryValues,
             colorizer,
@@ -64,6 +74,7 @@ namespace essex.visuals.heatStreams {
                 return rowHeight * catIndex + (rowGap ? catIndex : 0);
             },
         };
+
         return (
             <Select all selector="rect.value-run" data={(d: IndexedCategory) => categoryValues[d.id]}>
                 <Enter append="rect" class="value-run" {...renderProps}>
@@ -77,30 +88,69 @@ namespace essex.visuals.heatStreams {
         );
     };
 
-    export interface ICategoryTextProps {
-        isCategorySelected: boolean;
-        categoryTextY: (d: IndexedCategory) => number;
-    }
+    export const ValueText = (props: IValuesProps) => {
+        const {
+            categoryValues,
+            xScale,
+            rowHeight,
+            rowGap,
+            sliceWidth,
+        } = props;
 
-    export const CategoryText = ({
-        isCategorySelected,
-        categoryTextY,
-        rowHeight,
-    }: ICategoryProps) => {
+        const fontSize = rowHeight - 4;
         const renderProps = {
-            "font-size": `${rowHeight - 2}px`,
-            "font-weight": (d: IndexedCategory) => isCategorySelected(d.name) ? "bold" : "normal",
-            "text": (d: ICategory) => d.name,
-            "x": 2,
-            "y": categoryTextY,
+            "font-size": `${fontSize}px`,
+            "x": (d: IValueSlice) => xScale(d.start) + 2,
+            "y": (d: IValueSlice, i: number, e: any) => {
+                const catIndex = e[i].parentNode.__data__.index;
+                return (rowHeight * catIndex) + fontSize + (rowGap ? catIndex : 0);
+            },
         };
+
         return (
-            <Select all selector="text.category-text" data={(d: ICategory) => [d]}>
-                <Enter append="text" class="category-text" fill="black" {...renderProps} />
-                <Update {...renderProps} />
+            <Select all
+                selector="text.value-text"
+                data={(d: IndexedCategory) => categoryValues[d.id].filter((v) => {
+                    return sliceWidth > SLICE_WIDTH_WITH_TEXT_MIN_WIDTH;
+                })}
+            >
+                <Enter
+                    append="text"
+                    class="value-text"
+                    {...renderProps}
+                    text={(d) => printValue(d.value)}
+                />
+                <Update
+                    {...renderProps}
+                    text={(d) => printValue(d.value)}
+                />
                 <Exit remove />
             </Select>
         );
+    };
+
+    export const Values = (props: IValuesProps) => {
+        const { showValues } = props;
+        const children = [,
+        ];
+        if (showValues) {
+            children.push(<ValueText {...props} />);
+        }
+
+        if (showValues) {
+            return (
+                <Grouping children={children}>
+                    <ValueRun {...props} />
+                    <ValueText {...props} />
+                </Grouping>
+            );
+        } else {
+            return (
+                <Grouping children={children}>
+                    <ValueRun {...props} />
+                </Grouping>
+            );
+        }
     };
 
     export const CategoryView = ({
@@ -111,40 +161,24 @@ namespace essex.visuals.heatStreams {
         rowGap,
     }: ICategoryProps) => {
         const renderProps = {
-            "height": rowHeight,
-            "shape-rendering": "geometricPrecision",
-            "stroke": highlightColor,
+            "data-cat": (d: IndexedCategory) => d.name,
             "stroke-width": (d: IndexedCategory) => isCategorySelected(d.name) ? 1 : 0,
-            "width": width - 2,
-            "x": 1,
             "y": (d: IndexedCategory) => rowHeight * d.index + (rowGap ? d.index : 0),
-            "z-index": 1,
         };
         return (
             <Select all selector="rect.category-view" data={(d: ICategory) => [d]}>
-                <Enter append="rect" class="category-view" fill="none" {...renderProps} />
-                <Update {...renderProps} />
-                <Exit remove />
-            </Select>
-        );
-    };
-
-    export const CategoryChart = ({
-        rowHeight,
-        width,
-        chartPercent,
-        textPercent,
-        rowGap,
-    }: ICategoryProps) => {
-        const renderProps = {
-            height: rowHeight,
-            width: Math.floor(width * chartPercent),
-            x: width * textPercent,
-            y: (d: IndexedCategory) => rowHeight * d.index + (rowGap ? d.index : 0),
-        };
-        return (
-            <Select all selector="rect.category-chart" data={(d: ICategory) => [d]}>
-                <Enter append="rect" class="category-chart" fill="none" {...renderProps} />
+                <Enter
+                    append="rect"
+                    class="category-view"
+                    fill="none"
+                    height={rowHeight}
+                    shape-rendering="geometricPrecision"
+                    stroke={highlightColor}
+                    width={width - 2}
+                    x={1}
+                    z-index={1}
+                    {...renderProps}
+                />
                 <Update {...renderProps} />
                 <Exit remove />
             </Select>
@@ -162,19 +196,21 @@ namespace essex.visuals.heatStreams {
         categoryValues: ICategoryValueMap;
         isCategorySelected: (category: string) => boolean;
         categoryTextY: (d: ICategory, index: number) => number;
-        rebind: any;
+        rebindText: any;
+        rebindChart: any;
         rowGap: boolean;
     }
 
     export interface ICategoriesProps extends ICategoryProps {
         categories: ICategory[];
+        axisOffset: number;
+        height: number;
+        numTicks: number;
     }
 
-    export const Categories = (props: ICategoriesProps) => {
-        const chartContent = (
+    export const CategoryCharts = (props: ICategoriesProps) => {
+        const content = (
             <Grouping>
-                <CategoryText {...props} />
-                <CategoryChart {...props} />
                 <Values {...props} />
                 <CategoryView {...props} />
             </Grouping>
@@ -183,26 +219,78 @@ namespace essex.visuals.heatStreams {
             <Grouping>
                 <Select
                     all
-                    selector=".category"
-                    selectionRef="categories"
+                    selector="g.category-chart"
                     data={props.categories}
                     data-key={(d: ICategory) => d.name}
-                    rebind={props.rebind}
+                    rebind={props.rebindChart}
                 >
                     <Enter>
-                        <g
-                            selectionRef="categoryGroup"
-                            class="category"
-                            each={(d: IndexedCategory, i: number) => d.index = i}>
-                            {chartContent}
+                        <g class="category-chart" selectionRef="categoryChart">
+                            {content}
                         </g>
                     </Enter>
-                    <Update each={(d: IndexedCategory, i: number) => d.index = i}>
-                        {chartContent}
+                    <Update>
+                        {content}
                     </Update>
                     <Exit remove />
                 </Select>
             </Grouping>
         );
     };
+
+    export const CategoryTexts = (props: ICategoriesProps) => {
+        const {
+            rowHeight,
+            categoryTextY,
+            isCategorySelected,
+        } = props;
+
+        const updateProps = {
+            "font-weight": (d: IndexedCategory) => isCategorySelected(d.name) ? "bold" : "normal",
+            "text": (d: ICategory) => d.name,
+            "y": categoryTextY,
+        };
+        const titleContent = (d: ICategory) => {
+            return Object
+                .keys(d.metadata)
+                .reduce((prev, current) => `${prev}\n${_.capitalize(current)}: ${printValue(d.metadata[current])}`, "");
+        };
+        return (
+            <Grouping>
+                <Select
+                    all
+                    selector="text.category-text"
+                    data={props.categories}
+                    data-key={(d: ICategory) => d.name}
+                    rebind={props.rebindText}
+                >
+                    <Enter>
+                        <text class="category-text"
+                            fill="black"
+                            font-size={`${rowHeight - 2}px`}
+                            x={2}
+                            {...updateProps}
+                        >
+                            <title>{titleContent}</title>
+                        </text>
+                    </Enter>
+                    <Update {...updateProps} />
+                    <Exit remove />
+                </Select>
+            </Grouping>
+        );
+    };
+
+    export const Categories = (props: ICategoriesProps) => (
+        <g class="category-list" selectionRef="categoryList">
+            <g class="category-charts">
+                <CategoryCharts {...props} />
+            </g>
+            <TimeAxis {...props} />
+            <rect class="occluder" width={props.width * props.textPercent} height="100%" fill="white" />
+            <g class="category-texts">
+                <CategoryTexts {...props} />
+            </g>
+        </g>
+    );
 }

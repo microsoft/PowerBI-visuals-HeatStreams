@@ -39,7 +39,7 @@
                 },
                 "dateAggregation": {
                     "displayName": "Date Buckets",
-                    "description": "When a date domain is used, this specifies date bucket granularity.",
+                    "description": "When a date domain is used, this specifies date-bucket granularity.",
                     "type": {
                         "enumeration": [
                             { "displayName": "Hourly", "value": "hours" },
@@ -47,6 +47,13 @@
                             { "displayName": "Monthly", "value": "months" },
                             { "displayName": "Yearly", "value": "years" }
                         ]
+                    }
+                },
+                "numericAggregation": {
+                    "displayName": "Value Buckets",
+                    "description": "When a NUMERIC domain is used, this specifies number-bucket granularity.",
+                    "type": {
+                        "numeric": true
                     }
                 },
                 "valueMin": {
@@ -68,6 +75,26 @@
                     "description": "Score Split Point, midpoint between min and max if not present",
                     "type": {
                         "numeric": true
+                    }
+                },
+                "sortBy": {
+                    "displayName": "Sort By",
+                    "description": "Category Sorting Criteria",
+                    "type": {
+                        "enumeration": [
+                            { "displayName": "Name", "value": "name" },
+                            { "displayName": "Average", "value": "average" },
+                            { "displayName": "Max", "value": "max" },
+                            { "displayName": "Density", "value": "density" },
+                            { "displayName": "Sum", "value": "sum" }
+                        ]
+                    }
+                },
+                "sortInvert": {
+                    "displayName": "Sort Invert",
+                    "description": "Invert Sorting Criteria",
+                    "type": {
+                        "bool": true
                     }
                 }
             }
@@ -103,6 +130,27 @@
                 "rowGap": {
                     "displayName": "Row Gap",
                     "description": "Whether to show a small gap between rows",
+                    "type": {
+                        "bool": true
+                    }
+                },
+                "zoomLevel": {
+                    "displayName": "Zoom Level",
+                    "description": "Data Zoom Level",
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "numTicks": {
+                    "displayName": "Num Axis Ticks",
+                    "description": "The number of axis ticks to present",
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "showValues": {
+                    "displayName": "Show Values",
+                    "description": "Show Data Values",
                     "type": {
                         "bool": true
                     }

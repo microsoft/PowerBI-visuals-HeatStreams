@@ -35,5 +35,8 @@ namespace powerbi.extensibility.visual {
         public axisHeight = 20;
         public rowGap = true;
         public colorScheme = "RdBu";
+        public zoomLevel = 1;
+        public numTicks = 30;
+        public showValues = true;
     }
 }

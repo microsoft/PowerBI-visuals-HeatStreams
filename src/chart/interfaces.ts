@@ -4,6 +4,9 @@ namespace essex.visuals.heatStreams {
     export interface ICategory {
         id: number;
         name: string;
+        metadata?: {
+            [key: string]: number;
+        };
     }
 
     export interface ICategoryData {
@@ -24,12 +27,17 @@ namespace essex.visuals.heatStreams {
         value: number;
     }
 
+    export type SortBy = "name" | "average" | "max" | "density";
+
     export interface IVisualDataOptions {
         valueMin: number;
         valueMax: number;
         scoreSplit: number;
+        numericAggregation: number;
         dateAggregation: DateAggregation;
         isLogScale: boolean;
+        sortBy: SortBy;
+        sortInvert: boolean;
     }
 
     export interface IVisualRenderingOptions {
@@ -39,6 +47,9 @@ namespace essex.visuals.heatStreams {
         axisHeight: number;
         rowGap: boolean;
         colorScheme: string;
+        zoomLevel: number;
+        numTicks: number;
+        showValues: boolean;
     }
 
     export interface IChartProps {

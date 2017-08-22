@@ -119,10 +119,69 @@ namespace essex.visuals.heatStreams.dataconvert {
         };
     }
 
+    type Sorter = (cat1: ICategory, cat2: ICategory) => number;
+
+    function getSortComparator(
+        categories: ICategory[],
+        categoryData: CategoryDataMap,
+        options: IVisualDataOptions,
+    ): Sorter {
+        const { sortBy, sortInvert } = options;
+
+        categories.forEach((cat: ICategory) => {
+            const data = categoryData[cat.id];
+            const count = data.length;
+            const sum = data.reduce((prev, current) => prev + current.value, 0);
+            const max = Math.max(...data.map((c) => c.value));
+
+            cat.metadata = {
+                average: sum / count,
+                density: data.length,
+                max,
+                sum,
+            };
+        });
+
+        const valueCompare = (field: string) => (cat1: ICategory, cat2: ICategory) => {
+            const v1 = cat1.metadata[field];
+            const v2 = cat2.metadata[field];
+            return v2 - v1;
+        };
+
+        const SORT_COMPARATORS: {[key: string]: Sorter} = {
+            average: valueCompare("average"),
+            density: valueCompare("density"),
+            max: valueCompare("max"),
+            name: (cat1: ICategory, cat2: ICategory) => {
+                if (cat1.name < cat2.name) {
+                    return -1;
+                } else if (cat1.name > cat2.name) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            },
+        };
+
+        const sortComparator: Sorter = SORT_COMPARATORS[sortBy];
+        let result = sortComparator;
+        if (sortInvert) {
+            result = (cat1, cat2) => -1 * sortComparator(cat1, cat2);
+        }
+
+        return result;
+    }
+
+    function sortCategories(categories: ICategory[], categoryData: CategoryDataMap, options: IVisualDataOptions) {
+        const comparator = getSortComparator(categories, categoryData, options);
+        const result = categories.sort(comparator);
+        return result;
+    }
+
     export function convertCategoricalDataView(dataView: DataView, options: IVisualDataOptions): IChartData {
         const { categorical } = dataView;
 
-        const categories = _.get(categorical, "categories[0].values", [])
+        let categories = _.get(categorical, "categories[0].values", [])
             .map((t, index) => ({
                 id: index,
                 name: (t || "").toString(),
@@ -143,6 +202,8 @@ namespace essex.visuals.heatStreams.dataconvert {
             positionDomain,
             options.dateAggregation,
         );
+
+        categories = sortCategories(categories, categoryData, options);
         const result = {
             categories,
             categoryData,

@@ -6,11 +6,13 @@ namespace essex.visuals.heatStreams {
     export class Chart {
         public scrollPosition: number = 0;
         private optionsInternal: IChartOptions;
-        private categoryRebinder: any;
+        private categoryTextRebinder: any;
+        private categoryChartRebinder: any;
         private svgSelection: any;
         private colorizer: Colorizer;
         private selectionChangedHandler: SelectionChangedHandler;
         private renderedScale: { width: number, height: number };
+        private refs: any;
 
         public set options(value: IChartOptions) {
             this.optionsInternal = value;
@@ -114,6 +116,18 @@ namespace essex.visuals.heatStreams {
             this.options.selections = value;
         }
 
+        private get numTicks() {
+            return this.options.numTicks;
+        }
+
+        private get showValues() {
+            return this.options.showValues;
+        }
+
+        private get zoomLevel() {
+            return this.options.zoomLevel;
+        }
+
         public onSelectionChanged(handler: SelectionChangedHandler) {
             this.selectionChangedHandler = handler;
         }
@@ -143,8 +157,24 @@ namespace essex.visuals.heatStreams {
             this.renderedScale = { width, height };
             element.innerHTML = "";
 
-            d3.jsx.render(d3.select(element),
+            /*
+             * The zoom object allows the chart to be panned horizontally
+             */
+            const zoom = d3.zoom()
+                .scaleExtent([1, 1])
+                .on("zoom", () => {
+                    const max = this.width - (xScale(data.positionDomain[1]));
+                    const actual = d3.event.transform.x;
+                    const target = Math.min(0, Math.max(max, actual));
+                    const translate = `translate(${target})`;
+                    d3.select("g.time-axis").attr("transform", translate);
+                    d3.selectAll("g.category-chart").attr("transform", translate);
+                });
+
+            categoriesInView.forEach((c: IndexedCategory, idx) => c.index = idx);
+            this.refs = d3.jsx.render(d3.select(element),
                 <svg
+                    call={zoom}
                     selectionRef={(e: any) => this.svgSelection = e}
                     height={height} width={width}
                     on={{
@@ -152,39 +182,48 @@ namespace essex.visuals.heatStreams {
                         "wheel.scroll": this.onScroll.bind(this),
                     }}
                 >
-                    <g class="category-list">
-                        <TimeAxis axisOffset={axisOffset} xScale={xScale} />
-                        <Categories
-                            categoryValues={data.categoryValues}
-                            xScale={xScale}
-                            colorizer={(value: number) => this.colorizer.color(value).toString()}
-                            categories={categoriesInView}
-                            chartPercent={this.chartPercent}
-                            textPercent={this.textPercent}
-                            isCategorySelected={isCategorySelected}
-                            rowHeight={rowHeight}
-                            highlightColor={highlightColor}
-                            categoryTextY={categoryTextY}
-                            width={width}
-                            rebind={(r: any) => this.categoryRebinder = r}
-                            rowGap={rowGap}
-                            sliceWidth={sliceWidth}
-                        />
-                    </g>
+                    <Categories
+                        axisOffset={axisOffset}
+                        categoryValues={data.categoryValues}
+                        xScale={xScale}
+                        colorizer={(value: number) => this.colorizer.color(value).toString()}
+                        categories={categoriesInView}
+                        chartPercent={this.chartPercent}
+                        textPercent={this.textPercent}
+                        isCategorySelected={isCategorySelected}
+                        rowHeight={rowHeight}
+                        height={height}
+                        highlightColor={highlightColor}
+                        categoryTextY={categoryTextY}
+                        width={width}
+                        rebindText={(r: any) => this.categoryTextRebinder = r}
+                        rebindChart={(r: any) => this.categoryChartRebinder = r}
+                        rowGap={rowGap}
+                        sliceWidth={sliceWidth}
+                        numTicks={this.numTicks}
+                        showValues={this.showValues}
+                    />
                 </svg>,
             );
         }
 
         private sliceWidth(xScale: (input: number | Date) => number): number {
+            const { dateAggregation, numericAggregation } = this.options;
             const start = this.data.positionDomain[0];
-            const { dateAggregation } = this.options;
-            const end = (typeof start === "number") ? (start as number) + 1 : dateSliceEnd(start, dateAggregation);
+            const isNumber = typeof start === "number";
+            const end = isNumber ?
+                (start as number) + numericAggregation :
+                dateSliceEnd((start as Date), dateAggregation);
             return xScale(end) - xScale(start);
         }
 
         private rerender() {
-            const { categoriesInView } = this;
-            this.categoryRebinder((sel: any) => sel.data(categoriesInView, (d: ICategory) => d.name));
+            const {
+                categoriesInView: categories,
+            } = this;
+            categories.forEach((c: IndexedCategory, idx) => c.index = idx);
+            this.categoryChartRebinder((sel: any) => sel.data(categories, (d: ICategory) => d.name));
+            this.categoryTextRebinder((sel: any) => sel.data(categories, (d: ICategory) => d.name));
         }
 
         private get isFullRenderRequired() {
@@ -210,7 +249,7 @@ namespace essex.visuals.heatStreams {
         }
 
         private getXScale(domain: XDomain): d3.ScaleTime<number, number> {
-            const range = [this.width * this.textPercent, this.width];
+            const range = [this.width * this.textPercent, this.width * this.zoomLevel];
             const isNumberDomain = typeof domain[0] === "number";
             if (isNumberDomain) {
                 return d3.scaleLinear().domain(domain).range(range);
