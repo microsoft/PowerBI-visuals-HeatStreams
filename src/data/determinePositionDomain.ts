@@ -25,43 +25,15 @@
  */
 namespace essex.visuals.heatStreams.dataconvert {
     "use strict";
-    import DataView = powerbi.DataView;
-    import CategoryData = essex.visuals.heatStreams.ICategoryData;
     import CategoryDataMap = essex.visuals.heatStreams.ICategoryDataMap;
-    const _ = (window as any)._;
+    import XDomain = essex.visuals.heatStreams.XDomain;
+    const d3 = (window as any).d3;
 
-    export function convertCategoricalDataView(dataView: DataView, options: IVisualDataOptions): IChartData {
-        const { categorical } = dataView;
-
-        let categories = _.get(categorical, "categories[0].values", [])
-            .map((t, index) => ({
-                id: index,
-                name: (t || "").toString(),
-            }));
-
-        const categoryData: CategoryDataMap = {};
-        categories.forEach((category) => {
-            categoryData[category.id] = categorical.values.map((categoricalValue) => {
-                const position = categoricalValue.source.groupName;
-                const value = categoricalValue.values[category.id];
-                return { position, value } as CategoryData;
-            });
-        });
-
-        const positionDomain = determinePositionDomain(categoryData);
-        const valueSlices = coalesceValueSlices(
-            categoryData,
-            positionDomain,
-            options.dateAggregation,
-        );
-
-        categories = sortCategories(categories, categoryData, options);
-        const result = {
-            categories,
-            categoryData,
-            ...valueSlices,
-            positionDomain,
-        };
-        return result;
+    export function determinePositionDomain(data: CategoryDataMap): XDomain {
+        const domainsByCategory = Object.keys(data).map((category) => (
+            d3.extent(data[category], (pv: { position: Date | number }) => pv.position)
+        )) as XDomain[];
+        const mergedDomains = [].concat.apply([], domainsByCategory);
+        return d3.extent(mergedDomains) as XDomain;
     }
 }
