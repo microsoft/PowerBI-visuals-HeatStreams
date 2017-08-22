@@ -28,13 +28,14 @@ namespace essex.visuals.heatStreams.dataconvert {
     import CategoryDataMap = essex.visuals.heatStreams.ICategoryDataMap;
 
     type Sorter = (cat1: ICategory, cat2: ICategory) => number;
+    const invert = (sortComparator: Sorter) => (cat1: ICategory, cat2: ICategory) => -1 * sortComparator(cat1, cat2);
 
     function getSortComparator(
         categories: ICategory[],
         categoryData: CategoryDataMap,
         options: IVisualDataOptions,
     ): Sorter {
-        const { sortBy, sortInvert } = options;
+        const { sortBy, sortInvert: isInverted } = options;
 
         categories.forEach((cat: ICategory) => {
             const data = categoryData[cat.id];
@@ -71,13 +72,10 @@ namespace essex.visuals.heatStreams.dataconvert {
             },
         };
 
-        const sortComparator: Sorter = SORT_COMPARATORS[sortBy];
-        let result = sortComparator;
-        if (sortInvert) {
-            result = (cat1, cat2) => -1 * sortComparator(cat1, cat2);
-        }
-
-        return result;
+        const comparator: Sorter = SORT_COMPARATORS[sortBy];
+        return isInverted ?
+            invert(comparator) :
+            comparator;
     }
 
     export function sortCategories(
