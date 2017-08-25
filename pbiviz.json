@@ -5,14 +5,14 @@
     "guid": "heatStreams74779FE5319F4655BE62C4C5FD0ABFB1",
     "visualClassName": "Visual",
     "version": "1.0.0",
-    "description": "",
+    "description": "Uses color gradients to represent variations in categorical data streams, e.g., sentiment over time. [100 chars with spaces",
     "supportUrl": "",
     "gitHubUrl": ""
   },
   "apiVersion": "1.7.0",
   "author": {
-    "name": "Chris Trevino",
-    "email": "chtrevin@microsoft.com"
+    "name": "Microsoft (experimental)",
+    "email": "msrvizsupport@microsoft.com"
   },
   "assets": {
     "icon": "assets/icon.png"
