@@ -60,7 +60,8 @@ namespace essex.visuals.heatStreams {
         }
 
         public color(value: number) {
-            return this.colorScale(this.scaler.scale(value));
+            const scaled = this.scaler.scale(value);
+            return this.colorScale(scaled);
         }
     }
 }
