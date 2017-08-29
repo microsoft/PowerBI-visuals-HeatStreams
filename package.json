@@ -1,6 +1,6 @@
 {
   "name": "essex-visual-heat-streams",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "license": "MIT",
   "scripts": {
     "start": "pbiviz start",
