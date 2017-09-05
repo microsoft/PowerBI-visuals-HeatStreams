@@ -23,44 +23,45 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *  THE SOFTWARE.
  */
-// tslint:disable no-console
-namespace essex.visuals.heatStreams.dataconvert {
-    "use strict";
-    import DataView = powerbi.DataView;
-    import ISelectionManager = powerbi.extensibility.ISelectionManager;
-    import ChartData = essex.visuals.heatStreams.IChartData;
-    import Category = essex.visuals.heatStreams.ICategory;
-    import VisualDataOptions = essex.visuals.heatStreams.IVisualDataOptions;
-    const _ = (window as any)._;
+// tslint:disable no-console no-var-requires
+"use strict";
+import {
+    ICategory,
+    IChartData,
+    IVisualDataOptions,
+} from "../chart/interfaces";
+import convertCategoricalDataView from "./convertCategoricalDataView";
 
-    export class DataViewConverter {
-        constructor(private selectionManager: ISelectionManager) {
-        }
+const get = require("lodash/get");
+const isEqual = require("lodash/isEqual");
 
-        public convertDataView(dataView: DataView, options: VisualDataOptions): ChartData {
-            // TODO: when we support date-based drilldown, we have to process the matrix-form data view
-            return convertCategoricalDataView(dataView, options);
-        }
+export default class DataViewConverter {
+    constructor(private selectionManager: any) {
+    }
 
-        public unpackSelectedCategories(dataView: DataView): { [key: string]: Category } {
-            const selection = this.selectionManager.getSelectionIds();
-            const category = _.get(dataView, "categorical.categories[0]");
+    public convertDataView(dataView: powerbi.DataView, options: IVisualDataOptions): IChartData {
+        // TODO: when we support date-based drilldown, we have to process the matrix-form data view
+        return convertCategoricalDataView(dataView, options);
+    }
 
-            const selectedCategories = {};
-            if (category) {
-                selection.forEach((s) => {
-                    try {
-                        const selectorData = (s as any).selector.data[0].expr;
-                        if (_.isEqual(selectorData.left.source, (category as any).source.expr.source)) {
-                            selectedCategories[selectorData.right.value] = true;
-                        }
-                    } catch (err) {
-                        console.log("Error Processing Selection", s, err);
+    public unpackSelectedCategories(dataView: powerbi.DataView): { [key: string]: ICategory } {
+        const selection = this.selectionManager.getSelectionIds();
+        const category = get(dataView, "categorical.categories[0]");
+
+        const selectedCategories = {};
+        if (category) {
+            selection.forEach((s) => {
+                try {
+                    const selectorData = (s as any).selector.data[0].expr;
+                    if (isEqual(selectorData.left.source, (category as any).source.expr.source)) {
+                        selectedCategories[selectorData.right.value] = true;
                     }
-                });
-            }
-
-            return selectedCategories;
+                } catch (err) {
+                    console.log("Error Processing Selection", s, err);
+                }
+            });
         }
+
+        return selectedCategories;
     }
 }

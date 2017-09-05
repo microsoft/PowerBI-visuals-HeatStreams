@@ -155,6 +155,13 @@
                         "bool": true
                     }
                 },
+                "showCategories": {
+                    "displayName": "Show Categories",
+                    "description": "Show Category Labels",
+                    "type": {
+                        "bool": true
+                    }
+                },
                 "colorScheme": {
                     "displayName": "Theme",
                     "description": "The data color scheme",

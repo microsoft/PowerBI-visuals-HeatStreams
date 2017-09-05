@@ -23,17 +23,17 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *  THE SOFTWARE.
  */
-namespace essex.visuals.heatStreams.dataconvert {
-    "use strict";
-    import CategoryDataMap = essex.visuals.heatStreams.ICategoryDataMap;
-    import XDomain = essex.visuals.heatStreams.XDomain;
-    const d3 = (window as any).d3;
+"use strict";
+import * as d3 from "d3";
+import {
+    ICategoryDataMap,
+    XDomain,
+} from "../chart/interfaces";
 
-    export function determinePositionDomain(data: CategoryDataMap): XDomain {
-        const domainsByCategory = Object.keys(data).map((category) => (
-            d3.extent(data[category], (pv: { position: Date | number }) => pv.position)
-        )) as XDomain[];
-        const mergedDomains = [].concat.apply([], domainsByCategory);
-        return d3.extent(mergedDomains) as XDomain;
-    }
+export default function determinePositionDomain(data: ICategoryDataMap): XDomain {
+    const domainsByCategory = Object.keys(data).map((category) => (
+        d3.extent(data[category], (pv: { position: Date | number }) => pv.position)
+    )) as XDomain[];
+    const mergedDomains = [].concat.apply([], domainsByCategory);
+    return d3.extent(mergedDomains) as XDomain;
 }

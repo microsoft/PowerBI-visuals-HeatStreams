@@ -23,15 +23,24 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *  THE SOFTWARE.
  */
+// tslint:disable no-reference ordered-imports
+//
+// This is pretty hacky. The PowerBI utils use Typescript namespaces, which are awkward to use here.
+//
+/// <reference path="../../node_modules/powerbi-visuals-utils-typeutils/lib/index.d.ts" />
+/// <reference path="../../node_modules/powerbi-visuals-utils-svgutils/lib/index.d.ts" />
+/// <reference path="../../node_modules/powerbi-visuals-utils-dataviewutils/lib/index.d.ts" />
+import "script-loader!powerbi-visuals-utils-typeutils/lib/index";
+import "script-loader!powerbi-visuals-utils-svgutils/lib/index";
+import "script-loader!powerbi-visuals-utils-dataviewutils/lib/index";
+import {
+  IVisualDataOptions,
+  IVisualRenderingOptions,
+} from "../chart/interfaces";
+import VisualDataOptionsImpl from "./VisualDataOptionsImpl";
+import VisualRenderingOptionsImpl from "./VisualRenderingOptionsImpl";
 
-namespace powerbi.extensibility.visual {
-  "use strict";
-  import DataViewObjectsParser = powerbi.extensibility.utils.dataview.DataViewObjectsParser;
-  import VisualRenderingOptions = essex.visuals.heatStreams.IVisualRenderingOptions;
-  import VisualDataOptions = essex.visuals.heatStreams.IVisualDataOptions;
-
-  export class VisualSettings extends DataViewObjectsParser {
-    public rendering: VisualRenderingOptions = new VisualRenderingOptionsImpl();
-    public data: VisualDataOptions = new VisualDataOptionsImpl();
-  }
+export default class VisualSettings extends powerbi.extensibility.utils.dataview.DataViewObjectsParser {
+  public rendering: IVisualRenderingOptions = new VisualRenderingOptionsImpl();
+  public data: IVisualDataOptions = new VisualDataOptionsImpl();
 }

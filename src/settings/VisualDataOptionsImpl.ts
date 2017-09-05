@@ -23,20 +23,19 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *  THE SOFTWARE.
  */
+import {
+    DateAggregation,
+    IVisualDataOptions,
+    SortBy,
+} from "../chart/interfaces";
 
-namespace powerbi.extensibility.visual {
-    "use strict";
-    import VisualDataOptions = essex.visuals.heatStreams.IVisualDataOptions;
-    import DateAggregation = essex.visuals.heatStreams.DateAggregation;
-
-    export class VisualDataOptionsImpl implements VisualDataOptions {
-        public dateAggregation: DateAggregation = "days";
-        public numericAggregation: number = 1;
-        public valueMin = undefined;
-        public valueMax = undefined;
-        public scoreSplit = undefined;
-        public isLogScale: boolean = false;
-        public sortBy: essex.visuals.heatStreams.SortBy = "name";
-        public sortInvert = false;
-    }
+export default class VisualDataOptionsImpl implements IVisualDataOptions {
+    public dateAggregation: DateAggregation = "days";
+    public numericAggregation: number = 1;
+    public valueMin = undefined;
+    public valueMax = undefined;
+    public scoreSplit = undefined;
+    public isLogScale: boolean = false;
+    public sortBy: SortBy = "name";
+    public sortInvert = false;
 }

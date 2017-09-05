@@ -1,38 +1,20 @@
 {
   "compilerOptions": {
-    "allowJs": true,
+    "target": "es5",
+    "module": "commonjs",
     "jsx": "react",
-    "jsxFactory": "d3.jsx.createElement",
-    "emitDecoratorMetadata": true,
+    "jsxFactory": "createElement",
     "experimentalDecorators": true,
-    "target": "ES5",
-    "sourceMap": true,
+    "emitDecoratorMetadata": true,
+    "declaration": true,
+    "noImplicitAny": false,
     "noUnusedLocals": true,
-    "out": "./.tmp/build/visual.js",
+    "sourceMap": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "outDir": "lib",
     "lib": [
       "es2017",
       "dom"
     ]
-  },
-  "files": [
-    ".api/v1.7.0/PowerBI-visuals.d.ts",
-    "node_modules/powerbi-visuals-utils-dataviewutils/lib/index.d.ts",
-    "node_modules/@types/d3/index.d.ts",
-    "src/data/dateUtils.ts",
-    "src/data/convertCategoricalDataView.ts",
-    "src/data/coalesceValueSlices.ts",
-    "src/data/sortCategories.ts",
-    "src/data/determinePositionDomain.ts",
-    "src/data/DataViewConverter.ts",
-    "src/chart/components.tsx",
-    "src/chart/colorizer.ts",
-    "src/chart/chart.tsx",
-    "src/chart/interfaces.ts",
-    "src/chart/DivergingScaler.ts",
-    "src/chart/LinearScaler.ts",
-    "src/settings/VisualDataOptionsImpl.ts",
-    "src/settings/VisualRenderingOptionsImpl.ts",
-    "src/settings/VisualSettings.ts",
-    "src/visual.ts"
-  ]
+  }
 }

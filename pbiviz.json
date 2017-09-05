@@ -9,6 +9,7 @@
     "supportUrl": "",
     "gitHubUrl": ""
   },
+  "output": "dist/heatstreams.pbiviz",
   "apiVersion": "1.7.0",
   "author": {
     "name": "Microsoft (experimental)",
@@ -17,14 +18,7 @@
   "assets": {
     "icon": "assets/icon.png"
   },
-  "externalJS": [
-    "node_modules/powerbi-visuals-utils-dataviewutils/lib/index.js",
-    "node_modules/d3/build/d3.js",
-    "node_modules/d3-scale-chromatic/build/d3-scale-chromatic.js",
-    "node_modules/lodash/lodash.min.js",
-    "lib/d3-jsx.min.js"
-  ],
-  "style": "style/visual.less",
+  "style": "style/visual.scss",
   "capabilities": "capabilities.json",
   "dependencies": "dependencies.json",
   "stringResources": []
