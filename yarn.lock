@@ -2,6 +2,15 @@
 # yarn lockfile v1
 
 
+"@essex/d3-coloring-scales@^1.1.3":
+  version "1.1.4"
+  resolved "https://registry.yarnpkg.com/@essex/d3-coloring-scales/-/d3-coloring-scales-1.1.4.tgz#4c7f11a3d415406ff2e34a333702dbf7ded903a6"
+  dependencies:
+    "@types/d3" "^4.10.0"
+    "@types/d3-scale-chromatic" "^1.0.2"
+    d3 "^4.10.2"
+    d3-scale-chromatic "^1.1.1"
+
 "@essex/powerbi-visual-scripts@^1.1.2":
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/@essex/powerbi-visual-scripts/-/powerbi-visual-scripts-1.1.2.tgz#756a8fce0068e6e6a987c3d7fa8aff332b031123"
@@ -132,6 +141,10 @@
   resolved "https://registry.yarnpkg.com/@types/d3-request/-/d3-request-1.0.2.tgz#db9db8154f47816584706c6e6f702be66f22f4be"
   dependencies:
     "@types/d3-dsv" "*"
+
+"@types/d3-scale-chromatic@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@types/d3-scale-chromatic/-/d3-scale-chromatic-1.0.2.tgz#dded12e731f4d2dcf0861c62364eefe7c8d720d7"
 
 "@types/d3-scale@*":
   version "1.0.10"
@@ -1451,7 +1464,7 @@ d3@3.5.5:
   version "3.5.5"
   resolved "https://registry.yarnpkg.com/d3/-/d3-3.5.5.tgz#be1aba6a84fb6653283b3ebebb7f570e3bda187e"
 
-d3@^4.10.0:
+d3@^4.10.0, d3@^4.10.2:
   version "4.10.2"
   resolved "https://registry.yarnpkg.com/d3/-/d3-4.10.2.tgz#d401b2bc0372a77e6822f278c0e4b4090206babd"
   dependencies:

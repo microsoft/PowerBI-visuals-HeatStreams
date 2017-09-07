@@ -1,7 +1,12 @@
+import {
+    Colorizer,
+    DivergingScaler,
+    isDivergingColorScheme,
+    LinearScaler,
+} from "@essex/d3-coloring-scales";
 import * as d3 from "d3";
 import { createElement, render } from "d3-jsx";
 import { dateSliceEnd } from "../data/dateUtils";
-import Colorizer from "./colorizer";
 import { Categories } from "./components";
 
 import {
@@ -25,12 +30,11 @@ export default class Chart {
 
     public set options(value: IChartOptions) {
         this.optionsInternal = value;
-        this.colorizer = new Colorizer(
-            value,
-            this.valueMin,
-            this.valueMid,
-            this.valueMax,
-        );
+        const scaler = isDivergingColorScheme(this.options.colorScheme) ?
+            new DivergingScaler(this.valueMin, this.valueMid, this.valueMax, this.options.isLogScale) :
+            new LinearScaler(this.valueMin, this.valueMax, this.options.isLogScale);
+
+        this.colorizer = new Colorizer(scaler, this.options.colorScheme);
     }
 
     public get options() {
