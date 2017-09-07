@@ -23,7 +23,7 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *  THE SOFTWARE.
  */
-// tslint:disable no-var-requires
+// tslint:disable no-var-requires no-console
 "use strict";
 import "d3";
 import "d3-interpolate";
