@@ -7,7 +7,8 @@
     "package": "essex-powerbi-visual-scripts package",
     "start": "essex-powerbi-visual-scripts start",
     "lint": "tslint 'src/**/*.ts*'",
-    "test": "npm-run-all lint package"
+    "test": "npm-run-all lint package",
+    "format": "prettier --single-quote --trailing-comma all --use-tabs --no-semi --write 'src/**/*.{ts,tsx}'"
   },
   "author": {
     "name": "Microsoft (experimental)",

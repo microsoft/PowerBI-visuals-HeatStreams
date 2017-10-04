@@ -46,14 +46,13 @@ export default class HeatStreamsChart extends React.Component<IHeatStreamsChartP
       showValues,
       rowGap,
     } = this;
-    const { 
+    const {
       colorizer,
     } = this.props;
     const categoryY = (index: number) => (rowHeight * index) + (rowGap ? index : 0);
     const xScale = this.getXScale(data.positionDomain);
     const sliceWidth = this.sliceWidth(xScale);
     const isCategorySelected = (cat: ICategory) => !!this.selections[cat.name];
-
     return (
       <svg height={height} width={width}>
         <CategoryList

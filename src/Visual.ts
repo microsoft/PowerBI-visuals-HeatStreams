@@ -90,9 +90,33 @@ export class Visual implements powerbi.extensibility.IVisual {
         const { scrollOffset, target: element } = this;
         const data = this.converter.convertDataView(dv, this.settings.data);
         const selections = this.converter.unpackSelectedCategories(dv);
+        const customFilter = get(dv, "metadata.objects.data.filter");
 
-        const dateScrubStart = get(dv, "metadata.objects.data.filter.whereItems[0].condition.left.right.arg.value");
-        const dateScrubEnd = get(dv, "metadata.objects.data.filter.whereItems[0].condition.right.right.arg.value");
+        const cond = get(customFilter, "whereItems[0].condition");
+        let dateScrubStart = get(cond,
+          "left.right.arg.value", // PBI Service
+          get(cond, "left.right.value"), // PBI Desktop
+        );
+        let dateScrubEnd = get(cond,
+          "right.right.arg.value", // PBI Service
+          get(cond, "right.right.value"), // PBI Desktop
+        );
+
+        const castScrubPoint = (v) => {
+          if (typeof v === "string") {
+            const isNum = /^\d+$/.test(v);
+            if (isNum) {
+              return Number.parseFloat(v);
+            } else {
+              return new Date(v);
+            }
+          }
+          return v;
+        };
+
+        dateScrubStart = castScrubPoint(dateScrubStart);
+        dateScrubEnd = castScrubPoint(dateScrubEnd);
+
         const options = {
             ...this.settings.rendering,
             ...this.settings.data,
@@ -111,13 +135,9 @@ export class Visual implements powerbi.extensibility.IVisual {
         this.chart.onSelectionCleared(() =>
           this.handleClearSelection(dv));
         this.chart.onScrub((bounds) => this.handleScrub(bounds, dv));
+        
+        console.log("Render", options, customFilter);
         this.chart.render();
-    }
-
-    private async handleClearSelection(dv: powerbi.DataView) {
-      await this.selectionManager.clear();
-      this.host.applyJsonFilter(null, "data", "filter");
-      this.render(dv);
     }
 
     private getFilterBetweenDates(column: any, start: Date | number, end: Date | number) {
@@ -125,7 +145,7 @@ export class Visual implements powerbi.extensibility.IVisual {
         column: (column as any).ref,
         table: (column as any).source.entity,
       };
-      const filterVal = (v) => (typeof v === "number" ? v : v.toJSON());
+      const filterVal = (v) => (typeof v === "number" ? v : v);
       return new models.AdvancedFilter(
           target,
           "And",
@@ -134,7 +154,15 @@ export class Visual implements powerbi.extensibility.IVisual {
       );
     }
 
+    private async handleClearSelection(dv: powerbi.DataView) {
+      console.log("Handle Clear");
+      await this.selectionManager.clear();
+      this.host.applyJsonFilter(null, "data", "filter");
+      this.render(dv);
+    }
+
     private handleScrub(bounds: Array<Date | number>, dv: powerbi.DataView) {
+        console.log("Handle Scrub", bounds);
         if (bounds === null || bounds === undefined) {
             this.host.applyJsonFilter(null, "data", "filter");
             return;
@@ -142,9 +170,11 @@ export class Visual implements powerbi.extensibility.IVisual {
         const column = dv.metadata.columns[1].identityExprs[0];
         const filter = this.getFilterBetweenDates(column, bounds[0], bounds[1]);
         this.host.applyJsonFilter(filter, "data", "filter");
+        this.render(dv);
     }
 
     private handleCategoryClick(categoryIndex: number, multiselect: boolean, dv: powerbi.DataView) {
+        console.log("Handle Cat Click", categoryIndex);
         const selectionId = this.host.createSelectionIdBuilder()
           .withCategory(get(dv, "categorical.categories[0]", []), categoryIndex)
           .createSelectionId();
