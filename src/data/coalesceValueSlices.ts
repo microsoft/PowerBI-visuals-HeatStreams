@@ -49,7 +49,7 @@ function sliceStart(date: Date, dateAggregation: DateAggregation, positionDomain
         result.setUTCMonth(1);
     }
 
-    if (result.getTime() < positionDomain[0].getTime()) {
+    if (positionDomain[0] !== undefined && result.getTime() < positionDomain[0].getTime()) {
         return positionDomain[0];
     }
     return result;
