@@ -22,6 +22,11 @@ export interface IChartData {
 }
 
 export type SelectionChangedHandler = (category: number, multiselect: boolean) => void;
+export type SelectionClearedHandler = () => void;
+export type ScrubbedHandler = (bounds: Array<Date | number>) => void;
+
+export type IColorizer = (value: number) => string;
+export type IScaler = (value: number | Date) => number;
 
 export interface IValueSlice {
     start: Date | number;
@@ -76,6 +81,7 @@ export interface IChartOptions extends IVisualRenderingOptions, IVisualDataOptio
     data: IChartData;
     selections: { [key: string]: ICategory };
     scrollOffset: number;
+    timeScrub: Array<Date | number>;
 }
 
 export interface IndexedCategory extends ICategory {

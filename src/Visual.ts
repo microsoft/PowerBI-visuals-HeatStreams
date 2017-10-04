@@ -28,12 +28,19 @@
 import "d3";
 import "d3-interpolate";
 import "d3-scale-chromatic";
+import * as models from "powerbi-models";
 
-import Chart from "./chart/chart";
+import Chart from "./chart";
 import DataViewConverter from "./data/DataViewConverter";
 import VisualSettings from "./settings/VisualSettings";
 
 const get = require("lodash/get");
+
+// Polyfill for IE11
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isInteger
+Number.isInteger =
+  Number.isInteger ||
+  ((value: any) => (typeof value === "number" && isFinite(value) && Math.floor(value) === value));
 
 export class Visual implements powerbi.extensibility.IVisual {
     private static parseSettings(dataView: powerbi.DataView): VisualSettings {
@@ -62,9 +69,8 @@ export class Visual implements powerbi.extensibility.IVisual {
         try {
             const dataView = get(options, "dataViews[0]");
             if (dataView) {
-                console.log("Visual Update", options, this.selectionManager.getSelectionIds());
-                this.settings = Visual.parseSettings(dataView);
-                this.render(dataView);
+              this.settings = Visual.parseSettings(dataView);
+              this.render(dataView);
             }
         } catch (err) {
             console.error("Error Updating Visual", err);
@@ -84,6 +90,9 @@ export class Visual implements powerbi.extensibility.IVisual {
         const { scrollOffset, target: element } = this;
         const data = this.converter.convertDataView(dv, this.settings.data);
         const selections = this.converter.unpackSelectedCategories(dv);
+
+        const dateScrubStart = get(dv, "metadata.objects.data.filter.whereItems[0].condition.left.right.arg.value");
+        const dateScrubEnd = get(dv, "metadata.objects.data.filter.whereItems[0].condition.right.right.arg.value");
         const options = {
             ...this.settings.rendering,
             ...this.settings.data,
@@ -91,19 +100,54 @@ export class Visual implements powerbi.extensibility.IVisual {
             element,
             scrollOffset,
             selections,
+            timeScrub: dateScrubStart && dateScrubEnd ? [
+              dateScrubStart,
+              dateScrubEnd,
+            ] : null,
         };
-
         this.chart.options = options;
-        this.chart.onSelectionChanged(
-            (catIndex: number, multi: boolean) => this.handleCategoryClick(catIndex, multi, dv),
-        );
+        this.chart.onSelectionChanged((idx: number, multi: boolean) =>
+          this.handleCategoryClick(idx, multi, dv));
+        this.chart.onSelectionCleared(() =>
+          this.handleClearSelection(dv));
+        this.chart.onScrub((bounds) => this.handleScrub(bounds, dv));
         this.chart.render();
+    }
+
+    private async handleClearSelection(dv: powerbi.DataView) {
+      await this.selectionManager.clear();
+      this.host.applyJsonFilter(null, "data", "filter");
+      this.render(dv);
+    }
+
+    private getFilterBetweenDates(column: any, start: Date | number, end: Date | number) {
+      const target: models.IFilterColumnTarget = {
+        column: (column as any).ref,
+        table: (column as any).source.entity,
+      };
+      const filterVal = (v) => (typeof v === "number" ? v : v.toJSON());
+      return new models.AdvancedFilter(
+          target,
+          "And",
+          { operator: "GreaterThan", value: filterVal(start) },
+          { operator: "LessThan",  value: filterVal(end) },
+      );
+    }
+
+    private handleScrub(bounds: Array<Date | number>, dv: powerbi.DataView) {
+        if (bounds === null || bounds === undefined) {
+            this.host.applyJsonFilter(null, "data", "filter");
+            return;
+        }
+        const column = dv.metadata.columns[1].identityExprs[0];
+        const filter = this.getFilterBetweenDates(column, bounds[0], bounds[1]);
+        this.host.applyJsonFilter(filter, "data", "filter");
     }
 
     private handleCategoryClick(categoryIndex: number, multiselect: boolean, dv: powerbi.DataView) {
         const selectionId = this.host.createSelectionIdBuilder()
-            .withCategory(get(dv, "categorical.categories[0]", []), categoryIndex)
-            .createSelectionId();
+          .withCategory(get(dv, "categorical.categories[0]", []), categoryIndex)
+          .createSelectionId();
         this.selectionManager.select(selectionId, multiselect);
         this.render(dv);
     }

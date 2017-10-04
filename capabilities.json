@@ -30,6 +30,13 @@
         "data": {
             "displayName": "Data Settings",
             "properties": {
+                "filter": {
+                  "displayName": "Filter",
+                  "suppressFormatPainterCopy": true,
+                  "type": {
+                    "filter": true
+                  }
+                },
                 "isLogScale": {
                     "displayName": "Log-Scale",
                     "description": "Apply a log-scale to the data coloration.",
