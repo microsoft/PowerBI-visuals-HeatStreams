@@ -1,14 +1,12 @@
 // tslint:disable no-console no-var-requires
 import { ICategory } from './chart/interfaces'
 import buildDomainScrub from './data/buildDomainScrub'
-import DataViewConverter from './data/DataViewConverter'
 const get = require('lodash/get')
 
 export default class Interactions {
 	constructor(
 		private host: powerbi.extensibility.visual.IVisualHost,
 		private selectionManager: powerbi.extensibility.ISelectionManager,
-		private dataViewConverter: DataViewConverter,
 	) {}
 
 	public async clearSelections() {

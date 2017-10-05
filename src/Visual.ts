@@ -60,12 +60,13 @@ export class Visual implements powerbi.extensibility.IVisual {
 		const host = options.host
 		const selectionManager = host.createSelectionManager()
 		const converter = new DataViewConverter(selectionManager)
+
 		this.chartOptions = new ChartOptions(converter, target)
 		this.chart = new Chart(this.chartOptions)
-		this.interactions = new Interactions(host, selectionManager, converter)
+		this.interactions = new Interactions(host, selectionManager)
 	}
 
-	public update(options: powerbi.extensibility.VisualUpdateOptions) {
+	public updte(options: powerbi.extensibility.VisualUpdateOptions) {
 		try {
 			const dataView = get(options, 'dataViews[0]')
 			if (dataView) {
