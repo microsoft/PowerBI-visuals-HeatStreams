@@ -42,6 +42,10 @@ export default class DataViewConverter {
 		return convertCategoricalDataView(dataView, options)
 	}
 
+	/**
+   * Unpack selected categories from the native PowerBI data structure
+   * @param dataView
+   */
 	public unpackSelectedCategories(
 		dataView: powerbi.DataView,
 	): { [key: string]: ICategory } {

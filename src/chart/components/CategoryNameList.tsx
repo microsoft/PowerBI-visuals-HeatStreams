@@ -9,11 +9,18 @@ const CategoryNameList = ({
 	categoryY,
 	isCategorySelected,
 	onClickCategory,
+	onClear,
 }) => (
 	<g className="category-names">
 		{showCategories ? (
 			<g className="category-names">
-				<rect className="occluder" width={width} height="100%" fill="white" />
+				<rect
+					className="occluder"
+					width={width}
+					height="100%"
+					fill="white"
+					onClick={onClear}
+				/>
 				<g className="category-texts">
 					{categories.map((cat, index) => (
 						<CategoryText
@@ -21,7 +28,10 @@ const CategoryNameList = ({
 							rowHeight={rowHeight}
 							y={categoryY(index) + rowHeight - 1}
 							selected={isCategorySelected(cat)}
-							onClick={evt => onClickCategory(cat, evt.ctrlKey || evt.metaKey)}
+							onClick={evt => {
+								onClickCategory(cat, evt.ctrlKey || evt.metaKey)
+								evt.stopPropagation()
+							}}
 							name={cat.name}
 						/>
 					))}

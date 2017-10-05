@@ -1,3 +1,5 @@
+import { Colorizer } from '@essex/d3-coloring-scales'
+
 export type XDomain = [number, number] | [Date, Date]
 
 export interface ICategory {
@@ -85,6 +87,10 @@ export interface IChartOptions {
 	data: IChartData
 	selections: { [key: string]: ICategory }
 	timeScrub: Array<Date | number>
+	width: number
+	height: number
+	colorizer: Colorizer
+	element: HTMLElement
 }
 
 export interface IndexedCategory extends ICategory {

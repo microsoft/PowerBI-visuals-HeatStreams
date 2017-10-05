@@ -15,7 +15,7 @@ export default function buildDomainScrub(
 	const end = bounds[1]
 	const filterVal = v => (typeof v === 'number' ? v : v)
 	return new models.AdvancedFilter(
-		this.getTarget(column),
+		getTarget(column),
 		'And',
 		{ operator: 'GreaterThan', value: filterVal(start) },
 		{ operator: 'LessThan', value: filterVal(end) },

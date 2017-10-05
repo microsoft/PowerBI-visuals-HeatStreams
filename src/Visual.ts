@@ -30,9 +30,10 @@ import 'd3-interpolate'
 import 'd3-scale-chromatic'
 
 import Chart from './chart'
+import ChartOptions from './chart/ChartOptions'
 import { ICategory } from './chart/interfaces'
-import buildDomainScrub from './data/buildDomainScrub'
 import DataViewConverter from './data/DataViewConverter'
+import Interactions from './Interactions'
 import VisualSettings from './settings/VisualSettings'
 
 const get = require('lodash/get')
@@ -49,19 +50,19 @@ export class Visual implements powerbi.extensibility.IVisual {
 		return VisualSettings.parse(dataView) as VisualSettings
 	}
 
-	private target: HTMLElement
-	private host: powerbi.extensibility.visual.IVisualHost
 	private settings: VisualSettings
-	private selectionManager: powerbi.extensibility.ISelectionManager
-	private converter: DataViewConverter
 	private chart: Chart
+	private chartOptions: ChartOptions
+	private interactions: Interactions
 
 	constructor(options: powerbi.extensibility.visual.VisualConstructorOptions) {
-		this.target = options.element
-		this.host = options.host
-		this.selectionManager = this.host.createSelectionManager()
-		this.chart = new Chart(this.target)
-		this.converter = new DataViewConverter(this.selectionManager)
+		const target = options.element
+		const host = options.host
+		const selectionManager = host.createSelectionManager()
+		const converter = new DataViewConverter(selectionManager)
+		this.chartOptions = new ChartOptions(converter, target)
+		this.chart = new Chart(this.chartOptions)
+		this.interactions = new Interactions(host, selectionManager, converter)
 	}
 
 	public update(options: powerbi.extensibility.VisualUpdateOptions) {
@@ -69,7 +70,8 @@ export class Visual implements powerbi.extensibility.IVisual {
 			const dataView = get(options, 'dataViews[0]')
 			if (dataView) {
 				this.settings = Visual.parseSettings(dataView)
-				this.render(dataView)
+				this.chartOptions.loadDataView(dataView, this.settings)
+				this.render()
 			}
 		} catch (err) {
 			console.error('Error Updating Visual', err)
@@ -91,54 +93,16 @@ export class Visual implements powerbi.extensibility.IVisual {
 		)
 	}
 
-	private render(dv: powerbi.DataView) {
-		this.chart.options = {
-			data: this.converter.convertDataView(dv, this.settings.data),
-			dataOptions: this.settings.data,
-			renderOptions: this.settings.rendering,
-			selections: this.converter.unpackSelectedCategories(dv),
-			timeScrub: this.converter.unpackDomainScrub(dv),
-		}
-		this.chart.onSelectionChanged((category: ICategory, multi: boolean) =>
-			this.handleCategoryClick(category, multi, dv),
+	private render() {
+		const { interactions } = this
+		this.chart.onSelectionChanged((cat, multi) => {
+			interactions.selectCategory(cat, multi, this.chartOptions.dataView)
+		})
+		this.chart.onSelectionCleared(() => interactions.clearSelections())
+		this.chart.onScrub(bounds =>
+			interactions.scrub(bounds, this.chartOptions.dataView),
 		)
-		this.chart.onSelectionCleared(() => this.handleClearSelection(dv))
-		this.chart.onScrub(bounds => this.handleScrub(bounds, dv))
-
-		console.log('Render', this.chart.options, dv)
+		console.log('Render', this.chartOptions)
 		this.chart.render()
-	}
-
-	private async handleClearSelection(dv: powerbi.DataView) {
-		console.log('Handle Clear')
-		await this.selectionManager.clear()
-		this.host.applyJsonFilter(null, 'data', 'filter')
-		this.render(dv)
-	}
-
-	private handleScrub(bounds: Array<Date | number>, dv: powerbi.DataView) {
-		console.log('Handle Scrub', bounds)
-		if (bounds === null || bounds === undefined || +bounds[0] === +bounds[1]) {
-			this.host.applyJsonFilter(null, 'data', 'filter')
-			return
-		}
-		const column = dv.metadata.columns[1].identityExprs[0]
-		const filter = buildDomainScrub(bounds, column)
-		this.host.applyJsonFilter(filter, 'data', 'filter')
-		this.render(dv)
-	}
-
-	private async handleCategoryClick(
-		category: ICategory,
-		multiselect: boolean,
-		dv: powerbi.DataView,
-	) {
-		console.log('Handle Cat Click', category)
-		const selectionId = this.host
-			.createSelectionIdBuilder()
-			.withCategory(get(dv, 'categorical.categories[0]', []), category.id)
-			.createSelectionId()
-		await this.selectionManager.select(selectionId, multiselect)
-		this.render(dv)
 	}
 }

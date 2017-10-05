@@ -79,6 +79,7 @@ export default class HeatStreamsChart extends React.Component<
 					onScrub={this.props.onScrub}
 					xPan={this.state.panPosition}
 					timeScrub={this.timeScrub}
+					onClear={this.props.onClearSelection}
 				/>
 			</svg>
 		)

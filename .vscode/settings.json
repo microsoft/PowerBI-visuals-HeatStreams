@@ -1,5 +1,7 @@
 {
   "files.eol": "\n",
+  "editor.tabSize": 2,
+  "editor.insertSpaces": false,
   "files.watcherExclude": {
     "**/.git/objects/**": true,
     "**/node_modules/**": true

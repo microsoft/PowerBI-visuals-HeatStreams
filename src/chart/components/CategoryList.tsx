@@ -32,6 +32,7 @@ export interface ICategoryListProps {
 	onClick: (x: number, y: number, ctrlKey: boolean) => void
 	onScrub: (bounds: Array<Date | number>) => void
 	onScroll: (deltaY: number) => void
+	onClear: () => void
 }
 
 const CategoryList = ({
@@ -54,6 +55,7 @@ const CategoryList = ({
 	onClickCategory,
 	onScroll,
 	onScrub,
+	onClear,
 	xPan,
 	timeScrub,
 }) => (
@@ -113,6 +115,7 @@ const CategoryList = ({
 			categoryY={categoryY}
 			isCategorySelected={isCategorySelected}
 			onClickCategory={onClickCategory}
+			onClear={onClear}
 		/>
 	</g>
 )

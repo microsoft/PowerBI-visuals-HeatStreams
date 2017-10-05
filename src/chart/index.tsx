@@ -17,70 +17,11 @@ import {
 } from './interfaces'
 
 export default class Chart {
-	public scrollPosition: number = 0
-	private optionsInternal: IChartOptions
-	private colorizer: Colorizer
 	private selectionChangedHandler: SelectionChangedHandler
 	private selectionClearedHandler: SelectionClearedHandler
 	private scrubbedHandler: ScrubbedHandler
 
-	constructor(private element: HTMLElement) {}
-
-	public set options(value: IChartOptions) {
-		this.optionsInternal = value
-		const scaler = isDivergingColorScheme(
-			this.options.renderOptions.colorScheme,
-		)
-			? new DivergingScaler(
-					this.valueMin,
-					this.valueMid,
-					this.valueMax,
-					this.options.dataOptions.isLogScale,
-				)
-			: new LinearScaler(
-					this.valueMin,
-					this.valueMax,
-					this.options.dataOptions.isLogScale,
-				)
-
-		this.colorizer = new Colorizer(
-			scaler,
-			this.options.renderOptions.colorScheme,
-		)
-	}
-
-	public get options() {
-		return this.optionsInternal
-	}
-
-	private get width(): number {
-		return this.element.getBoundingClientRect().width
-	}
-
-	private get height(): number {
-		return this.element.getBoundingClientRect().height
-	}
-
-	private get valueMin(): number {
-		const valueMin = this.options.dataOptions.valueMin
-		return valueMin !== null && valueMin !== undefined
-			? valueMin
-			: this.options.data.valueDomain[0]
-	}
-
-	private get valueMax(): number {
-		const valueMax = this.options.dataOptions.valueMax
-		return valueMax !== null && valueMax !== undefined
-			? valueMax
-			: this.options.data.valueDomain[1]
-	}
-
-	private get valueMid() {
-		const scoreSplit = this.options.dataOptions.scoreSplit
-		return scoreSplit !== null && scoreSplit !== undefined
-			? scoreSplit
-			: (this.valueMax + this.valueMin) / 2
-	}
+	constructor(private options: IChartOptions) {}
 
 	public onSelectionChanged(handler: SelectionChangedHandler) {
 		this.selectionChangedHandler = handler
@@ -95,18 +36,18 @@ export default class Chart {
 	}
 
 	public render() {
-		const { options, width, height, colorizer } = this
+		const { width, height, colorizer } = this.options
 		return ReactDOM.render(
 			<ChartComponent
 				width={width}
 				height={height}
-				options={options}
+				options={this.options}
 				colorizer={v => colorizer.color(v).toString()}
 				onClearSelection={this.onClearSelection.bind(this)}
 				onClickCategory={this.onClickCategory.bind(this)}
 				onScrub={this.onScrubbed.bind(this)}
 			/>,
-			this.element,
+			this.options.element,
 		)
 	}
 
