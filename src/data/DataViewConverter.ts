@@ -75,20 +75,6 @@ export default class DataViewConverter {
 	}
 
 	public unpackDomainScrub(dataView: powerbi.DataView) {
-		const customFilter = get(dataView, 'metadata.objects.data.filter')
-
-		const cond = get(customFilter, 'whereItems[0].condition')
-		let dateScrubStart = get(
-			cond,
-			'left.right.arg.value', // PBI Service
-			get(cond, 'left.right.value'), // PBI Desktop
-		)
-		let dateScrubEnd = get(
-			cond,
-			'right.right.arg.value', // PBI Service
-			get(cond, 'right.right.value'), // PBI Desktop
-		)
-
 		const castScrubPoint = v => {
 			if (typeof v === 'string') {
 				const isNum = /^\d+$/.test(v)
@@ -101,11 +87,24 @@ export default class DataViewConverter {
 			return v
 		}
 
-		dateScrubStart = castScrubPoint(dateScrubStart)
-		dateScrubEnd = castScrubPoint(dateScrubEnd)
-
-		return dateScrubStart && dateScrubEnd && +dateScrubStart !== +dateScrubEnd
-			? [dateScrubStart, dateScrubEnd]
-			: null
+		const customFilter = get(dataView, 'metadata.objects.data.filter')
+		const cond = get(customFilter, 'whereItems[0].condition')
+		const dateScrubStart = castScrubPoint(
+			get(
+				cond,
+				'left.right.arg.value', // PBI Service
+				get(cond, 'left.right.value'), // PBI Desktop
+			),
+		)
+		const dateScrubEnd = castScrubPoint(
+			get(
+				cond,
+				'right.right.arg.value', // PBI Service
+				get(cond, 'right.right.value'), // PBI Desktop
+			),
+		)
+		const isValidScrub =
+			dateScrubStart && dateScrubEnd && +dateScrubStart !== +dateScrubEnd
+		return isValidScrub ? [dateScrubStart, dateScrubEnd] : null
 	}
 }
