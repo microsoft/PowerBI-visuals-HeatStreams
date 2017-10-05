@@ -13,6 +13,7 @@ import Overlay from './Overlay'
 import TimeScrub from './TimeScrub'
 
 export interface ICategoryListProps {
+	axisHeight: number
 	width: number
 	height: number
 	axisOffset: number
@@ -36,6 +37,7 @@ export interface ICategoryListProps {
 }
 
 const CategoryList = ({
+	axisHeight,
 	width,
 	height,
 	axisOffset,
@@ -67,6 +69,7 @@ const CategoryList = ({
 			width={width - textPercent * width}
 			x={textPercent * width}
 			height={height}
+			onClick={onClear}
 		/>
 		<CategoryChartList
 			categories={categories}
@@ -94,13 +97,13 @@ const CategoryList = ({
 			offset={axisOffset}
 			xScale={xScale}
 			timeScrub={timeScrub}
-			height={height - axisOffset}
+			height={axisHeight}
 			width={width - width * textPercent}
 		/>
 		<Overlay
 			width={width - textPercent * width}
 			x={textPercent * width}
-			height={height}
+			height={axisOffset + axisHeight}
 			xScale={xScale}
 			onDrag={bounds => onScrub(bounds)}
 			timeScrub={timeScrub}

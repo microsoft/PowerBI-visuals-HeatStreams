@@ -40,6 +40,7 @@ export default class HeatStreamsChart extends React.Component<
 	public render() {
 		const {
 			axisOffset,
+			axisHeight,
 			categoriesInView,
 			highlightColor,
 			rowHeight,
@@ -60,6 +61,7 @@ export default class HeatStreamsChart extends React.Component<
 				<CategoryList
 					height={height}
 					width={width}
+					axisHeight={axisHeight}
 					axisOffset={axisOffset}
 					categoryY={categoryY}
 					categories={categoriesInView}
