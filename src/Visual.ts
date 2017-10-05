@@ -66,7 +66,7 @@ export class Visual implements powerbi.extensibility.IVisual {
 		this.interactions = new Interactions(host, selectionManager)
 	}
 
-	public updte(options: powerbi.extensibility.VisualUpdateOptions) {
+	public update(options: powerbi.extensibility.VisualUpdateOptions) {
 		try {
 			const dataView = get(options, 'dataViews[0]')
 			if (dataView) {
