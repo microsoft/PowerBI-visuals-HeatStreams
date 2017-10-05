@@ -1,9 +1,12 @@
+import { color, hsl } from 'd3-color'
 import * as React from 'react'
 import { ICategory, IColorizer, IScaler, IValueSlice } from '../../interfaces'
 import printValue from '../printValue'
 import CategoryView from './CategoryView'
 import ValueRun from './ValueRun'
 import ValueText from './ValueText'
+
+const SLICE_WIDTH_WITH_TEXT_MIN_WIDTH = 35
 
 export interface ICategoryChartProps {
 	category: ICategory
@@ -25,43 +28,54 @@ const CategoryChart = ({
 	colorizer,
 	xScale,
 	rowHeight,
-	showValues,
+	showValues: showValuesConfig,
 	width,
 	highlightColor,
 	selected,
 	y,
 	sliceWidth,
-}: ICategoryChartProps) => (
-	<g className="category-chart">
-		<CategoryView
-			selected={selected}
-			highlightColor={highlightColor}
-			width={width}
-			height={rowHeight}
-			y={y}
-		/>
-		{categoryData.map(cd => [
-			<ValueRun
-				key={`cdv:${cd.start}`}
-				color={colorizer(cd.value)}
+}: ICategoryChartProps) => {
+	const showValues =
+		showValuesConfig && sliceWidth >= SLICE_WIDTH_WITH_TEXT_MIN_WIDTH
+	return (
+		<g className="category-chart">
+			<CategoryView
+				selected={selected}
+				highlightColor={highlightColor}
+				width={width}
 				height={rowHeight}
-				title={printValue(cd.value)}
-				width={sliceWidth}
-				x={xScale(cd.start)}
 				y={y}
-				value={cd.value}
-			/>,
-			showValues ? (
-				<ValueText
-					key={`cdt:${cd.start}`}
-					rowHeight={rowHeight}
-					text={printValue(cd.value)}
-					x={xScale(cd.start) + 2}
-					y={y}
-				/>
-			) : null,
-		])}
-	</g>
-)
+			/>
+			{categoryData.map(cd => {
+				const cellColor = colorizer(cd.value)
+				const textColor = hsl(color(cellColor)).l > 0.5 ? '#000' : '#fff'
+				const text = printValue(cd.value)
+				const start = xScale(cd.start)
+				return [
+					<ValueRun
+						key={`cdv:${cd.start}`}
+						color={cellColor}
+						height={rowHeight}
+						title={text}
+						width={sliceWidth}
+						x={start}
+						y={y}
+						value={cd.value}
+					/>,
+					showValues ? (
+						<ValueText
+							key={`cdt:${cd.start}`}
+							rowHeight={rowHeight}
+							text={text}
+							color={textColor}
+							x={start + 2}
+							y={y + rowHeight - 2}
+						/>
+					) : null,
+				]
+			})}
+		</g>
+	)
+}
 
 export default CategoryChart

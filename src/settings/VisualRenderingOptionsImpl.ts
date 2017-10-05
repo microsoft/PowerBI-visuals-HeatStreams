@@ -35,6 +35,6 @@ export default class VisualRenderingOptionsImpl
 	public colorScheme = 'RdBu'
 	public zoomLevel = 1
 	public numTicks = 30
-	public showValues = false
+	public showValues = true
 	public showCategories = true
 }
