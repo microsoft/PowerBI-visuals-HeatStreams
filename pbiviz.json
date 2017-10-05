@@ -1,8 +1,8 @@
 {
   "visual": {
     "name": "heat-streams",
-    "displayName": "Heat Streams X",
-    "guid": "heatStreamsX74779FE5319F4655BE62C4C5FD0ABFB1",
+    "displayName": "Heat Streams",
+    "guid": "heatStreams74779FE5319F4655BE62C4C5FD0ABFB1",
     "visualClassName": "Visual",
     "version": "1.0.0",
     "description": "Visualize and compare categorical data values over time using heatmap-style color gradients.",
