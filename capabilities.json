@@ -36,12 +36,6 @@
                     "filter": true
                   }
                 },
-                "selectedCategories": {
-                  "suppressFormatPainterCopy": true,
-                  "type": {
-                    "text": true
-                  }
-                },
                 "isLogScale": {
                     "displayName": "Log-Scale",
                     "description": "Apply a log-scale to the data coloration.",
