@@ -27,10 +27,6 @@
     "@types/node": "^8.0.25",
     "@types/react": "^16.0.7",
     "@types/react-dom": "^15.5.5",
-    "@types/react-redux": "^5.0.10",
-    "@types/redux": "^3.6.0",
-    "@types/redux-actions": "^2.2.2",
-    "@types/redux-logger": "^3.0.4",
     "d3-scale-chromatic": "^1.1.1",
     "lodash": "^4.17.4",
     "powerbi-models": "^0.11.3",
@@ -40,11 +36,7 @@
     "prop-types": "^15.6.0",
     "react": "^16.0.0",
     "react-d3-axis": "^0.1.1",
-    "react-dom": "^16.0.0",
-    "react-redux": "^5.0.6",
-    "redux": "^3.7.2",
-    "redux-actions": "^2.2.1",
-    "redux-logger": "^3.0.6"
+    "react-dom": "^16.0.0"
   },
   "devDependencies": {
     "@essex/powerbi-visual-scripts": "^1.1.2",
