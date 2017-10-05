@@ -24,18 +24,18 @@
  *  THE SOFTWARE.
  */
 import {
-    DateAggregation,
-    IVisualDataOptions,
-    SortBy,
-} from "../chart/interfaces";
+	DateAggregation,
+	IVisualDataOptions,
+	SortBy,
+} from '../chart/interfaces'
 
 export default class VisualDataOptionsImpl implements IVisualDataOptions {
-    public dateAggregation: DateAggregation = "days";
-    public numericAggregation: number = 1;
-    public valueMin = undefined;
-    public valueMax = undefined;
-    public scoreSplit = undefined;
-    public isLogScale: boolean = false;
-    public sortBy: SortBy = "name";
-    public sortInvert = false;
+	public dateAggregation: DateAggregation = 'days'
+	public numericAggregation: number = 1
+	public valueMin = undefined
+	public valueMax = undefined
+	public scoreSplit = undefined
+	public isLogScale: boolean = false
+	public sortBy: SortBy = 'name'
+	public sortInvert = false
 }

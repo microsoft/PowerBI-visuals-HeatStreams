@@ -24,161 +24,121 @@
  *  THE SOFTWARE.
  */
 // tslint:disable no-var-requires no-console
-"use strict";
-import "d3";
-import "d3-interpolate";
-import "d3-scale-chromatic";
-import * as models from "powerbi-models";
+'use strict'
+import 'd3'
+import 'd3-interpolate'
+import 'd3-scale-chromatic'
 
-import Chart from "./chart";
-import DataViewConverter from "./data/DataViewConverter";
-import VisualSettings from "./settings/VisualSettings";
+import Chart from './chart'
+import { ICategory } from './chart/interfaces'
+import buildDomainScrub from './data/buildDomainScrub'
+import DataViewConverter from './data/DataViewConverter'
+import VisualSettings from './settings/VisualSettings'
 
-const get = require("lodash/get");
+const get = require('lodash/get')
 
 // Polyfill for IE11
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isInteger
 Number.isInteger =
-  Number.isInteger ||
-  ((value: any) => (typeof value === "number" && isFinite(value) && Math.floor(value) === value));
+	Number.isInteger ||
+	((value: any) =>
+		typeof value === 'number' && isFinite(value) && Math.floor(value) === value)
 
 export class Visual implements powerbi.extensibility.IVisual {
-    private static parseSettings(dataView: powerbi.DataView): VisualSettings {
-        return VisualSettings.parse(dataView) as VisualSettings;
-    }
+	private static parseSettings(dataView: powerbi.DataView): VisualSettings {
+		return VisualSettings.parse(dataView) as VisualSettings
+	}
 
-    private target: HTMLElement;
-    private host: powerbi.extensibility.visual.IVisualHost;
-    private settings: VisualSettings;
-    private selectionManager: powerbi.extensibility.ISelectionManager;
-    private converter: DataViewConverter;
-    private scrollOffset: number = 0;
-    private chart: Chart;
+	private target: HTMLElement
+	private host: powerbi.extensibility.visual.IVisualHost
+	private settings: VisualSettings
+	private selectionManager: powerbi.extensibility.ISelectionManager
+	private converter: DataViewConverter
+	private chart: Chart
 
-    constructor(options: powerbi.extensibility.visual.VisualConstructorOptions) {
-        this.target = options.element;
-        this.host = options.host;
-        this.selectionManager = this.host.createSelectionManager();
-        this.chart = new Chart();
-        this.converter = new DataViewConverter(
-            this.selectionManager,
-        );
-    }
+	constructor(options: powerbi.extensibility.visual.VisualConstructorOptions) {
+		this.target = options.element
+		this.host = options.host
+		this.selectionManager = this.host.createSelectionManager()
+		this.chart = new Chart(this.target)
+		this.converter = new DataViewConverter(this.selectionManager)
+	}
 
-    public update(options: powerbi.extensibility.VisualUpdateOptions) {
-        try {
-            const dataView = get(options, "dataViews[0]");
-            if (dataView) {
-              this.settings = Visual.parseSettings(dataView);
-              this.render(dataView);
-            }
-        } catch (err) {
-            console.error("Error Updating Visual", err);
-        }
-    }
+	public update(options: powerbi.extensibility.VisualUpdateOptions) {
+		try {
+			const dataView = get(options, 'dataViews[0]')
+			if (dataView) {
+				this.settings = Visual.parseSettings(dataView)
+				this.render(dataView)
+			}
+		} catch (err) {
+			console.error('Error Updating Visual', err)
+		}
+	}
 
-    /**
-     * This function gets called for each of the objects defined in the capabilities files and allows you to
-     * select which of the objects and properties you want to expose to the users in the property pane.
-     */
-    public enumerateObjectInstances(options: powerbi.EnumerateVisualObjectInstancesOptions)
-    : powerbi.VisualObjectInstance[] | powerbi.VisualObjectInstanceEnumerationObject {
-        return VisualSettings.enumerateObjectInstances(this.settings || VisualSettings.getDefault(), options);
-    }
+	/**
+   * This function gets called for each of the objects defined in the capabilities files and allows you to
+   * select which of the objects and properties you want to expose to the users in the property pane.
+   */
+	public enumerateObjectInstances(
+		options: powerbi.EnumerateVisualObjectInstancesOptions,
+	):
+		| powerbi.VisualObjectInstance[]
+		| powerbi.VisualObjectInstanceEnumerationObject {
+		return VisualSettings.enumerateObjectInstances(
+			this.settings || VisualSettings.getDefault(),
+			options,
+		)
+	}
 
-    private render(dv: powerbi.DataView) {
-        const { scrollOffset, target: element } = this;
-        const data = this.converter.convertDataView(dv, this.settings.data);
-        const selections = this.converter.unpackSelectedCategories(dv);
-        const customFilter = get(dv, "metadata.objects.data.filter");
+	private render(dv: powerbi.DataView) {
+		this.chart.options = {
+			data: this.converter.convertDataView(dv, this.settings.data),
+			dataOptions: this.settings.data,
+			renderOptions: this.settings.rendering,
+			selections: this.converter.unpackSelectedCategories(dv),
+			timeScrub: this.converter.unpackDomainScrub(dv),
+		}
+		this.chart.onSelectionChanged((category: ICategory, multi: boolean) =>
+			this.handleCategoryClick(category, multi, dv),
+		)
+		this.chart.onSelectionCleared(() => this.handleClearSelection(dv))
+		this.chart.onScrub(bounds => this.handleScrub(bounds, dv))
 
-        const cond = get(customFilter, "whereItems[0].condition");
-        let dateScrubStart = get(cond,
-          "left.right.arg.value", // PBI Service
-          get(cond, "left.right.value"), // PBI Desktop
-        );
-        let dateScrubEnd = get(cond,
-          "right.right.arg.value", // PBI Service
-          get(cond, "right.right.value"), // PBI Desktop
-        );
+		console.log('Render', this.chart.options, dv)
+		this.chart.render()
+	}
 
-        const castScrubPoint = (v) => {
-          if (typeof v === "string") {
-            const isNum = /^\d+$/.test(v);
-            if (isNum) {
-              return Number.parseFloat(v);
-            } else {
-              return new Date(v);
-            }
-          }
-          return v;
-        };
+	private async handleClearSelection(dv: powerbi.DataView) {
+		console.log('Handle Clear')
+		await this.selectionManager.clear()
+		this.host.applyJsonFilter(null, 'data', 'filter')
+		this.render(dv)
+	}
 
-        dateScrubStart = castScrubPoint(dateScrubStart);
-        dateScrubEnd = castScrubPoint(dateScrubEnd);
+	private handleScrub(bounds: Array<Date | number>, dv: powerbi.DataView) {
+		console.log('Handle Scrub', bounds)
+		if (bounds === null || bounds === undefined || +bounds[0] === +bounds[1]) {
+			this.host.applyJsonFilter(null, 'data', 'filter')
+			return
+		}
+		const column = dv.metadata.columns[1].identityExprs[0]
+		const filter = buildDomainScrub(bounds, column)
+		this.host.applyJsonFilter(filter, 'data', 'filter')
+		this.render(dv)
+	}
 
-        const options = {
-            ...this.settings.rendering,
-            ...this.settings.data,
-            data,
-            element,
-            scrollOffset,
-            selections,
-            timeScrub: dateScrubStart && dateScrubEnd ? [
-              dateScrubStart,
-              dateScrubEnd,
-            ] : null,
-        };
-        this.chart.options = options;
-        this.chart.onSelectionChanged((idx: number, multi: boolean) =>
-          this.handleCategoryClick(idx, multi, dv));
-        this.chart.onSelectionCleared(() =>
-          this.handleClearSelection(dv));
-        this.chart.onScrub((bounds) => this.handleScrub(bounds, dv));
-        
-        console.log("Render", options, customFilter);
-        this.chart.render();
-    }
-
-    private getFilterBetweenDates(column: any, start: Date | number, end: Date | number) {
-      const target: models.IFilterColumnTarget = {
-        column: (column as any).ref,
-        table: (column as any).source.entity,
-      };
-      const filterVal = (v) => (typeof v === "number" ? v : v);
-      return new models.AdvancedFilter(
-          target,
-          "And",
-          { operator: "GreaterThan", value: filterVal(start) },
-          { operator: "LessThan",  value: filterVal(end) },
-      );
-    }
-
-    private async handleClearSelection(dv: powerbi.DataView) {
-      console.log("Handle Clear");
-      await this.selectionManager.clear();
-      this.host.applyJsonFilter(null, "data", "filter");
-      this.render(dv);
-    }
-
-    private handleScrub(bounds: Array<Date | number>, dv: powerbi.DataView) {
-        console.log("Handle Scrub", bounds);
-        if (bounds === null || bounds === undefined) {
-            this.host.applyJsonFilter(null, "data", "filter");
-            return;
-        }
-        const column = dv.metadata.columns[1].identityExprs[0];
-        const filter = this.getFilterBetweenDates(column, bounds[0], bounds[1]);
-        this.host.applyJsonFilter(filter, "data", "filter");
-        this.render(dv);
-    }
-
-    private handleCategoryClick(categoryIndex: number, multiselect: boolean, dv: powerbi.DataView) {
-        console.log("Handle Cat Click", categoryIndex);
-        const selectionId = this.host.createSelectionIdBuilder()
-          .withCategory(get(dv, "categorical.categories[0]", []), categoryIndex)
-          .createSelectionId();
-        this.selectionManager.select(selectionId, multiselect);
-        this.render(dv);
-    }
+	private async handleCategoryClick(
+		category: ICategory,
+		multiselect: boolean,
+		dv: powerbi.DataView,
+	) {
+		console.log('Handle Cat Click', category)
+		const selectionId = this.host
+			.createSelectionIdBuilder()
+			.withCategory(get(dv, 'categorical.categories[0]', []), category.id)
+			.createSelectionId()
+		await this.selectionManager.select(selectionId, multiselect)
+		this.render(dv)
+	}
 }

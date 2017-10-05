@@ -1,5 +1,5 @@
 Arguments: 
-  C:\Program Files\nodejs\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js add react-d3-axis
+  C:\Program Files\nodejs\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js add lint-staged husky --dev
 
 PATH: 
   C:\Program Files\ConEmu\ConEmu\Scripts;C:\Program Files\ConEmu;C:\Program Files\ConEmu\ConEmu;C:\ProgramData\Oracle\Java\javapath;C:\Python36\Scripts\;C:\Python36\;C:\ProgramData\Boxstarter;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\ProgramData\chocolatey\bin;C:\Program Files (x86)\Git\cmd;C:\Program Files\Rust stable GNU 1.20\bin;C:\tools\go\bin;;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\Program Files (x86)\Windows Kits\8.1\Windows Performance Toolkit\;C:\Program Files\Java\jre7\bin;C:\Program Files (x86)\sbt\bin;C:\Program Files\Java\jdk1.8.0_144\bin;C:\Program Files\nodejs\;C:\Program Files (x86)\Yarn\bin;C:\Users\chtrevin\AppData\Local\Microsoft\WindowsApps;C:\Program Files\Microsoft VS Code\bin;C:\Users\chtrevin\AppData\Local\Microsoft\WindowsApps;C:\Program Files (x86)\Yarn\bin;C:\bin\scala-2.11.4\bin;C:\Users\chtrevin\AppData\Roaming\npm;C:\Users\chtrevin\AppData\Local\Yarn\bin;C:\Program Files\watchman;
@@ -19,11 +19,13 @@ npm manifest:
     "version": "1.0.0",
     "license": "MIT",
     "scripts": {
+      "precommit": "lint-staged",
       "install-certificate": "essex-powerbi-visual-scripts install-certificate",
       "package": "essex-powerbi-visual-scripts package",
       "start": "essex-powerbi-visual-scripts start",
       "lint": "tslint 'src/**/*.ts*'",
-      "test": "npm-run-all lint package"
+      "test": "npm-run-all lint package",
+      "format": "prettier --single-quote --trailing-comma all --use-tabs --no-semi --write \"src/**/*.ts*\""
     },
     "author": {
       "name": "Microsoft (experimental)",
@@ -41,19 +43,28 @@ npm manifest:
       "@types/node": "^8.0.25",
       "@types/react": "^16.0.7",
       "@types/react-dom": "^15.5.5",
+      "@types/react-redux": "^5.0.10",
+      "@types/redux": "^3.6.0",
+      "@types/redux-logger": "^3.0.4",
       "d3-scale-chromatic": "^1.1.1",
       "lodash": "^4.17.4",
+      "powerbi-models": "^0.11.3",
       "powerbi-visuals-utils-dataviewutils": "^1.2.0",
       "powerbi-visuals-utils-svgutils": "^1.1.0",
       "powerbi-visuals-utils-typeutils": "^1.1.0",
       "prop-types": "^15.6.0",
       "react": "^16.0.0",
-      "react-dom": "^16.0.0"
+      "react-d3-axis": "^0.1.1",
+      "react-dom": "^16.0.0",
+      "react-redux": "^5.0.6",
+      "redux": "^3.7.2",
+      "redux-logger": "^3.0.6"
     },
     "devDependencies": {
       "@essex/powerbi-visual-scripts": "^1.1.2",
       "npm-run-all": "^4.0.2",
       "powerbi-visuals-tools": "^1.7.2",
+      "prettier": "^1.7.4",
       "tslint": "^5.6.0",
       "typescript": "^2.4.2"
     },
@@ -327,9 +338,28 @@ Lockfile:
     dependencies:
       "@types/react" "*"
   
+  "@types/react-redux@^5.0.10":
+    version "5.0.10"
+    resolved "https://registry.yarnpkg.com/@types/react-redux/-/react-redux-5.0.10.tgz#f5c45a349f759d87d6b1f2aa096a756561a6d5c9"
+    dependencies:
+      "@types/react" "*"
+      redux "^3.6.0"
+  
   "@types/react@*", "@types/react@^16.0.7":
     version "16.0.7"
     resolved "https://registry.yarnpkg.com/@types/react/-/react-16.0.7.tgz#f85b6c33c988a1631e2f32fedae71ec6d9718a0d"
+  
+  "@types/redux-logger@^3.0.4":
+    version "3.0.4"
+    resolved "https://registry.yarnpkg.com/@types/redux-logger/-/redux-logger-3.0.4.tgz#90fdca7a2af5fb3523b840648cfedc63486e116e"
+    dependencies:
+      redux "^3.6.0"
+  
+  "@types/redux@^3.6.0":
+    version "3.6.0"
+    resolved "https://registry.yarnpkg.com/@types/redux/-/redux-3.6.0.tgz#f1ebe1e5411518072e4fdfca5c76e16e74c1399a"
+    dependencies:
+      redux "*"
   
   JSONStream@^0.8.4:
     version "0.8.4"
@@ -1623,6 +1653,10 @@ Lockfile:
   decamelize@^1.0.0, decamelize@^1.1.1, decamelize@^1.1.2:
     version "1.2.0"
     resolved "https://registry.yarnpkg.com/decamelize/-/decamelize-1.2.0.tgz#f6534d15148269b20352e7bee26f501f9a191290"
+  
+  deep-diff@^0.3.5:
+    version "0.3.8"
+    resolved "https://registry.yarnpkg.com/deep-diff/-/deep-diff-0.3.8.tgz#c01de63efb0eec9798801d40c7e0dae25b582c84"
   
   deep-extend@~0.4.0:
     version "0.4.2"
@@ -3032,6 +3066,10 @@ Lockfile:
     version "2.16.3"
     resolved "https://registry.yarnpkg.com/hoek/-/hoek-2.16.3.tgz#20bb7403d3cea398e91dc4710a8ff1b8274a25ed"
   
+  hoist-non-react-statics@^2.2.1:
+    version "2.3.1"
+    resolved "https://registry.yarnpkg.com/hoist-non-react-statics/-/hoist-non-react-statics-2.3.1.tgz#343db84c6018c650778898240135a1420ee22ce0"
+  
   homedir-polyfill@^1.0.0, homedir-polyfill@^1.0.1:
     version "1.0.1"
     resolved "https://registry.yarnpkg.com/homedir-polyfill/-/homedir-polyfill-1.0.1.tgz#4c2bbc8a758998feebf5ed68580f76d46768b4bc"
@@ -3217,7 +3255,7 @@ Lockfile:
     version "1.0.3"
     resolved "https://registry.yarnpkg.com/interpret/-/interpret-1.0.3.tgz#cbc35c62eeee73f19ab7b10a801511401afc0f90"
   
-  invariant@^2.2.2:
+  invariant@^2.0.0, invariant@^2.2.2:
     version "2.2.2"
     resolved "https://registry.yarnpkg.com/invariant/-/invariant-2.2.2.tgz#9e1f56ac0acdb6bf303306f338be3b204ae60360"
     dependencies:
@@ -3515,6 +3553,10 @@ Lockfile:
     version "1.5.1"
     resolved "https://registry.yarnpkg.com/jschardet/-/jschardet-1.5.1.tgz#c519f629f86b3a5bedba58a88d311309eec097f9"
   
+  jsen@^0.6.1:
+    version "0.6.6"
+    resolved "https://registry.yarnpkg.com/jsen/-/jsen-0.6.6.tgz#0240c18cf11350ac021456f48a7eb13bd67e0420"
+  
   jsesc@~0.5.0:
     version "0.5.0"
     resolved "https://registry.yarnpkg.com/jsesc/-/jsesc-0.5.0.tgz#e7dee66e35d6fc16f710fe91d5cf69f70f08911d"
@@ -3734,6 +3776,10 @@ Lockfile:
     dependencies:
       p-locate "^2.0.0"
       path-exists "^3.0.0"
+  
+  lodash-es@^4.2.0, lodash-es@^4.2.1:
+    version "4.17.4"
+    resolved "https://registry.yarnpkg.com/lodash-es/-/lodash-es-4.17.4.tgz#dcc1d7552e150a0640073ba9cb31d70f032950e7"
   
   lodash._arraycopy@^3.0.0:
     version "3.0.0"
@@ -4119,7 +4165,7 @@ Lockfile:
     version "3.10.1"
     resolved "https://registry.yarnpkg.com/lodash/-/lodash-3.10.1.tgz#5bf45e8e49ba4189e17d482789dfd15bd140b7b6"
   
-  lodash@^4.0.0, lodash@^4.1.0, lodash@^4.11.1, lodash@^4.14.0, lodash@^4.17.4, lodash@^4.3.0, lodash@~4.17.4:
+  lodash@^4.0.0, lodash@^4.1.0, lodash@^4.11.1, lodash@^4.14.0, lodash@^4.17.4, lodash@^4.2.0, lodash@^4.2.1, lodash@^4.3.0, lodash@~4.17.4:
     version "4.17.4"
     resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.4.tgz#78203a4d1c328ae1d86dca6460e369b57f4055ae"
   
@@ -5155,6 +5201,12 @@ Lockfile:
       source-map "^0.5.7"
       supports-color "^4.2.1"
   
+  powerbi-models@^0.11.3:
+    version "0.11.3"
+    resolved "https://registry.yarnpkg.com/powerbi-models/-/powerbi-models-0.11.3.tgz#7a0c6d297f0863ebc8c7ccfa3f5fea5e3488e316"
+    dependencies:
+      jsen "^0.6.1"
+  
   powerbi-visuals-package-validator@^1.0.0:
     version "1.0.0"
     resolved "https://registry.yarnpkg.com/powerbi-visuals-package-validator/-/powerbi-visuals-package-validator-1.0.0.tgz#7b0aaf1eaba5442f3b8286b5db32446352914bd4"
@@ -5231,6 +5283,10 @@ Lockfile:
     version "0.2.0"
     resolved "https://registry.yarnpkg.com/preserve/-/preserve-0.2.0.tgz#815ed1f6ebc65926f865b310c0713bcb3315ce4b"
   
+  prettier@^1.7.4:
+    version "1.7.4"
+    resolved "https://registry.yarnpkg.com/prettier/-/prettier-1.7.4.tgz#5e8624ae9363c80f95ec644584ecdf55d74f93fa"
+  
   pretty-hrtime@^1.0.0:
     version "1.0.3"
     resolved "https://registry.yarnpkg.com/pretty-hrtime/-/pretty-hrtime-1.0.3.tgz#b7e3ea42435a4c9b2759d99e0f201eb195802ee1"
@@ -5257,7 +5313,7 @@ Lockfile:
     dependencies:
       asap "~2.0.3"
   
-  prop-types@^15.6.0:
+  prop-types@^15.5.10, prop-types@^15.6.0:
     version "15.6.0"
     resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.6.0.tgz#ceaf083022fc46b4a35f69e13ef75aed0d639856"
     dependencies:
@@ -5378,6 +5434,10 @@ Lockfile:
       lodash.merge "^4.6.0"
       rcfinder "^0.1.6"
   
+  react-d3-axis@^0.1.1:
+    version "0.1.1"
+    resolved "https://registry.yarnpkg.com/react-d3-axis/-/react-d3-axis-0.1.1.tgz#de890587645e46b1c286314c4f352ebb94f5c522"
+  
   react-dom@^16.0.0:
     version "16.0.0"
     resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.0.0.tgz#9cc3079c3dcd70d4c6e01b84aab2a7e34c303f58"
@@ -5386,6 +5446,17 @@ Lockfile:
       loose-envify "^1.1.0"
       object-assign "^4.1.1"
       prop-types "^15.6.0"
+  
+  react-redux@^5.0.6:
+    version "5.0.6"
+    resolved "https://registry.yarnpkg.com/react-redux/-/react-redux-5.0.6.tgz#23ed3a4f986359d68b5212eaaa681e60d6574946"
+    dependencies:
+      hoist-non-react-statics "^2.2.1"
+      invariant "^2.0.0"
+      lodash "^4.2.0"
+      lodash-es "^4.2.0"
+      loose-envify "^1.1.0"
+      prop-types "^15.5.10"
   
   react@^16.0.0:
     version "16.0.0"
@@ -5516,6 +5587,21 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/reduce-function-call/-/reduce-function-call-1.0.2.tgz#5a200bf92e0e37751752fe45b0ab330fd4b6be99"
     dependencies:
       balanced-match "^0.4.2"
+  
+  redux-logger@^3.0.6:
+    version "3.0.6"
+    resolved "https://registry.yarnpkg.com/redux-logger/-/redux-logger-3.0.6.tgz#f7555966f3098f3c88604c449cf0baf5778274bf"
+    dependencies:
+      deep-diff "^0.3.5"
+  
+  redux@*, redux@^3.6.0, redux@^3.7.2:
+    version "3.7.2"
+    resolved "https://registry.yarnpkg.com/redux/-/redux-3.7.2.tgz#06b73123215901d25d065be342eb026bc1c8537b"
+    dependencies:
+      lodash "^4.2.1"
+      lodash-es "^4.2.1"
+      loose-envify "^1.1.0"
+      symbol-observable "^1.0.3"
   
   regenerate@^1.2.1:
     version "1.3.2"
@@ -6241,6 +6327,10 @@ Lockfile:
       sax "~1.2.1"
       whet.extend "~0.9.9"
   
+  symbol-observable@^1.0.3:
+    version "1.0.4"
+    resolved "https://registry.yarnpkg.com/symbol-observable/-/symbol-observable-1.0.4.tgz#29bf615d4aa7121bdd898b22d4b3f9bc4e2aa03d"
+  
   synesthesia@^1.0.1:
     version "1.0.1"
     resolved "https://registry.yarnpkg.com/synesthesia/-/synesthesia-1.0.1.tgz#5ef95ea548c0d5c6e6f9bb4b0d0731dff864a777"
@@ -6861,4 +6951,7 @@ Lockfile:
       window-size "0.1.0"
 
 Trace: 
-  Error: EPERM: operation not permitted, unlink 'C:\Workspace\heat-streams\node_modules\autoprefixer\node_modules\.bin'
+  Error: connect ETIMEDOUT 104.16.60.173:443
+      at Object._errnoException (util.js:1026:11)
+      at _exceptionWithHostPort (util.js:1049:20)
+      at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1174:14)

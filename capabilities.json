@@ -31,7 +31,6 @@
             "displayName": "Data Settings",
             "properties": {
                 "filter": {
-                  "displayName": "Filter",
                   "suppressFormatPainterCopy": true,
                   "type": {
                     "filter": true

@@ -3,12 +3,13 @@
   "version": "1.0.0",
   "license": "MIT",
   "scripts": {
+    "precommit": "lint-staged",
     "install-certificate": "essex-powerbi-visual-scripts install-certificate",
-    "package": "essex-powerbi-visual-scripts package",
+    "package": "cross-env NODE_ENV=production essex-powerbi-visual-scripts package",
     "start": "essex-powerbi-visual-scripts start",
-    "lint": "tslint 'src/**/*.ts*'",
+    "lint": "tslint 'src/**/*.ts*' --fix",
     "test": "npm-run-all lint package",
-    "format": "prettier --single-quote --trailing-comma all --use-tabs --no-semi --write 'src/**/*.{ts,tsx}'"
+    "format": "prettier --write \"src/**/*.ts*\""
   },
   "author": {
     "name": "Microsoft (experimental)",
@@ -26,6 +27,10 @@
     "@types/node": "^8.0.25",
     "@types/react": "^16.0.7",
     "@types/react-dom": "^15.5.5",
+    "@types/react-redux": "^5.0.10",
+    "@types/redux": "^3.6.0",
+    "@types/redux-actions": "^2.2.2",
+    "@types/redux-logger": "^3.0.4",
     "d3-scale-chromatic": "^1.1.1",
     "lodash": "^4.17.4",
     "powerbi-models": "^0.11.3",
@@ -35,10 +40,17 @@
     "prop-types": "^15.6.0",
     "react": "^16.0.0",
     "react-d3-axis": "^0.1.1",
-    "react-dom": "^16.0.0"
+    "react-dom": "^16.0.0",
+    "react-redux": "^5.0.6",
+    "redux": "^3.7.2",
+    "redux-actions": "^2.2.1",
+    "redux-logger": "^3.0.6"
   },
   "devDependencies": {
     "@essex/powerbi-visual-scripts": "^1.1.2",
+    "cross-env": "^5.0.5",
+    "husky": "^0.14.3",
+    "lint-staged": "^4.2.3",
     "npm-run-all": "^4.0.2",
     "powerbi-visuals-tools": "^1.7.2",
     "prettier": "^1.7.4",
@@ -58,5 +70,18 @@
       "^.+\\.(ts|tsx)$": "<rootDir>/scripts/preprocessor.js"
     },
     "testRegex": "test/.*\\.spec\\.(ts|tsx|js)$"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "npm run format",
+      "npm run lint",
+      "git add"
+    ]
+  },
+  "prettier": {
+    "singleQuote": true,
+    "trailingComma": "all",
+    "semi": false,
+    "useTabs": true
   }
 }

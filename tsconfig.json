@@ -6,8 +6,6 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "declaration": true,
-    "noImplicitAny": false,
-    "noUnusedLocals": true,
     "sourceMap": true,
     "suppressImplicitAnyIndexErrors": true,
     "outDir": "lib",

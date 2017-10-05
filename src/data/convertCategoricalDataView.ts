@@ -25,50 +25,56 @@
  */
 // tslint:disable no-var-requires
 
-"use strict";
+'use strict'
 import {
-    ICategoryData,
-    ICategoryDataMap,
-    IChartData,
-    IVisualDataOptions,
-} from "../chart/interfaces";
-import coalesceValueSlices from "./coalesceValueSlices";
-import determinePositionDomain from "./determinePositionDomain";
-import sortCategories from "./sortCategories";
+	ICategoryData,
+	ICategoryDataMap,
+	IChartData,
+	IVisualDataOptions,
+} from '../chart/interfaces'
+import coalesceValueSlices from './coalesceValueSlices'
+import determinePositionDomain from './determinePositionDomain'
+import sortCategories from './sortCategories'
 
-const get = require("lodash/get");
+const get = require('lodash/get')
 
-export default function convertCategoricalDataView(dataView: any, options: IVisualDataOptions): IChartData {
-    const { categorical } = dataView;
+export default function convertCategoricalDataView(
+	dataView: any,
+	options: IVisualDataOptions,
+): IChartData {
+	const { categorical } = dataView
 
-    let categories = get(categorical, "categories[0].values", [])
-        .map((t, index) => ({
-            id: index,
-            name: (t || "").toString(),
-        }));
+	let categories = get(
+		categorical,
+		'categories[0].values',
+		[],
+	).map((t, index) => ({
+		id: index,
+		name: (t || '').toString(),
+	}))
 
-    const categoryData: ICategoryDataMap = {};
-    categories.forEach((category) => {
-        categoryData[category.id] = categorical.values.map((categoricalValue) => {
-            const position = categoricalValue.source.groupName;
-            const value = categoricalValue.values[category.id];
-            return { position, value } as ICategoryData;
-        });
-    });
+	const categoryData: ICategoryDataMap = {}
+	categories.forEach(category => {
+		categoryData[category.id] = categorical.values.map(categoricalValue => {
+			const position = categoricalValue.source.groupName
+			const value = categoricalValue.values[category.id]
+			return { position, value } as ICategoryData
+		})
+	})
 
-    const positionDomain = determinePositionDomain(categoryData);
-    const valueSlices = coalesceValueSlices(
-        categoryData,
-        positionDomain,
-        options.dateAggregation,
-    );
+	const positionDomain = determinePositionDomain(categoryData)
+	const valueSlices = coalesceValueSlices(
+		categoryData,
+		positionDomain,
+		options.dateAggregation,
+	)
 
-    categories = sortCategories(categories, categoryData, options);
-    const result = {
-        categories,
-        categoryData,
-        ...valueSlices,
-        positionDomain,
-    };
-    return result;
+	categories = sortCategories(categories, categoryData, options)
+	const result = {
+		categories,
+		categoryData,
+		...valueSlices,
+		positionDomain,
+	}
+	return result
 }

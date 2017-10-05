@@ -30,17 +30,18 @@
 /// <reference path="../../node_modules/powerbi-visuals-utils-typeutils/lib/index.d.ts" />
 /// <reference path="../../node_modules/powerbi-visuals-utils-svgutils/lib/index.d.ts" />
 /// <reference path="../../node_modules/powerbi-visuals-utils-dataviewutils/lib/index.d.ts" />
-import "script-loader!powerbi-visuals-utils-typeutils/lib/index";
-import "script-loader!powerbi-visuals-utils-svgutils/lib/index";
-import "script-loader!powerbi-visuals-utils-dataviewutils/lib/index";
+import 'script-loader!powerbi-visuals-utils-typeutils/lib/index'
+import 'script-loader!powerbi-visuals-utils-svgutils/lib/index'
+import 'script-loader!powerbi-visuals-utils-dataviewutils/lib/index'
 import {
-  IVisualDataOptions,
-  IVisualRenderingOptions,
-} from "../chart/interfaces";
-import VisualDataOptionsImpl from "./VisualDataOptionsImpl";
-import VisualRenderingOptionsImpl from "./VisualRenderingOptionsImpl";
+	IVisualDataOptions,
+	IVisualRenderingOptions,
+} from '../chart/interfaces'
+import VisualDataOptionsImpl from './VisualDataOptionsImpl'
+import VisualRenderingOptionsImpl from './VisualRenderingOptionsImpl'
 
-export default class VisualSettings extends powerbi.extensibility.utils.dataview.DataViewObjectsParser {
-  public rendering: IVisualRenderingOptions = new VisualRenderingOptionsImpl();
-  public data: IVisualDataOptions = new VisualDataOptionsImpl();
+export default class VisualSettings extends powerbi.extensibility.utils.dataview
+	.DataViewObjectsParser {
+	public rendering: IVisualRenderingOptions = new VisualRenderingOptionsImpl()
+	public data: IVisualDataOptions = new VisualDataOptionsImpl()
 }

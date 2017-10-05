@@ -23,88 +23,101 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *  THE SOFTWARE.
  */
-"use strict";
-import * as d3 from "d3";
+'use strict'
+import * as d3 from 'd3'
 import {
-    DateAggregation,
-    ICategoryDataMap,
-    ICategoryValueMap,
-    XDomain,
-} from "../chart/interfaces";
+	DateAggregation,
+	ICategoryDataMap,
+	ICategoryValueMap,
+	XDomain,
+} from '../chart/interfaces'
 
-function sliceStart(date: Date, dateAggregation: DateAggregation, positionDomain: [Date, Date]): Date {
-    const result = new Date(date);
-    result.setUTCMilliseconds(0);
-    result.setUTCSeconds(0);
-    result.setUTCMinutes(0);
+function sliceStart(
+	date: Date,
+	dateAggregation: DateAggregation,
+	positionDomain: [Date, Date],
+): Date {
+	const result = new Date(date)
+	result.setUTCMilliseconds(0)
+	result.setUTCSeconds(0)
+	result.setUTCMinutes(0)
 
-    if (dateAggregation === "days") {
-        result.setUTCHours(0);
-    } else if (dateAggregation === "months") {
-        result.setUTCHours(0);
-        result.setUTCDate(1);
-    } else if (dateAggregation === "years") {
-        result.setUTCHours(0);
-        result.setUTCDate(1);
-        result.setUTCMonth(1);
-    }
+	if (dateAggregation === 'days') {
+		result.setUTCHours(0)
+	} else if (dateAggregation === 'months') {
+		result.setUTCHours(0)
+		result.setUTCDate(1)
+	} else if (dateAggregation === 'years') {
+		result.setUTCHours(0)
+		result.setUTCDate(1)
+		result.setUTCMonth(1)
+	}
 
-    if (positionDomain[0] !== undefined && result.getTime() < positionDomain[0].getTime()) {
-        return positionDomain[0];
-    }
-    return result;
+	if (
+		positionDomain[0] !== undefined &&
+		result.getTime() < positionDomain[0].getTime()
+	) {
+		return positionDomain[0]
+	}
+	return result
 }
 
 export default function coalesceValueSlices(
-    data: ICategoryDataMap,
-    positionDomain: XDomain,
-    dateAggregation: DateAggregation,
+	data: ICategoryDataMap,
+	positionDomain: XDomain,
+	dateAggregation: DateAggregation,
 ) {
-    let valueMin: number;
-    let valueMax: number;
-    const isNumericDomain = typeof positionDomain[0] === "number";
+	let valueMin: number
+	let valueMax: number
+	const isNumericDomain = typeof positionDomain[0] === 'number'
 
-    const categoryIds = Object.keys(data);
-    const result = categoryIds.reduce((agg: ICategoryValueMap, current: string) => {
-        // sort the category data ascending
-        const categoryData = data[current];
+	const categoryIds = Object.keys(data)
+	const result = categoryIds.reduce(
+		(agg: ICategoryValueMap, current: string) => {
+			// sort the category data ascending
+			const categoryData = data[current]
 
-        // Bucket out the values by their aggregated position (within day, within year, etc..)
-        const valuePositions: { [dateCode: string]: number[] } = {};
-        categoryData.forEach((cd) => {
-            if (cd.value !== undefined && cd.value !== null) {
-                const start = isNumericDomain ?
-                    `${cd.position}` :
-                    sliceStart(cd.position, dateAggregation, positionDomain as [Date, Date]).toUTCString();
+			// Bucket out the values by their aggregated position (within day, within year, etc..)
+			const valuePositions: { [dateCode: string]: number[] } = {}
+			categoryData.forEach(cd => {
+				if (cd.value !== undefined && cd.value !== null) {
+					const start = isNumericDomain
+						? `${cd.position}`
+						: sliceStart(cd.position, dateAggregation, positionDomain as [
+								Date,
+								Date
+							]).toUTCString()
 
-                if (!valuePositions[start]) {
-                    valuePositions[start] = [];
-                }
-                if (cd.value !== null) {
-                    if (valueMin === undefined || cd.value < valueMin) {
-                        valueMin = cd.value;
-                    }
-                    if (valueMax === undefined || cd.value > valueMax) {
-                        valueMax = cd.value;
-                    }
-                }
-                valuePositions[start].push(cd.value);
-            }
-        });
+					if (!valuePositions[start]) {
+						valuePositions[start] = []
+					}
+					if (cd.value !== null) {
+						if (valueMin === undefined || cd.value < valueMin) {
+							valueMin = cd.value
+						}
+						if (valueMax === undefined || cd.value > valueMax) {
+							valueMax = cd.value
+						}
+					}
+					valuePositions[start].push(cd.value)
+				}
+			})
 
-        const slices = Object.keys(valuePositions).map((vp) => {
-            const start = isNumericDomain ? parseInt(vp, 10) : new Date(vp);
-            return {
-                start,
-                value: d3.mean(valuePositions[vp]),
-            };
-        });
-        agg[current] = slices;
-        return agg;
-    }, {} as ICategoryValueMap) as ICategoryValueMap;
+			const slices = Object.keys(valuePositions).map(vp => {
+				const start = isNumericDomain ? parseInt(vp, 10) : new Date(vp)
+				return {
+					start,
+					value: d3.mean(valuePositions[vp]),
+				}
+			})
+			agg[current] = slices
+			return agg
+		},
+		{} as ICategoryValueMap,
+	) as ICategoryValueMap
 
-    return {
-        categoryValues: result,
-        valueDomain: [valueMin, valueMax] as [number, number],
-    };
+	return {
+		categoryValues: result,
+		valueDomain: [valueMin, valueMax] as [number, number],
+	}
 }
