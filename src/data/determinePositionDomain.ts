@@ -25,14 +25,29 @@
  */
 'use strict'
 import * as d3 from 'd3'
-import { ICategoryDataMap, XDomain } from '../chart/interfaces'
+import {
+	ICategoryDataMap,
+	IVisualDataOptions,
+	XDomain,
+} from '../chart/interfaces'
+import getSliceEnd from './getSliceEnd'
 
 export default function determinePositionDomain(
 	data: ICategoryDataMap,
+	options: IVisualDataOptions,
 ): XDomain {
+	// Get the domain of each category
 	const domainsByCategory = Object.keys(data).map(category =>
 		d3.extent(data[category], (pv: { position: Date | number }) => pv.position),
 	) as XDomain[]
+
+	// Smang the domains together into an array
 	const mergedDomains = [].concat.apply([], domainsByCategory)
-	return d3.extent(mergedDomains) as XDomain
+
+	// Get the extent of the domain
+	const domain = d3.extent(mergedDomains) as XDomain
+
+	// The actual end should be the end of the final slice
+	domain[1] = getSliceEnd(domain[1], options)
+	return domain
 }

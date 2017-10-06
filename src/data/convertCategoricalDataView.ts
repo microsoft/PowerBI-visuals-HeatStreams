@@ -62,7 +62,7 @@ export default function convertCategoricalDataView(
 		})
 	})
 
-	const positionDomain = determinePositionDomain(categoryData)
+	const positionDomain = determinePositionDomain(categoryData, options)
 	const valueSlices = coalesceValueSlices(
 		categoryData,
 		positionDomain,

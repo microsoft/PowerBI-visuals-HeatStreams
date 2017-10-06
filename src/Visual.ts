@@ -67,7 +67,7 @@ export class Visual implements powerbi.extensibility.IVisual {
 		global['setLogLevel'] = logger.setLevel
 		// tslint:disable-next-line no-console
 		console.log(
-			`🔥🔥 %c HeatStreams %c 🔥🔥
+			`%c🔥🔥 HeatStreams 🔥🔥%c
     For debug information, set %cwindow.LogLevel%c to
       0 = NONE
       1 = ERROR (default value)
@@ -75,11 +75,13 @@ export class Visual implements powerbi.extensibility.IVisual {
       3 = DEBUG
     (this may need to be done in the visual's Javascript context)
 
-    Cheers from Microsoft Research! msrvizsupport@microsoft.com
+    Cheers from Microsoft Research! %cmsrvizsupport@microsoft.com%c
     `,
 			'font-size: 20px; font-weight: 500; text-shadow: -1px -1px hsl(0,100%,50%)',
 			'',
-			'font-size: 14px; font-weight: bold;',
+			'font-weight: bold;',
+			'',
+			'font-weight: bold',
 			'',
 		)
 	}

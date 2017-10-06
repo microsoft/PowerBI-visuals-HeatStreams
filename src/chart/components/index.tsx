@@ -252,7 +252,7 @@ export default class HeatStreamsChart extends React.Component<
 
 	private sliceWidth(xScale: IScaler): number {
 		const start = this.data.positionDomain[0]
-		const end = getSliceEnd(start, this.options)
+		const end = getSliceEnd(start, this.options.dataOptions)
 		return xScale(end) - xScale(start)
 	}
 }
