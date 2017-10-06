@@ -9,7 +9,6 @@ const TimeScrub = ({ data, xScale, height, color }) =>
 			x={xScale(data[0])}
 			y={0}
 			stroke={color}
-			strokeWidth={1}
 		/>
 	)
 
