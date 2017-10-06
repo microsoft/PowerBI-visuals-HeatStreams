@@ -52,11 +52,10 @@ class Overlay extends React.Component<IOverlayProps, IOverlayState> {
 		return (
 			<g className="overlay">
 				<rect
+					className="board"
 					x={x}
 					height={height}
 					width={width}
-					fill="transparent"
-					cursor="crosshair"
 					onMouseDown={evt => this.onMouseDown(evt)}
 					onMouseMove={evt => this.onMouseMove(evt)}
 					onMouseUp={evt => this.onMouseUp(evt)}
@@ -68,7 +67,6 @@ class Overlay extends React.Component<IOverlayProps, IOverlayState> {
 						height={height}
 						width={xScale(timeScrub[1]) - xScale(timeScrub[0])}
 						x={xScale(timeScrub[0])}
-						fill="transparent"
 						stroke={highlightColor}
 						strokeWidth={1}
 					/>

@@ -15,11 +15,8 @@ const CategoryNameList = ({
 		{showCategories ? (
 			<g className="category-names">
 				<rect
-					className="occluder"
+					className="category-name-occluder"
 					width={width}
-					height="100%"
-					fill="white"
-					cursor="default"
 					onClick={onClear}
 				/>
 				<g className="category-texts">

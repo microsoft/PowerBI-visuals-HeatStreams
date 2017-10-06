@@ -6,19 +6,10 @@ const TimeAxis = ({ xPan, offset, xScale, width, x, timeScrub, height }) => (
 		transform={`translate(${xPan}, ${offset})`}
 		style={{ pointerEvents: 'all' }}
 	>
-		<rect
-			className="overlay"
-			pointerEvents="all"
-			width={width}
-			x={x}
-			height={height}
-			fill="transparent"
-		/>
 		{timeScrub ? (
 			<rect
-				className="extent"
+				className="axis-scrub-extent"
 				height={height}
-				fill="rgba(155, 155, 155, 155)"
 				x={xScale(timeScrub[0])}
 				width={xScale(timeScrub[1]) - xScale(timeScrub[0])}
 			/>

@@ -3,8 +3,6 @@ import * as React from 'react'
 const CategoryText = ({ rowHeight, y, selected, name, onClick }) => (
 	<text
 		className="category-text"
-		fill="black"
-		cursor="pointer"
 		fontSize={`${rowHeight - 2}px`}
 		x={2}
 		y={y}

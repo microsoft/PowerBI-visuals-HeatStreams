@@ -4,11 +4,10 @@ import * as React from 'react'
 
 const Backboard = ({ height, width, x, onClick }) => (
 	<rect
+		className="backboard"
 		x={x}
 		height={height}
 		width={width}
-		fill="white"
-		cursor="default"
 		onClick={onClick}
 	/>
 )

@@ -5,3 +5,46 @@
 	stroke: none;
 	shape-rendering: crispEdges;
 }
+
+.value-text {
+  stroke: none;
+}
+
+.category-view {
+  fill: none;
+  shape-rendering: geometricPrecision;
+}
+
+.axis-scrub-extent {
+  fill: rgba(155, 155, 155, 155)
+}
+
+.backboard {
+  fill: white;
+  cursor: default;
+}
+
+.category-name-occluder {
+  height: 100%;
+  fill: white;
+  cursor: default;
+}
+
+.category-text { 
+  fill: black;
+  cursor: pointer;
+}
+
+.overlay .board {
+  fill: transparent;
+  cursor: crosshair;
+}
+
+.overlay .selection {
+  fill: transparent;
+}
+
+.time-scrub {
+  fill: none;
+  stroke-width: 1
+}

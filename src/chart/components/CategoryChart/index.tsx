@@ -6,8 +6,6 @@ import CategoryView from './CategoryView'
 import ValueRun from './ValueRun'
 import ValueText from './ValueText'
 
-const SLICE_WIDTH_WITH_TEXT_MIN_WIDTH = 35
-
 export interface ICategoryChartProps {
 	category: ICategory
 	categoryData: IValueSlice[]
@@ -28,15 +26,13 @@ const CategoryChart = ({
 	colorizer,
 	xScale,
 	rowHeight,
-	showValues: showValuesConfig,
+	showValues,
 	width,
 	highlightColor,
 	selected,
 	y,
 	sliceWidth,
 }: ICategoryChartProps) => {
-	const showValues =
-		showValuesConfig && sliceWidth >= SLICE_WIDTH_WITH_TEXT_MIN_WIDTH
 	return (
 		<g className="category-chart">
 			<CategoryView
@@ -67,6 +63,7 @@ const CategoryChart = ({
 							key={`cdt:${cd.start}`}
 							rowHeight={rowHeight}
 							text={text}
+							sliceWidth={sliceWidth}
 							color={textColor}
 							x={start + 2}
 							y={y + rowHeight - 2}
