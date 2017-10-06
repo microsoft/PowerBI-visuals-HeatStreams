@@ -1,7 +1,8 @@
-// tslint:disable no-console no-var-requires
+// tslint:disable no-var-requires
 import { ICategory } from './chart/interfaces'
 import buildDomainScrub from './data/buildDomainScrub'
 const get = require('lodash/get')
+const logger = require('./logger')
 
 export default class Interactions {
 	constructor(
@@ -10,7 +11,7 @@ export default class Interactions {
 	) {}
 
 	public async clearSelections() {
-		console.log('Handle Clear')
+		logger.info('Handle Clear')
 		await this.selectionManager.clear()
 		this.applyFilter(null)
 		this.persistSelectedCategories([])
@@ -21,14 +22,14 @@ export default class Interactions {
 		multiselect: boolean,
 		dataView: powerbi.DataView,
 	) {
-		console.log('Handle Cat Click', category, multiselect)
+		logger.info('Handle Cat Click', category, multiselect)
 		const selection = this.selectionIdForCategory(category, dataView)
 		await this.selectionManager.select(selection, multiselect)
 		this.persistSelectedCategories([category.id])
 	}
 
 	public async scrub(bounds: Array<Date | number>, dv: powerbi.DataView) {
-		console.log('Handle Scrub', bounds)
+		logger.info('Handle Scrub', bounds)
 		if (bounds === null || bounds === undefined || +bounds[0] === +bounds[1]) {
 			this.applyFilter(null)
 			return

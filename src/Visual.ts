@@ -23,7 +23,7 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *  THE SOFTWARE.
  */
-// tslint:disable no-var-requires no-console
+// tslint:disable no-var-requires no-string-literal
 'use strict'
 import 'd3'
 import 'd3-interpolate'
@@ -35,8 +35,8 @@ import { ICategory } from './chart/interfaces'
 import DataViewConverter from './data/DataViewConverter'
 import Interactions from './Interactions'
 import VisualSettings from './settings/VisualSettings'
-
 const get = require('lodash/get')
+import * as logger from './logger'
 
 // Polyfill for IE11
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isInteger
@@ -64,6 +64,24 @@ export class Visual implements powerbi.extensibility.IVisual {
 		this.chartOptions = new ChartOptions(converter, target)
 		this.chart = new Chart(this.chartOptions)
 		this.interactions = new Interactions(host, selectionManager)
+		global['setLogLevel'] = logger.setLevel
+		// tslint:disable-next-line no-console
+		console.log(
+			`🔥🔥 %c HeatStreams %c 🔥🔥
+    For debug information, set %cwindow.LogLevel%c to
+      0 = NONE
+      1 = ERROR (default value)
+      2 = INFO
+      3 = DEBUG
+    (this may need to be done in the visual's Javascript context)
+
+    Cheers from Microsoft Research! msrvizsupport@microsoft.com
+    `,
+			'font-size: 20px; font-weight: 500; text-shadow: -1px -1px hsl(0,100%,50%)',
+			'',
+			'font-size: 14px; font-weight: bold;',
+			'',
+		)
 	}
 
 	public update(options: powerbi.extensibility.VisualUpdateOptions) {
@@ -75,7 +93,7 @@ export class Visual implements powerbi.extensibility.IVisual {
 				this.render()
 			}
 		} catch (err) {
-			console.error('Error Updating Visual', err)
+			logger.error('🐞Error Updating Heatstreams 🐞', err)
 		}
 	}
 
@@ -103,7 +121,7 @@ export class Visual implements powerbi.extensibility.IVisual {
 		this.chart.onScrub(bounds =>
 			interactions.scrub(bounds, this.chartOptions.dataView),
 		)
-		console.log('Render', this.chartOptions)
+		logger.info('Render', this.chartOptions)
 		this.chart.render()
 	}
 }

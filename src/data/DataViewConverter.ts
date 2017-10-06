@@ -23,13 +23,14 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *  THE SOFTWARE.
  */
-// tslint:disable no-console no-var-requires
+// tslint:disable no-var-requires
 'use strict'
 import { ICategory, IChartData, IVisualDataOptions } from '../chart/interfaces'
 import convertCategoricalDataView from './convertCategoricalDataView'
 
 const get = require('lodash/get')
 const isEqual = require('lodash/isEqual')
+import * as logger from '../logger'
 
 export default class DataViewConverter {
 	constructor(private selectionManager: any) {}
@@ -66,7 +67,11 @@ export default class DataViewConverter {
 						selectedCategories[selectorData.right.value] = true
 					}
 				} catch (err) {
-					console.log('Error Processing Selection', s, err)
+					logger.error(
+						'🐞Error Processing Selected HeatStreams Categories🐞',
+						s,
+						err,
+					)
 				}
 			})
 		}
