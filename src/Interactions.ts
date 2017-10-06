@@ -33,8 +33,8 @@ export default class Interactions {
 			this.applyFilter(null)
 			return
 		}
-		const column = dv.metadata.columns[0].identityExprs[0]
-		const filter = buildDomainScrub(bounds, column)
+		const column = dv.metadata.columns.find(col => col.roles.grouping)
+		const filter = buildDomainScrub(bounds, column.identityExprs[0])
 		this.applyFilter(filter)
 	}
 
