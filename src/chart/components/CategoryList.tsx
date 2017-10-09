@@ -65,6 +65,16 @@ const CategoryList = ({
 		className="category-list"
 		onWheel={evt => onScroll(evt.deltaX, evt.deltaY)}
 	>
+		<CategoryNameList
+			categories={categories}
+			showCategories={showCategories}
+			width={width * textPercent}
+			rowHeight={rowHeight}
+			categoryY={categoryY}
+			isCategorySelected={isCategorySelected}
+			onClickCategory={onClickCategory}
+			onClear={onClear}
+		/>
 		<Backboard
 			width={width - textPercent * width}
 			x={textPercent * width}
@@ -109,16 +119,6 @@ const CategoryList = ({
 			timeScrub={timeScrub}
 			highlightColor={highlightColor}
 			onClick={onClick}
-		/>
-		<CategoryNameList
-			categories={categories}
-			showCategories={showCategories}
-			width={width * textPercent}
-			rowHeight={rowHeight}
-			categoryY={categoryY}
-			isCategorySelected={isCategorySelected}
-			onClickCategory={onClickCategory}
-			onClear={onClear}
 		/>
 	</g>
 )
