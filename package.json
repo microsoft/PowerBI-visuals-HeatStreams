@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "license": "MIT",
   "scripts": {
+    "clean": "rimraf dist",
     "precommit": "lint-staged",
     "install-certificate": "essex-powerbi-visual-scripts install-certificate",
     "package": "cross-env NODE_ENV=production essex-powerbi-visual-scripts package",
@@ -47,6 +48,7 @@
     "npm-run-all": "^4.0.2",
     "powerbi-visuals-tools": "^1.7.2",
     "prettier": "^1.7.4",
+    "rimraf": "^2.6.2",
     "tslint": "^5.6.0",
     "typescript": "^2.4.2"
   },
