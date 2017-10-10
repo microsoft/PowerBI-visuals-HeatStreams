@@ -24,8 +24,8 @@
 *  THE SOFTWARE.
 */
 'use strict'
-import { IVisualDataOptions, ICategoryDataMap } from '../chart/interfaces'
 import { ICategory } from '@essex/react-heat-streams'
+import { ICategoryDataMap, IVisualDataOptions } from '../chart/interfaces'
 
 type Sorter = (cat1: ICategory, cat2: ICategory) => number
 const invert = (sortComparator: Sorter) => (cat1: ICategory, cat2: ICategory) =>

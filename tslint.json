@@ -3,7 +3,8 @@
 	"extends": ["tslint:recommended"],
 	"jsRules": {},
 	"rules": {
-		// Stupid Rules
+    // Stupid Rules
+    "object-literal-sort-keys": false,
 		"no-namespace": false,
 		"quotemark": false,
 		"semicolon": false,

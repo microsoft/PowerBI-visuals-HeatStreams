@@ -5,6 +5,7 @@ import {
 	isDivergingColorScheme,
 	LinearScaler,
 } from '@essex/d3-coloring-scales'
+import { ICategory } from '@essex/react-heat-streams'
 import DataViewConverter from '../data/DataViewConverter'
 import VisualSettings from '../settings/VisualSettings'
 import {
@@ -13,8 +14,6 @@ import {
 	IVisualDataOptions,
 	IVisualRenderingOptions,
 } from './interfaces'
-import { ICategory } from '@essex/react-heat-streams'
-const get = require('lodash/get')
 
 export default class ChartOptions implements IChartOptions {
 	public dataOptions: IVisualDataOptions
