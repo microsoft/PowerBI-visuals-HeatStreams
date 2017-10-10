@@ -1,18 +1,17 @@
 {
-    "defaultSeverity": "error",
-    "extends": [
-        "tslint:recommended"
-    ],
-    "jsRules": {},
-    "rules": {
-        "no-namespace": false,
-        "quotemark": false,
-        "semicolon": false,
-        "indent": false,
-        "jsdoc-format": false,
-        "arrow-parens": [ true, "ban-single-arg-parens"],
-        "trailing-comma": false,
-        "linebreak-style": [true, "LF"]
-    },
-    "rulesDirectory": []
+	"defaultSeverity": "error",
+	"extends": ["tslint:recommended"],
+	"jsRules": {},
+	"rules": {
+		// Stupid Rules
+		"no-namespace": false,
+		"quotemark": false,
+		"semicolon": false,
+		"indent": false,
+		"jsdoc-format": false,
+		"arrow-parens": [true, "ban-single-arg-parens"],
+		"trailing-comma": false,
+		"linebreak-style": [true, "LF"]
+	},
+	"rulesDirectory": []
 }

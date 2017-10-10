@@ -1,3 +1,4 @@
+ 
 # Set the default behavior, in case people don't have core.autocrlf set.
 * text=auto
 
@@ -9,6 +10,7 @@
 *.tsx text eol=lf
 *.yaml text eol=lf
 *.css text eol=lf
+*.scss text eol=lf
 *.gitattributes text eol=lf
 *.gitignore text eol=lf
 *.npmignore text eol=lf
