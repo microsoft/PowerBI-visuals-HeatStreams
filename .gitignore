@@ -1,11 +1,7 @@
 node_modules/
 .tmp/
 dist/
-<<<<<<< HEAD
-package-lock.json
-=======
 lib/
 package-lock.json
 *-debug.log
 *-error.log
->>>>>>> 80de6c69385b3108b10aad2604c990827199a4ca
