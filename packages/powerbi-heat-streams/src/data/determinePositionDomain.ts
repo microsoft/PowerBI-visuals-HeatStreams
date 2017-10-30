@@ -24,9 +24,9 @@
  *  THE SOFTWARE.
  */
 'use strict'
+import { getSliceEnd, XDomain } from '@essex/react-heat-streams'
 import * as d3 from 'd3'
 import { ICategoryDataMap, IVisualDataOptions } from '../chart/interfaces'
-import { XDomain, getSliceEnd } from '@essex/react-heat-streams'
 
 export default function determinePositionDomain(
 	data: ICategoryDataMap,

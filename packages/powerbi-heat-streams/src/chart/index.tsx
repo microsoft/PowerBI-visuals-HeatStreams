@@ -39,8 +39,8 @@ export default class Chart {
 	public render() {
 		const { width, height, colorizer } = this.options
 		const renderProps = {
-			width: width,
-			height: height,
+			width,
+			height,
 			textPercent: this.options.renderOptions.categoryTextPercent / 100.0,
 			rowHeight: this.options.renderOptions.rowHeight,
 			axisHeight: this.options.renderOptions.axisHeight,

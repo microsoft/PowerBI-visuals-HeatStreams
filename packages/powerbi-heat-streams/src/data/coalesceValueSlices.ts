@@ -24,13 +24,13 @@
  *  THE SOFTWARE.
  */
 'use strict'
-import * as d3 from 'd3'
-import { ICategoryDataMap } from '../chart/interfaces'
 import {
 	DateAggregation,
 	ICategoryValueMap,
 	XDomain,
 } from '@essex/react-heat-streams'
+import * as d3 from 'd3'
+import { ICategoryDataMap } from '../chart/interfaces'
 
 function sliceStart(
 	date: Date,

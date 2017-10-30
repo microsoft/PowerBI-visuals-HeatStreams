@@ -23,8 +23,8 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *  THE SOFTWARE.
  */
-import { IVisualDataOptions, SortBy } from '../chart/interfaces'
 import { DateAggregation } from '@essex/react-heat-streams'
+import { IVisualDataOptions, SortBy } from '../chart/interfaces'
 
 export default class VisualDataOptionsImpl implements IVisualDataOptions {
 	public dateAggregation: DateAggregation = 'days'
