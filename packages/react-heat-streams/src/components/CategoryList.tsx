@@ -5,6 +5,7 @@ import {
 	IColorizer,
 	IScaler,
 	Scrub,
+	XDomain,
 } from '../interfaces'
 import Axis from './Axis'
 import Backboard from './Backboard'
@@ -25,6 +26,7 @@ export interface ICategoryListProps {
 	rowHeight: number
 	highlightColor: string
 	numAxisTicks: number
+	xDomain: XDomain
 	categoryY: (index: number) => number
 	colorizer: IColorizer
 	xScale: IScaler
@@ -65,6 +67,7 @@ const CategoryList: React.StatelessComponent<ICategoryListProps> = ({
 	xPan,
 	timeScrub,
 	numAxisTicks,
+	xDomain,
 }) => (
 	<g
 		className="category-list"
@@ -99,6 +102,7 @@ const CategoryList: React.StatelessComponent<ICategoryListProps> = ({
 			categoryY={categoryY}
 			sliceWidth={sliceWidth}
 			xPan={xPan}
+			xDomain={xDomain}
 		/>
 		<TimeScrub
 			data={timeScrub}

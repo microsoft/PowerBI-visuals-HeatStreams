@@ -4,6 +4,7 @@ import {
 	ICategoryValueMap,
 	IColorizer,
 	IScaler,
+	XDomain,
 } from '../interfaces'
 import CategoryChart from './CategoryChart'
 
@@ -20,6 +21,7 @@ export interface ICategoryChartListProps {
 	categoryY: (input: number) => number
 	sliceWidth: number
 	xPan: number
+	xDomain: XDomain
 }
 
 const CategoryChartList: React.StatelessComponent<ICategoryChartListProps> = ({
@@ -35,6 +37,7 @@ const CategoryChartList: React.StatelessComponent<ICategoryChartListProps> = ({
 	categoryY,
 	sliceWidth,
 	xPan,
+	xDomain,
 }) => (
 	<g className="category-charts">
 		{categories.map((cat, index) => (
@@ -45,6 +48,7 @@ const CategoryChartList: React.StatelessComponent<ICategoryChartListProps> = ({
 				colorizer={colorizer}
 				xScale={xScale}
 				xPan={xPan}
+				xDomain={xDomain}
 				rowHeight={rowHeight}
 				showValues={showValues}
 				width={width}

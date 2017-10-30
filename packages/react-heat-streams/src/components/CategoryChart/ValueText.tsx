@@ -9,7 +9,7 @@ export interface IValueTextProps {
 	width: number
 }
 
-const SANE_MIN_WIDTH = 15
+const SANE_MIN_WIDTH = 20
 const SIDE_PADS = 4
 const FONT_SIZE = 8
 
@@ -46,8 +46,11 @@ export default class ValueText extends React.Component<IValueTextProps, {}> {
 		const { width, color } = this.props
 		const box = this.textElement.getBBox()
 		const spaceNeeded = box.width + SIDE_PADS
-		if (width >= spaceNeeded) {
+
+		if (width > SANE_MIN_WIDTH) {
 			this.textElement.setAttribute('fill', color)
+			const textContent = width >= spaceNeeded ? this.props.text : '…'
+			this.textElement.textContent = textContent
 		} else {
 			this.textElement.setAttribute('fill', 'transparent')
 		}

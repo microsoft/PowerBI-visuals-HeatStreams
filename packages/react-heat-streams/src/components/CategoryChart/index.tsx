@@ -1,6 +1,12 @@
 import { color, hsl } from 'd3-color'
 import * as React from 'react'
-import { ICategory, IColorizer, IScaler, IValueSlice } from '../../interfaces'
+import {
+	ICategory,
+	IColorizer,
+	IScaler,
+	IValueSlice,
+	XDomain,
+} from '../../interfaces'
 import printValue from '../printValue'
 import CategoryView from './CategoryView'
 import ValueRun from './ValueRun'
@@ -19,6 +25,7 @@ export interface ICategoryChartProps {
 	y: number
 	sliceWidth: number
 	xPan: number
+	xDomain: XDomain
 }
 
 const CategoryChart: React.StatelessComponent<ICategoryChartProps> = ({
@@ -34,6 +41,7 @@ const CategoryChart: React.StatelessComponent<ICategoryChartProps> = ({
 	y,
 	sliceWidth,
 	xPan,
+	xDomain,
 }) => {
 	return (
 		<g className="category-chart">
@@ -48,7 +56,7 @@ const CategoryChart: React.StatelessComponent<ICategoryChartProps> = ({
 				const cellColor = colorizer(cd.value)
 				const textColor = hsl(color(cellColor)).l > 0.5 ? '#000' : '#fff'
 				const text = printValue(cd.value)
-				const start = xPan + xScale(cd.start)
+				const start = xPan + Math.max(xScale(xDomain[0]), xScale(cd.start))
 				const end = xPan + xScale(cd.end)
 				const currentSliceWidth = end - start
 
@@ -67,7 +75,7 @@ const CategoryChart: React.StatelessComponent<ICategoryChartProps> = ({
 							key={`cdt:${cd.start}`}
 							height={rowHeight}
 							text={text}
-							width={sliceWidth}
+							width={currentSliceWidth}
 							color={textColor}
 							x={start}
 							y={y + rowHeight}

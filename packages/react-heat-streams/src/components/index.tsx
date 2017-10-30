@@ -113,6 +113,7 @@ export default class HeatStreamsChart extends React.Component<
 					showValues={showValues}
 					colorizer={colorizer}
 					xScale={xScale}
+					xDomain={xDomain}
 					numAxisTicks={numTicks}
 					isCategorySelected={isCategorySelected}
 					sliceWidth={sliceWidth}
