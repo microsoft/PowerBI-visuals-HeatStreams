@@ -67,6 +67,7 @@ export default function convertCategoricalDataView(
 		categoryData,
 		positionDomain,
 		options.dateAggregation,
+		options.numericAggregation,
 	)
 
 	categories = sortCategories(categories, categoryData, options)

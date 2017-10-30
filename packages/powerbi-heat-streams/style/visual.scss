@@ -3,11 +3,20 @@
 	padding: 0;
 	margin: 0;
 	stroke: none;
-	shape-rendering: crispEdges;
+  shape-rendering: crispEdges;
+  clip-path: url("#clip-chart")
 }
 
 .value-text {
+  width: '100%';
   stroke: none;
+  font-family: "Lucida Console", Monaco, monospace;
+  text-align: right;
+  text-anchor: end;
+}
+
+.category-charts {
+  clip-path: url("#clip-chart")
 }
 
 .category-view {

@@ -26,6 +26,7 @@
 'use strict'
 import {
 	DateAggregation,
+	getSliceEnd,
 	ICategoryValueMap,
 	XDomain,
 } from '@essex/react-heat-streams'
@@ -66,6 +67,7 @@ export default function coalesceValueSlices(
 	data: ICategoryDataMap,
 	positionDomain: XDomain,
 	dateAggregation: DateAggregation,
+	numericAggregation: number,
 ) {
 	let valueMin: number
 	let valueMax: number
@@ -105,8 +107,10 @@ export default function coalesceValueSlices(
 
 			const slices = Object.keys(valuePositions).map(vp => {
 				const start = isNumericDomain ? parseInt(vp, 10) : new Date(vp)
+				const end = getSliceEnd(start, numericAggregation, dateAggregation)
 				return {
 					start,
+					end,
 					value: d3.mean(valuePositions[vp]),
 				}
 			})

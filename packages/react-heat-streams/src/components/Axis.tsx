@@ -7,6 +7,7 @@ export interface ITimeAxisProps {
 	height: number
 	xPan: number
 	offset: number
+	numTicks: number
 	timeScrub: Array<number | Date>
 	xScale: (input: number | Date) => number
 }
@@ -18,6 +19,7 @@ const TimeAxis: React.StatelessComponent<ITimeAxisProps> = ({
 	x,
 	timeScrub,
 	height,
+	numTicks = 10,
 }) => {
 	const isScrubValid = timeScrub !== null && timeScrub.length === 2
 	return (
@@ -34,7 +36,7 @@ const TimeAxis: React.StatelessComponent<ITimeAxisProps> = ({
 				/>
 			) : null}
 			<Axis
-				{...axisPropsFromTickScale(xScale, 10)}
+				{...axisPropsFromTickScale(xScale, numTicks)}
 				style={{ orient: BOTTOM }}
 			/>
 		</g>

@@ -36,7 +36,7 @@ const CategoryChartList: React.StatelessComponent<ICategoryChartListProps> = ({
 	sliceWidth,
 	xPan,
 }) => (
-	<g className="category-charts" transform={`translate(${xPan})`}>
+	<g className="category-charts">
 		{categories.map((cat, index) => (
 			<CategoryChart
 				key={cat.id}
@@ -44,6 +44,7 @@ const CategoryChartList: React.StatelessComponent<ICategoryChartListProps> = ({
 				categoryData={categoryValues[cat.id]}
 				colorizer={colorizer}
 				xScale={xScale}
+				xPan={xPan}
 				rowHeight={rowHeight}
 				showValues={showValues}
 				width={width}

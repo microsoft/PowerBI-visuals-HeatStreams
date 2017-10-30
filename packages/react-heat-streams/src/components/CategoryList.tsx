@@ -24,6 +24,7 @@ export interface ICategoryListProps {
 	categoryValues: ICategoryValueMap
 	rowHeight: number
 	highlightColor: string
+	numAxisTicks: number
 	categoryY: (index: number) => number
 	colorizer: IColorizer
 	xScale: IScaler
@@ -63,6 +64,7 @@ const CategoryList: React.StatelessComponent<ICategoryListProps> = ({
 	onClear,
 	xPan,
 	timeScrub,
+	numAxisTicks,
 }) => (
 	<g
 		className="category-list"
@@ -112,6 +114,7 @@ const CategoryList: React.StatelessComponent<ICategoryListProps> = ({
 			timeScrub={timeScrub}
 			height={axisHeight}
 			width={width - width * textPercent}
+			numTicks={numAxisTicks}
 		/>
 		<Overlay
 			width={width - textPercent * width}

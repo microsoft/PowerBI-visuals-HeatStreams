@@ -18,6 +18,7 @@ export interface ICategoryChartProps {
 	selected: boolean
 	y: number
 	sliceWidth: number
+	xPan: number
 }
 
 const CategoryChart: React.StatelessComponent<ICategoryChartProps> = ({
@@ -32,6 +33,7 @@ const CategoryChart: React.StatelessComponent<ICategoryChartProps> = ({
 	selected,
 	y,
 	sliceWidth,
+	xPan,
 }) => {
 	return (
 		<g className="category-chart">
@@ -46,26 +48,29 @@ const CategoryChart: React.StatelessComponent<ICategoryChartProps> = ({
 				const cellColor = colorizer(cd.value)
 				const textColor = hsl(color(cellColor)).l > 0.5 ? '#000' : '#fff'
 				const text = printValue(cd.value)
-				const start = xScale(cd.start)
+				const start = xPan + xScale(cd.start)
+				const end = xPan + xScale(cd.end)
+				const currentSliceWidth = end - start
+
 				return [
 					<ValueRun
 						key={`cdv:${cd.start}`}
 						color={cellColor}
 						height={rowHeight}
 						title={text}
-						width={sliceWidth}
+						width={currentSliceWidth}
 						x={start}
 						y={y}
 					/>,
 					showValues ? (
 						<ValueText
 							key={`cdt:${cd.start}`}
-							rowHeight={rowHeight}
+							height={rowHeight}
 							text={text}
-							sliceWidth={sliceWidth}
+							width={sliceWidth}
 							color={textColor}
-							x={start + 2}
-							y={y + rowHeight - 2}
+							x={start}
+							y={y + rowHeight}
 						/>
 					) : null,
 				]

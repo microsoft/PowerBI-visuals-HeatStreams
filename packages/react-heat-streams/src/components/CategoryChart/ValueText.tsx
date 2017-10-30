@@ -2,15 +2,16 @@ import * as React from 'react'
 
 export interface IValueTextProps {
 	text: string
-	rowHeight: number
+	height: number
 	x: number
 	y: number
 	color: string
-	sliceWidth: number
+	width: number
 }
 
 const SANE_MIN_WIDTH = 15
 const SIDE_PADS = 4
+const FONT_SIZE = 8
 
 export default class ValueText extends React.Component<IValueTextProps, {}> {
 	private textElement: SVGTextElement
@@ -24,14 +25,16 @@ export default class ValueText extends React.Component<IValueTextProps, {}> {
 	}
 
 	public render() {
-		const { text, rowHeight, x, y, color, sliceWidth } = this.props
+		const { text, height, x, y, color, width } = this.props
+		const fontSize = height > 10 ? FONT_SIZE : height - 4
+		const pad = (height - fontSize) / 2
 		return (
 			<text
 				ref={e => (this.textElement = e)}
 				className="value-text"
-				fontSize={`${rowHeight - 2}px`}
-				x={x}
-				y={y}
+				fontSize={`${fontSize}px`}
+				x={x + width - 2}
+				y={y - pad}
 				fill={'transparent'}
 			>
 				{text}
@@ -40,10 +43,10 @@ export default class ValueText extends React.Component<IValueTextProps, {}> {
 	}
 
 	private remeasure() {
-		const { sliceWidth, color } = this.props
+		const { width, color } = this.props
 		const box = this.textElement.getBBox()
 		const spaceNeeded = box.width + SIDE_PADS
-		if (sliceWidth >= spaceNeeded) {
+		if (width >= spaceNeeded) {
 			this.textElement.setAttribute('fill', color)
 		} else {
 			this.textElement.setAttribute('fill', 'transparent')

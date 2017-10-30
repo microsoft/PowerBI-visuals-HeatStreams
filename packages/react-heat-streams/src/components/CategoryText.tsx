@@ -17,6 +17,7 @@ const CategoryText: React.StatelessComponent<ICategoryTextProps> = ({
 	<text
 		className="category-text"
 		fontSize={`${rowHeight - 2}px`}
+		clipPath="url(#clip-category-text)"
 		x={2}
 		y={y}
 		fontWeight={selected ? 'bold' : 'normal'}

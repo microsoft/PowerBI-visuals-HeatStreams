@@ -80,9 +80,24 @@ export default class HeatStreamsChart extends React.Component<
 		const categoryY = (index: number) =>
 			rowHeight * index + (rowGap ? index : 0)
 		const isCategorySelected = (cat: ICategory) => !!selections[cat.name]
+		const categoryTextWidth = width * textPercent
+		const chartWidth = width - categoryTextWidth
 
 		return (
 			<svg height={height} width={width}>
+				<defs>
+					<clipPath id="clip-chart">
+						<rect
+							x={categoryTextWidth}
+							y="0"
+							width={chartWidth}
+							height={height}
+						/>
+					</clipPath>
+					<clipPath id="clip-category-text">
+						<rect x="0" y="0" width={categoryTextWidth} height={height} />
+					</clipPath>
+				</defs>
 				<CategoryList
 					height={height}
 					width={width}
@@ -98,6 +113,7 @@ export default class HeatStreamsChart extends React.Component<
 					showValues={showValues}
 					colorizer={colorizer}
 					xScale={xScale}
+					numAxisTicks={numTicks}
 					isCategorySelected={isCategorySelected}
 					sliceWidth={sliceWidth}
 					onClickCategory={this.props.onClickCategory}

@@ -45,6 +45,7 @@ export type IScaler = (value: number | Date) => number
 
 export interface IValueSlice {
 	start: Date | number
+	end: Date | number
 	value: number
 }
 
