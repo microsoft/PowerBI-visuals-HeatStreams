@@ -49,6 +49,7 @@ class Overlay extends React.Component<IOverlayProps, IOverlayState> {
 		const timeScrub = this.state.dragging
 			? [this.dragStart, this.dragEnd]
 			: timeScrubProps
+
 		const isScrubValid = timeScrub !== null && timeScrub.length === 2
 		return (
 			<g className="overlay">
@@ -126,10 +127,12 @@ class Overlay extends React.Component<IOverlayProps, IOverlayState> {
 	}
 
 	private get isDragAction() {
-		const dragEndTime = +Date.now()
+		// TODO: re-enable this when we can support time scrubbing in tandem with category selection
+		return false
+		/*const dragEndTime = +Date.now()
 		const timeDiff = dragEndTime - this.state.dragStartTime
 		const distDiff = this.dragEnd - this.dragStart
-		return timeDiff > CLICK_TIME_CUTOFF || distDiff > CLICK_DISTANCE_CUTOFF
+		return timeDiff > CLICK_TIME_CUTOFF || distDiff > CLICK_DISTANCE_CUTOFF*/
 	}
 
 	private get dragStart() {
