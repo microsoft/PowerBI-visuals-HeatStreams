@@ -1,7 +1,7 @@
 {
   "name": "@essex/visual-heat-streams",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.0.1",
   "license": "MIT",
   "scripts": {
     "clean": "rimraf dist",
@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@essex/d3-coloring-scales": "^1.1.6",
-    "@essex/react-heat-streams": "1.0.0",
+    "@essex/react-heat-streams": "1.0.1",
     "debug": "^3.1.0",
     "lodash": "^4.17.4",
     "powerbi-models": "^0.11.3",
