@@ -48,7 +48,10 @@ export default class Interactions {
 	}
 
 	private applyFilter(filter) {
-		this.host.applyJsonFilter(filter, 'data', 'filter')
+		logger.info(
+			'Date scrubbing not supported yet in tandem w/ category selection. 🤷‍',
+		)
+		// this.host.applyJsonFilter(filter, 'data', 'filter')
 	}
 
 	private persistSelectedCategories(categories) {
