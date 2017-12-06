@@ -1,7 +1,7 @@
 {
   "name": "@essex/visual-heat-streams",
   "private": true,
-  "version": "1.0.2",
+  "version": "1.0.1",
   "license": "MIT",
   "scripts": {
     "clean": "rimraf dist",
