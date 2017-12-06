@@ -26,6 +26,12 @@
 // tslint:disable no-var-requires no-string-literal no-reference
 /// <reference path="../node_modules/powerbi-visuals-tools/templates/visuals/.api/v1.7.0/PowerBI-visuals.d.ts" />
 'use strict'
+
+// This shims some ES basics for non-compliant browsers (e.g. IE11).
+// The shims we know we need are:
+//   * Number.isInteger
+//   * Object.assign
+require('babel-polyfill')
 import Chart from './chart'
 import ChartOptions from './chart/ChartOptions'
 import DataViewConverter from './data/DataViewConverter'
@@ -33,13 +39,6 @@ import Interactions from './Interactions'
 import VisualSettings from './settings/VisualSettings'
 const get = require('lodash/get')
 import * as logger from './logger'
-
-// Polyfill for IE11
-// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isInteger
-Number.isInteger =
-	Number.isInteger ||
-	((value: any) =>
-		typeof value === 'number' && isFinite(value) && Math.floor(value) === value)
 
 export class Visual implements powerbi.extensibility.IVisual {
 	private static parseSettings(dataView: powerbi.DataView): VisualSettings {

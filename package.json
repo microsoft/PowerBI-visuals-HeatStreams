@@ -54,5 +54,8 @@
     "trailingComma": "all",
     "semi": false,
     "useTabs": true
+  },
+  "dependencies": {
+    "babel-polyfill": "^6.26.0"
   }
 }
