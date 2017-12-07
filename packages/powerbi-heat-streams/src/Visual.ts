@@ -27,11 +27,6 @@
 /// <reference path="../node_modules/powerbi-visuals-tools/templates/visuals/.api/v1.7.0/PowerBI-visuals.d.ts" />
 'use strict'
 
-// This shims some ES basics for non-compliant browsers (e.g. IE11).
-// The shims we know we need are:
-//   * Number.isInteger
-//   * Object.assign
-require('babel-polyfill')
 import Chart from './chart'
 import ChartOptions from './chart/ChartOptions'
 import DataViewConverter from './data/DataViewConverter'
@@ -39,6 +34,10 @@ import Interactions from './Interactions'
 import VisualSettings from './settings/VisualSettings'
 const get = require('lodash/get')
 import * as logger from './logger'
+
+// Polyfills for IE11
+require('es6-promise').polyfill()
+require('es6-object-assign').polyfill()
 
 export class Visual implements powerbi.extensibility.IVisual {
 	private static parseSettings(dataView: powerbi.DataView): VisualSettings {

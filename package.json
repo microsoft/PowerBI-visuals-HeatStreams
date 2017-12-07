@@ -12,7 +12,7 @@
     "lint": "tslint 'packages/*/**/*.{ts,tsx}' -e '**/{node_modules,dist,lib}/**' -e '**/*.d.ts'",
     "precommit": "lint-staged",
     "format": "prettier --write \"src/**/*.ts*\"",
-    "test": "npm-run-all build package"
+    "test": "cross-env NODE_ENV=production npm-run-all build package"
   },
   "author": {
     "name": "Microsoft (experimental)",
@@ -25,7 +25,6 @@
     }
   ],
   "devDependencies": {
-    "@essex/powerbi-visual-scripts": "^1.1.2",
     "@types/d3": "3.x",
     "@types/node": "^8.0.34",
     "@types/react": "^16.0.10",
