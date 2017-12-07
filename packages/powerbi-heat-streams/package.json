@@ -1,7 +1,7 @@
 {
   "name": "@essex/visual-heat-streams",
   "private": true,
-  "version": "1.1.0",
+  "version": "1.1.1",
   "license": "MIT",
   "scripts": {
     "clean": "rimraf dist",
@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@essex/d3-coloring-scales": "^1.1.6",
-    "@essex/react-heat-streams": "^1.1.0",
+    "@essex/react-heat-streams": "^1.1.1",
     "@types/d3": "3.x",
     "@types/node": "^8.0.34",
     "@types/object-assign": "^4.0.30",
