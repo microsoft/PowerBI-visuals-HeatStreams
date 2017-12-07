@@ -24,7 +24,7 @@
  *  THE SOFTWARE.
  */
 // tslint:disable no-var-requires no-string-literal no-reference
-/// <reference path="../node_modules/powerbi-visuals-tools/templates/visuals/.api/v1.7.0/PowerBI-visuals.d.ts" />
+/// <reference path="../../../node_modules/powerbi-visuals-tools/templates/visuals/.api/v1.7.0/PowerBI-visuals.d.ts" />
 'use strict'
 
 import Chart from './chart'
@@ -94,9 +94,9 @@ export class Visual implements powerbi.extensibility.IVisual {
 	}
 
 	/**
-   * This function gets called for each of the objects defined in the capabilities files and allows you to
-   * select which of the objects and properties you want to expose to the users in the property pane.
-   */
+	 * This function gets called for each of the objects defined in the capabilities files and allows you to
+	 * select which of the objects and properties you want to expose to the users in the property pane.
+	 */
 	public enumerateObjectInstances(
 		options: powerbi.EnumerateVisualObjectInstancesOptions,
 	):

@@ -14,10 +14,13 @@
     "email": "msrvizsupport@microsoft.com"
   },
   "dependencies": {
+    "@types/d3": "3.x",
+    "@types/node": "^8.0.34",
+    "@types/react": "^15.x",
+    "@types/react-dom": "^15.x",
     "@essex/d3-coloring-scales": "^1.1.6",
-    "@essex/react-heat-streams": "1.0.1",
+    "@essex/react-heat-streams": "*",
     "@types/object-assign": "^4.0.30",
-    "core-js": "^2.5.1",
     "debug": "^3.1.0",
     "es6-promise": "^4.1.1",
     "es6-object-assign": "^1.1.0",
@@ -27,14 +30,15 @@
     "powerbi-visuals-utils-dataviewutils": "^1.2.0",
     "powerbi-visuals-utils-svgutils": "^1.1.0",
     "powerbi-visuals-utils-typeutils": "^1.1.0",
-    "react": "^16.0.0",
-    "react-dom": "^16.0.0"
+    "powerbi-visuals-tools": "^1.7.2",
+    "react": "^15.0.0",
+    "react-dom": "^15.0.0"
   },
   "devDependencies": {
     "@essex/powerbi-visual-scripts": "^1.1.6",
     "cross-env": "^5.0.5",
     "powerbi-visuals-tools": "^1.7.2",
     "rimraf": "^2.6.2",
-    "typescript": "^2.5.3"
+    "typescript": "^2.6.2"
   }
 }
