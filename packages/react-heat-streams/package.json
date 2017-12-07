@@ -1,6 +1,6 @@
 {
   "name": "@essex/react-heat-streams",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "private": true,
   "license": "MIT",
   "main": "lib/index.js",
@@ -22,11 +22,11 @@
     "react": "15.x"
   },
   "dependencies": {
+    "@essex/d3-coloring-scales": "^1.1.3",
     "@types/d3": "3.x",
     "@types/node": "^8.0.34",
     "@types/react": "^15.0.10",
     "@types/react-dom": "^15.0.1",
-    "@essex/d3-coloring-scales": "^1.1.3",
     "d3-color": "^1.0.3",
     "d3-scale": "^1.0.6",
     "is-integer": "^1.0.7",

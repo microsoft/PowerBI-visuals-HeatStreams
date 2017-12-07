@@ -1,7 +1,7 @@
 {
   "name": "@essex/visual-heat-streams",
   "private": true,
-  "version": "1.0.1",
+  "version": "1.1.0",
   "license": "MIT",
   "scripts": {
     "clean": "rimraf dist",
@@ -14,23 +14,23 @@
     "email": "msrvizsupport@microsoft.com"
   },
   "dependencies": {
+    "@essex/d3-coloring-scales": "^1.1.6",
+    "@essex/react-heat-streams": "^1.1.0",
     "@types/d3": "3.x",
     "@types/node": "^8.0.34",
+    "@types/object-assign": "^4.0.30",
     "@types/react": "^15.x",
     "@types/react-dom": "^15.x",
-    "@essex/d3-coloring-scales": "^1.1.6",
-    "@essex/react-heat-streams": "*",
-    "@types/object-assign": "^4.0.30",
     "debug": "^3.1.0",
-    "es6-promise": "^4.1.1",
     "es6-object-assign": "^1.1.0",
+    "es6-promise": "^4.1.1",
     "lodash": "^4.17.4",
     "object-assign": "^4.1.1",
     "powerbi-models": "^0.11.3",
+    "powerbi-visuals-tools": "^1.7.2",
     "powerbi-visuals-utils-dataviewutils": "^1.2.0",
     "powerbi-visuals-utils-svgutils": "^1.1.0",
     "powerbi-visuals-utils-typeutils": "^1.1.0",
-    "powerbi-visuals-tools": "^1.7.2",
     "react": "^15.0.0",
     "react-dom": "^15.0.0"
   },
