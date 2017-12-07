@@ -21,7 +21,6 @@ const CategoryView: React.StatelessComponent<ICategoryViewProps> = ({
 		height={height}
 		width={width - 2}
 		x={1}
-		z-index={1}
 		strokeWidth={selected ? 1 : 0}
 	/>
 )

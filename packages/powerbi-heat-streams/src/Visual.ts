@@ -34,6 +34,7 @@ import Interactions from './Interactions'
 import VisualSettings from './settings/VisualSettings'
 const get = require('lodash/get')
 import * as logger from './logger'
+const packageJson = require('../package.json')
 
 // Polyfills for IE11
 require('es6-promise').polyfill()
@@ -61,7 +62,7 @@ export class Visual implements powerbi.extensibility.IVisual {
 		global['setLogLevel'] = logger.setLevel
 		// tslint:disable-next-line no-console
 		console.log(
-			`%c🔥🔥 HeatStreams 🔥🔥%c
+			`%c🔥🔥 HeatStreams ${packageJson.version}🔥🔥%c
     For debug information, set %cwindow.LogLevel%c to
       0 = NONE
       1 = ERROR (default value)
