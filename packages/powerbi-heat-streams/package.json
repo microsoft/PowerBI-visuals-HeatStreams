@@ -35,7 +35,7 @@
     "react-dom": "^15.0.0"
   },
   "devDependencies": {
-    "@essex/powerbi-visual-scripts": "^1.1.6",
+    "@essex/powerbi-visual-scripts": "^1.1.8",
     "cross-env": "^5.0.5",
     "powerbi-visuals-tools": "^1.7.2",
     "rimraf": "^2.6.2",

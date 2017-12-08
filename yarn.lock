@@ -64,9 +64,9 @@
     d3 "^4.10.2"
     d3-scale-chromatic "^1.1.1"
 
-"@essex/powerbi-visual-scripts@^1.1.6":
-  version "1.1.6"
-  resolved "https://registry.yarnpkg.com/@essex/powerbi-visual-scripts/-/powerbi-visual-scripts-1.1.6.tgz#bbc258b69e1906f7961ce3284c5d71eca2066dcd"
+"@essex/powerbi-visual-scripts@^1.1.8":
+  version "1.1.8"
+  resolved "https://registry.yarnpkg.com/@essex/powerbi-visual-scripts/-/powerbi-visual-scripts-1.1.8.tgz#17f22086fa5e43878f516dcdb5a0d698e172a604"
   dependencies:
     "@types/chai" "^4.0.4"
     "@types/d3" "^4.10.0"
