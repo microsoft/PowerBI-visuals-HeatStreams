@@ -25,7 +25,10 @@ export default class Interactions {
 		logger.info('Handle Cat Click', category, multiselect)
 		const selection = this.selectionIdForCategory(category, dataView)
 		await this.selectionManager.select(selection, multiselect)
-		this.persistSelectedCategories([category.id])
+		const selectedCategories = this.selectionManager.hasSelection()
+			? [category.id]
+			: []
+		this.persistSelectedCategories(selectedCategories)
 	}
 
 	public async scrub(bounds: Array<Date | number>, dv: powerbi.DataView) {
