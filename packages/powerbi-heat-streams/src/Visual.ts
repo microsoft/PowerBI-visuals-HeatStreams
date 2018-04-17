@@ -49,6 +49,7 @@ export class Visual implements powerbi.extensibility.IVisual {
 	private chart: Chart
 	private chartOptions: ChartOptions
 	private interactions: Interactions
+	private dataView: powerbi.DataView
 
 	constructor(options: powerbi.extensibility.visual.VisualConstructorOptions) {
 		const target = options.element
@@ -59,6 +60,7 @@ export class Visual implements powerbi.extensibility.IVisual {
 		this.chartOptions = new ChartOptions(converter, target)
 		this.chart = new Chart(this.chartOptions)
 		this.interactions = new Interactions(host, selectionManager)
+		this.interactions.onRestoreSelection(this.onRestoreSelection.bind(this))
 		global['setLogLevel'] = logger.setLevel
 		// tslint:disable-next-line no-console
 		console.log(
@@ -83,10 +85,10 @@ export class Visual implements powerbi.extensibility.IVisual {
 
 	public update(options: powerbi.extensibility.VisualUpdateOptions) {
 		try {
-			const dataView = get(options, 'dataViews[0]')
-			if (dataView) {
-				this.settings = Visual.parseSettings(dataView)
-				this.chartOptions.loadDataView(dataView, this.settings)
+			this.dataView = get(options, 'dataViews[0]')
+			if (this.dataView) {
+				this.settings = Visual.parseSettings(this.dataView)
+				this.chartOptions.loadFromDataView(this.dataView, this.settings)
 				this.render()
 			}
 		} catch (err) {
@@ -109,15 +111,21 @@ export class Visual implements powerbi.extensibility.IVisual {
 		)
 	}
 
+	/**
+	 * Handler for when selection should be restored from PowerBI
+	 */
+	private onRestoreSelection() {
+		this.chartOptions.loadSelections(this.dataView)
+		this.render()
+	}
+
 	private render() {
 		const { interactions } = this
 		this.chart.onSelectionChanged((cat, multi) => {
-			interactions.selectCategory(cat, multi, this.chartOptions.dataView)
+			interactions.selectCategory(cat, multi, this.dataView)
 		})
 		this.chart.onSelectionCleared(() => interactions.clearSelections())
-		this.chart.onScrub(bounds =>
-			interactions.scrub(bounds, this.chartOptions.dataView),
-		)
+		this.chart.onScrub(bounds => interactions.scrub(bounds, this.dataView))
 		logger.info('Render', this.chartOptions)
 		this.chart.render()
 	}

@@ -39,6 +39,16 @@ export default class Interactions {
 		this.applyFilter(filter)
 	}
 
+	/**
+	 * Event that gets fired when selection should be restored to the given ids.
+	 * @param listener The listener for the event
+	 */
+	public onRestoreSelection(
+		listener: (ids: powerbi.visuals.ISelectionId[]) => any,
+	) {
+		this.selectionManager.registerOnSelectCallback(listener)
+	}
+
 	private selectionIdForCategory(category: ICategory, dv: powerbi.DataView) {
 		const categoryColumn = get(dv, 'categorical.categories[0]', [])
 		return this.host
