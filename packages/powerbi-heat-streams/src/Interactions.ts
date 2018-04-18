@@ -25,7 +25,10 @@ export default class Interactions {
 		logger.info('Handle Cat Click', category, multiselect)
 		const selection = this.selectionIdForCategory(category, dataView)
 		await this.selectionManager.select(selection, multiselect)
-		this.persistSelectedCategories([category.id])
+		const selectedCategories = this.selectionManager.hasSelection()
+			? [category.id]
+			: []
+		this.persistSelectedCategories(selectedCategories)
 	}
 
 	public async scrub(bounds: Array<Date | number>, dv: powerbi.DataView) {
@@ -37,6 +40,16 @@ export default class Interactions {
 		const column = dv.metadata.columns.find(col => col.roles.grouping)
 		const filter = buildDomainScrub(bounds, column.identityExprs[0])
 		this.applyFilter(filter)
+	}
+
+	/**
+	 * Event that gets fired when selection should be restored to the given ids.
+	 * @param listener The listener for the event
+	 */
+	public onRestoreSelection(
+		listener: (ids: powerbi.visuals.ISelectionId[]) => any,
+	) {
+		this.selectionManager.registerOnSelectCallback(listener)
 	}
 
 	private selectionIdForCategory(category: ICategory, dv: powerbi.DataView) {

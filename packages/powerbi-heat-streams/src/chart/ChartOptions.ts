@@ -22,21 +22,20 @@ export default class ChartOptions implements IChartOptions {
 	public selections: { [key: string]: ICategory }
 	public timeScrub: Array<Date | number>
 	public colorizer: Colorizer
-	public dataView: powerbi.DataView
 
 	constructor(
 		private converter: DataViewConverter,
 		public element: HTMLElement,
 	) {} // tslint:disable-line no-empty
 
-	public loadDataView(dataView: powerbi.DataView, settings: VisualSettings) {
-		this.dataView = dataView
+	public loadFromDataView(
+		dataView: powerbi.DataView,
+		settings: VisualSettings,
+	) {
 		this.dataOptions = settings.data
 		this.renderOptions = settings.rendering
-		this.selections = this.converter.unpackSelectedCategories(dataView)
 		this.timeScrub = this.converter.unpackDomainScrub(dataView)
 		this.data = this.converter.convertDataView(dataView, settings.data)
-
 		const { colorScheme } = this.renderOptions
 		const { isLogScale } = this.dataOptions
 		const { valueMin, valueMax, valueMid } = this
@@ -45,6 +44,15 @@ export default class ChartOptions implements IChartOptions {
 			: new LinearScaler(valueMin, valueMax, isLogScale)
 
 		this.colorizer = new Colorizer(scaler, colorScheme)
+
+		this.loadSelections(dataView)
+	}
+
+	/**
+	 * Loads the selections from the given dataView
+	 */
+	public loadSelections(dataView: powerbi.DataView) {
+		this.selections = this.converter.unpackSelectedCategories(dataView)
 	}
 
 	public get width(): number {
