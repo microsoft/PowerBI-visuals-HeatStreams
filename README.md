@@ -1,5 +1,15 @@
 # Heat Streams PowerBI Visual
 
+# About
+The HeatStreams Visual is a categorical heat-map encoding of a metric over a time or numeric domain. Users can pick from a variety of color schemes (all provided by d3), and basic selection of categories is provided. Categories may be multi-selected with ctrl+click. 
+
+# Development
+This visualization is a Lerna monorepo split into two main components: a React-based data visualization, and a PowerBI wrapper around the visual. The Essex build system is used to construct the visual.
+
+> yarn --ignore-engines # PowerBI insists on a Node 6.x engine, which isn't really necessary
+> yarn build            # Transpiles react components, bundles the PowerBI visual under `packages/powerbi-heat-streams/dist`
+> yarn start            # Starts up the local PowerBI visual development server
+
 # Contributing
 
 This project welcomes contributions and suggestions.  Most contributions require you to agree to a
