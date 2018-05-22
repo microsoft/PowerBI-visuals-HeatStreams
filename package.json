@@ -4,7 +4,6 @@
   "license": "MIT",
   "scripts": {
     "clean": "lerna run clean --stream",
-    "package": "lerna run package --stream",
     "start": "lerna run start --no-sort --concurrency 2 --stream",
     "build": "lerna run build --stream",
     "lint": "tslint 'packages/*/**/*.{ts,tsx}' -e '**/{node_modules,dist,lib}/**' -e '**/*.d.ts'",
