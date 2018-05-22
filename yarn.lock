@@ -82,13 +82,13 @@
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/@essex/oss-report-builder/-/oss-report-builder-2.0.4.tgz#fa58686f8f1f80c7cee4aaa0225c20a330f8f9ed"
 
-"@essex/powerbi-visual-scripts@^2.0.6":
-  version "2.0.6"
-  resolved "https://registry.yarnpkg.com/@essex/powerbi-visual-scripts/-/powerbi-visual-scripts-2.0.6.tgz#e1be3f6f1b63e2346d21cf675a618e7c9e168230"
+"@essex/powerbi-visual-scripts@^2.0.11":
+  version "2.0.11"
+  resolved "https://registry.yarnpkg.com/@essex/powerbi-visual-scripts/-/powerbi-visual-scripts-2.0.11.tgz#933a9d3077d32c4b1f4c3077d4df253b6d04550f"
   dependencies:
     "@essex/oss-report-builder" "^2.0.4"
-    "@essex/visual-config" "^2.0.6"
-    "@essex/visual-entry-loader" "^2.0.6"
+    "@essex/visual-config" "^2.0.11"
+    "@essex/visual-entry-loader" "^2.0.11"
     "@types/chai" "^4.0.4"
     "@types/d3" "^4.10.0"
     "@types/mocha" "^2.2.42"
@@ -115,15 +115,15 @@
     ts-loader "^2.3.7"
     webpack "^3.5.5"
 
-"@essex/visual-config@^2.0.6":
-  version "2.0.6"
-  resolved "https://registry.yarnpkg.com/@essex/visual-config/-/visual-config-2.0.6.tgz#9ad3ca92e39da9ade92824f4ca5d78a2fe70f791"
+"@essex/visual-config@^2.0.11":
+  version "2.0.11"
+  resolved "https://registry.yarnpkg.com/@essex/visual-config/-/visual-config-2.0.11.tgz#64833836110b8023bd54e291b8697d5f8e03b411"
 
-"@essex/visual-entry-loader@^2.0.6":
-  version "2.0.6"
-  resolved "https://registry.yarnpkg.com/@essex/visual-entry-loader/-/visual-entry-loader-2.0.6.tgz#88436884764f4f627fc2406898366505f96576c9"
+"@essex/visual-entry-loader@^2.0.11":
+  version "2.0.11"
+  resolved "https://registry.yarnpkg.com/@essex/visual-entry-loader/-/visual-entry-loader-2.0.11.tgz#5d748060ed9894276d76f596fe1f2d9f077e72ab"
   dependencies:
-    "@essex/visual-config" "^2.0.6"
+    "@essex/visual-config" "^2.0.11"
 
 "@samverschueren/stream-to-observable@^0.3.0":
   version "0.3.0"
