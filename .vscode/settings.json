@@ -29,5 +29,11 @@
       ],
       "url": "./node_modules/powerbi-visuals-tools/templates/visuals/.api/v1.6.0/schema.dependencies.json"
     }
-  ]
+  ],
+  "[typescript]": {
+    "editor.formatOnSave": true
+  },
+  "[typescriptreact]": {
+    "editor.formatOnSave": true
+  }
 }

@@ -1,4 +1,5 @@
 import * as React from 'react'
+import autobind from 'autobind-decorator'
 import {
 	ICategory,
 	ICategoryValueMap,
@@ -42,95 +43,107 @@ export interface ICategoryListProps {
 	timeScrub: Array<number | Date>
 }
 
-const CategoryList: React.StatelessComponent<ICategoryListProps> = ({
-	axisHeight,
-	width,
-	height,
-	axisOffset,
-	textPercent,
-	showCategories,
-	categories,
-	categoryValues,
-	rowHeight,
-	highlightColor,
-	categoryY,
-	colorizer,
-	xScale,
-	showValues,
-	isCategorySelected,
-	sliceWidth,
-	onClick,
-	onClickCategory,
-	onScroll,
-	onScrub,
-	onClear,
-	xPan,
-	timeScrub,
-	numAxisTicks,
-	xDomain,
-}) => (
-	<g
-		className="category-list"
-		onWheel={evt => onScroll(evt.deltaX, evt.deltaY)}
-	>
-		<CategoryNameList
-			categories={categories}
-			showCategories={showCategories}
-			width={width * textPercent}
-			rowHeight={rowHeight}
-			categoryY={categoryY}
-			isCategorySelected={isCategorySelected}
-			onClickCategory={onClickCategory}
-			onClear={onClear}
-		/>
-		<Backboard
-			width={width - textPercent * width}
-			x={textPercent * width}
-			height={height}
-			onClick={onClear}
-		/>
-		<CategoryChartList
-			categories={categories}
-			categoryValues={categoryValues}
-			xScale={xScale}
-			colorizer={colorizer}
-			rowHeight={rowHeight}
-			showValues={showValues}
-			width={width}
-			highlightColor={highlightColor}
-			isCategorySelected={isCategorySelected}
-			categoryY={categoryY}
-			sliceWidth={sliceWidth}
-			xPan={xPan}
-			xDomain={xDomain}
-		/>
-		<TimeScrub
-			data={timeScrub}
-			xScale={xScale}
-			height={axisOffset}
-			color={highlightColor}
-		/>
-		<Axis
-			x={width * textPercent}
-			xPan={xPan}
-			offset={axisOffset}
-			xScale={xScale}
-			timeScrub={timeScrub}
-			height={axisHeight}
-			width={width - width * textPercent}
-			numTicks={numAxisTicks}
-		/>
-		<Overlay
-			width={width - textPercent * width}
-			x={textPercent * width}
-			height={axisOffset + axisHeight}
-			xScale={xScale}
-			onDrag={bounds => onScrub(bounds)}
-			timeScrub={timeScrub}
-			highlightColor={highlightColor}
-			onClick={onClick}
-		/>
-	</g>
-)
+export default class CategoryList extends React.PureComponent<
+	ICategoryListProps
+> {
+	public render() {
+		const {
+			axisHeight,
+			width,
+			height,
+			axisOffset,
+			textPercent,
+			showCategories,
+			categories,
+			categoryValues,
+			rowHeight,
+			highlightColor,
+			categoryY,
+			colorizer,
+			xScale,
+			showValues,
+			isCategorySelected,
+			sliceWidth,
+			onClick,
+			onClickCategory,
+			onScroll,
+			onScrub,
+			onClear,
+			xPan,
+			timeScrub,
+			numAxisTicks,
+			xDomain,
+		} = this.props
+		return (
+			<g className="category-list" onWheel={this.onWheel}>
+				<CategoryNameList
+					categories={categories}
+					showCategories={showCategories}
+					width={width * textPercent}
+					rowHeight={rowHeight}
+					categoryY={categoryY}
+					isCategorySelected={isCategorySelected}
+					onClickCategory={onClickCategory}
+					onClear={onClear}
+				/>
+				<Backboard
+					width={width - textPercent * width}
+					x={textPercent * width}
+					height={height}
+					onClick={onClear}
+				/>
+				<CategoryChartList
+					categories={categories}
+					categoryValues={categoryValues}
+					xScale={xScale}
+					colorizer={colorizer}
+					rowHeight={rowHeight}
+					showValues={showValues}
+					width={width}
+					highlightColor={highlightColor}
+					isCategorySelected={isCategorySelected}
+					categoryY={categoryY}
+					sliceWidth={sliceWidth}
+					xPan={xPan}
+					xDomain={xDomain}
+				/>
+				<TimeScrub
+					data={timeScrub}
+					xScale={xScale}
+					height={axisOffset}
+					color={highlightColor}
+				/>
+				<Axis
+					x={width * textPercent}
+					xPan={xPan}
+					offset={axisOffset}
+					xScale={xScale}
+					timeScrub={timeScrub}
+					height={axisHeight}
+					width={width - width * textPercent}
+					numTicks={numAxisTicks}
+				/>
+				<Overlay
+					width={width - textPercent * width}
+					x={textPercent * width}
+					height={axisOffset + axisHeight}
+					xScale={xScale}
+					onDrag={this.onDragOverlay}
+					timeScrub={timeScrub}
+					highlightColor={highlightColor}
+					onClick={onClick}
+				/>
+			</g>
+		)
+	}
 
-export default CategoryList
+	@autobind
+	private onWheel(evt: React.WheelEvent<SVGGElement>) {
+		this.props.onScroll(evt.deltaX, evt.deltaY)
+	}
+
+	@autobind
+	private onDragOverlay(bounds: Array<number | Date>) {
+		this.props.onScrub(bounds)
+	}
+}

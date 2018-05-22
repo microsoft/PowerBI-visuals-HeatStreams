@@ -1,18 +1,15 @@
 {
 	"defaultSeverity": "error",
-	"extends": ["tslint:recommended"],
-	"jsRules": {},
+	"extends": [
+		"tslint:recommended",
+		"tslint-config-prettier",
+		"tslint-react",
+		"tslint-react-perf"
+	],
 	"rules": {
-    // Stupid Rules
-    "object-literal-sort-keys": false,
 		"no-namespace": false,
-		"quotemark": false,
-		"semicolon": false,
-		"indent": false,
-		"jsdoc-format": false,
-		"arrow-parens": [true, "ban-single-arg-parens"],
-		"trailing-comma": false,
-		"linebreak-style": [true, "LF"]
-	},
-	"rulesDirectory": []
+    "object-literal-sort-keys": false,
+    "ordered-imports": false,
+    "jsx-wrap-multiline": false
+	}
 }

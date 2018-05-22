@@ -12,6 +12,7 @@ import {
 } from '../interfaces'
 import { getSliceEnd } from '../utils'
 import CategoryList from './CategoryList'
+import autobind from 'autobind-decorator'
 
 export interface IHeatStreamsState {
 	scrollPosition: number
@@ -43,12 +44,12 @@ export interface IHeatStreamsChartProps {
 	onScrub: (bounds: Scrub) => void
 }
 
-export default class HeatStreamsChart extends React.Component<
+export default class HeatStreamsChart extends React.PureComponent<
 	IHeatStreamsChartProps,
 	IHeatStreamsState
 > {
-	constructor(...args) {
-		super(...args)
+	constructor(props: IHeatStreamsChartProps) {
+		super(props)
 		this.state = {
 			panPosition: 0,
 			scrollPosition: 0,
@@ -118,8 +119,8 @@ export default class HeatStreamsChart extends React.Component<
 					isCategorySelected={isCategorySelected}
 					sliceWidth={sliceWidth}
 					onClickCategory={this.props.onClickCategory}
-					onClick={(x, y, ctrlKey) => this.onClick(x, y, ctrlKey)}
-					onScroll={(deltaX, deltaY) => this.onScroll(deltaX, deltaY)}
+					onClick={this.onClick}
+					onScroll={this.onScroll}
 					onScrub={this.props.onScrub}
 					xPan={this.state.panPosition}
 					timeScrub={timeScrub}
@@ -129,6 +130,7 @@ export default class HeatStreamsChart extends React.Component<
 		)
 	}
 
+	@autobind
 	private onClick(x: number, y: number, ctrlKey: boolean) {
 		const { rowGap, timeScrub, rowHeight } = this.props
 		if (timeScrub) {
@@ -176,6 +178,7 @@ export default class HeatStreamsChart extends React.Component<
 		)
 	}
 
+	@autobind
 	private onScroll(deltaX, deltaY) {
 		const panPosition =
 			this.props.zoomLevel === 1

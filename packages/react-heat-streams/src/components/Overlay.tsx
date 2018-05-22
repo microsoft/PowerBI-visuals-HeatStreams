@@ -1,4 +1,5 @@
 import * as React from 'react'
+import autobind from 'autobind-decorator'
 
 export interface IOverlayProps {
 	height: number
@@ -30,9 +31,9 @@ const INITIAL_STATE = Object.freeze({
 	dragging: false,
 })
 
-class Overlay extends React.Component<IOverlayProps, IOverlayState> {
-	constructor(...args) {
-		super(...args)
+class Overlay extends React.PureComponent<IOverlayProps, IOverlayState> {
+	constructor(props: IOverlayProps) {
+		super(props)
 		this.state = INITIAL_STATE
 	}
 
@@ -51,6 +52,16 @@ class Overlay extends React.Component<IOverlayProps, IOverlayState> {
 			: timeScrubProps
 
 		const isScrubValid = timeScrub !== null && timeScrub.length === 2
+		const scrub = isScrubValid ? (
+			<rect
+				className="selection"
+				height={height}
+				width={xScale(timeScrub[1]) - xScale(timeScrub[0])}
+				x={xScale(timeScrub[0])}
+				stroke={highlightColor}
+				strokeWidth={1}
+			/>
+		) : null
 		return (
 			<g className="overlay">
 				<rect
@@ -58,25 +69,17 @@ class Overlay extends React.Component<IOverlayProps, IOverlayState> {
 					x={x}
 					height={height}
 					width={width}
-					onMouseDown={evt => this.onMouseDown(evt)}
-					onMouseMove={evt => this.onMouseMove(evt)}
-					onMouseUp={evt => this.onMouseUp(evt)}
-					onMouseLeave={evt => this.onMouseLeave(evt)}
+					onMouseDown={this.onMouseDown}
+					onMouseMove={this.onMouseMove}
+					onMouseUp={this.onMouseUp}
+					onMouseLeave={this.onMouseLeave}
 				/>
-				{isScrubValid ? (
-					<rect
-						className="selection"
-						height={height}
-						width={xScale(timeScrub[1]) - xScale(timeScrub[0])}
-						x={xScale(timeScrub[0])}
-						stroke={highlightColor}
-						strokeWidth={1}
-					/>
-				) : null}
+				{scrub}
 			</g>
 		)
 	}
 
+	@autobind
 	private onMouseDown(evt) {
 		if (this.state.dragging) {
 			this.cutDrag(evt)
@@ -90,12 +93,14 @@ class Overlay extends React.Component<IOverlayProps, IOverlayState> {
 		}
 	}
 
+	@autobind
 	private onMouseUp(evt) {
 		if (this.state.dragging) {
 			this.cutDrag(evt)
 		}
 	}
 
+	@autobind
 	private onMouseMove(evt) {
 		if (this.state.dragging) {
 			this.setState({
@@ -105,6 +110,7 @@ class Overlay extends React.Component<IOverlayProps, IOverlayState> {
 		}
 	}
 
+	@autobind
 	private onMouseLeave(evt) {
 		if (this.state.dragging) {
 			this.cutDrag(evt)

@@ -38,27 +38,25 @@ const CategoryChartList: React.StatelessComponent<ICategoryChartListProps> = ({
 	sliceWidth,
 	xPan,
 	xDomain,
-}) => (
-	<g className="category-charts">
-		{categories.map((cat, index) => (
-			<CategoryChart
-				key={cat.id}
-				category={cat}
-				categoryData={categoryValues[cat.id]}
-				colorizer={colorizer}
-				xScale={xScale}
-				xPan={xPan}
-				xDomain={xDomain}
-				rowHeight={rowHeight}
-				showValues={showValues}
-				width={width}
-				highlightColor={highlightColor}
-				selected={isCategorySelected(cat)}
-				y={categoryY(index)}
-				sliceWidth={sliceWidth}
-			/>
-		))}
-	</g>
-)
-
+}) => {
+	const charts = categories.map((cat, index) => (
+		<CategoryChart
+			key={cat.id}
+			category={cat}
+			categoryData={categoryValues[cat.id]}
+			colorizer={colorizer}
+			xScale={xScale}
+			xPan={xPan}
+			xDomain={xDomain}
+			rowHeight={rowHeight}
+			showValues={showValues}
+			width={width}
+			highlightColor={highlightColor}
+			selected={isCategorySelected(cat)}
+			y={categoryY(index)}
+			sliceWidth={sliceWidth}
+		/>
+	))
+	return <g className="category-charts">{charts}</g>
+}
 export default CategoryChartList
