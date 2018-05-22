@@ -13,7 +13,10 @@ const SANE_MIN_WIDTH = 20
 const SIDE_PADS = 4
 const FONT_SIZE = 8
 
-export default class ValueText extends React.Component<IValueTextProps, {}> {
+export default class ValueText extends React.PureComponent<
+	IValueTextProps,
+	{}
+> {
 	private textElement: SVGTextElement
 
 	public componentDidMount() {

@@ -45,9 +45,9 @@ export default class DataViewConverter {
 	}
 
 	/**
-   * Unpack selected categories from the native PowerBI data structure
-   * @param dataView
-   */
+	 * Unpack selected categories from the native PowerBI data structure
+	 * @param dataView
+	 */
 	public unpackSelectedCategories(
 		dataView: powerbi.DataView,
 	): { [key: string]: ICategory } {

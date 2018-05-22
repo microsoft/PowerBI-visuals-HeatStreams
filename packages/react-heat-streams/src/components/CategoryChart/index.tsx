@@ -43,6 +43,37 @@ const CategoryChart: React.StatelessComponent<ICategoryChartProps> = ({
 	xPan,
 	xDomain,
 }) => {
+	const categoryChart = categoryData.map(cd => {
+		const cellColor = colorizer(cd.value)
+		const textColor = hsl(color(cellColor)).l > 0.5 ? '#000' : '#fff'
+		const text = printValue(cd.value)
+		const start = xPan + Math.max(xScale(xDomain[0]), xScale(cd.start))
+		const end = xPan + xScale(cd.end)
+		const currentSliceWidth = end - start
+
+		return [
+			<ValueRun
+				key={`cdv:${cd.start}`}
+				color={cellColor}
+				height={rowHeight}
+				title={text}
+				width={currentSliceWidth}
+				x={start}
+				y={y}
+			/>,
+			showValues ? (
+				<ValueText
+					key={`cdt:${cd.start}`}
+					height={rowHeight}
+					text={text}
+					width={currentSliceWidth}
+					color={textColor}
+					x={start}
+					y={y + rowHeight}
+				/>
+			) : null,
+		]
+	})
 	return (
 		<g className="category-chart">
 			<CategoryView
@@ -52,37 +83,7 @@ const CategoryChart: React.StatelessComponent<ICategoryChartProps> = ({
 				height={rowHeight}
 				y={y}
 			/>
-			{categoryData.map(cd => {
-				const cellColor = colorizer(cd.value)
-				const textColor = hsl(color(cellColor)).l > 0.5 ? '#000' : '#fff'
-				const text = printValue(cd.value)
-				const start = xPan + Math.max(xScale(xDomain[0]), xScale(cd.start))
-				const end = xPan + xScale(cd.end)
-				const currentSliceWidth = end - start
-
-				return [
-					<ValueRun
-						key={`cdv:${cd.start}`}
-						color={cellColor}
-						height={rowHeight}
-						title={text}
-						width={currentSliceWidth}
-						x={start}
-						y={y}
-					/>,
-					showValues ? (
-						<ValueText
-							key={`cdt:${cd.start}`}
-							height={rowHeight}
-							text={text}
-							width={currentSliceWidth}
-							color={textColor}
-							x={start}
-							y={y + rowHeight}
-						/>
-					) : null,
-				]
-			})}
+			{categoryChart}
 		</g>
 	)
 }
