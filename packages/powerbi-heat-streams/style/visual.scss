@@ -3,57 +3,57 @@
 	padding: 0;
 	margin: 0;
 	stroke: none;
-  shape-rendering: crispEdges;
-  clip-path: url("#clip-chart")
+	shape-rendering: crispEdges;
+	clip-path: url('#clip-chart');
 }
 
 .value-text {
-  width: '100%';
-  stroke: none;
-  font-family: "Lucida Console", Monaco, monospace;
-  text-align: right;
-  text-anchor: end;
+	width: '100%';
+	stroke: none;
+	font-family: 'Lucida Console', Monaco, monospace;
+	text-align: right;
+	text-anchor: end;
 }
 
 .category-charts {
-  clip-path: url("#clip-chart")
+	clip-path: url('#clip-chart');
 }
 
 .category-view {
-  fill: none;
-  shape-rendering: geometricPrecision;
+	fill: none;
+	shape-rendering: geometricPrecision;
 }
 
 .axis-scrub-extent {
-  fill: rgba(155, 155, 155, 155)
+	fill: rgba(155, 155, 155, 155);
 }
 
 .backboard {
-  fill: white;
-  cursor: default;
+	fill: transparent;
+	cursor: default;
 }
 
 .category-name-occluder {
-  height: 100%;
-  fill: white;
-  cursor: default;
+	height: 100%;
+	fill: transparent;
+	cursor: default;
 }
 
-.category-text { 
-  fill: black;
-  cursor: pointer;
+.category-text {
+	fill: black;
+	cursor: pointer;
 }
 
 .overlay .board {
-  fill: transparent;
-  // cursor: crosshair;
+	fill: transparent;
+	// cursor: crosshair;
 }
 
 .overlay .selection {
-  fill: transparent;
+	fill: transparent;
 }
 
 .time-scrub {
-  fill: none;
-  stroke-width: 1;
+	fill: none;
+	stroke-width: 1;
 }
