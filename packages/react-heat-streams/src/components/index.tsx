@@ -130,8 +130,7 @@ export default class HeatStreamsChart extends React.PureComponent<
 		)
 	}
 
-	@autobind
-	private onClick(x: number, y: number, ctrlKey: boolean) {
+	private onClick = (x: number, y: number, ctrlKey: boolean) => {
 		const { rowGap, timeScrub, rowHeight } = this.props
 		if (timeScrub) {
 			this.props.onClearSelection()
@@ -178,8 +177,7 @@ export default class HeatStreamsChart extends React.PureComponent<
 		)
 	}
 
-	@autobind
-	private onScroll(deltaX, deltaY) {
+	private onScroll = (deltaX, deltaY) => {
 		const panPosition =
 			this.props.zoomLevel === 1
 				? 0

@@ -1,44 +1,43 @@
 {
-  "name": "@essex/visual-heat-streams",
-  "private": true,
-  "version": "1.1.2",
-  "license": "MIT",
-  "main": "src/Visual.ts",
-  "scripts": {
-    "clean": "rimraf dist",
-    "install-certificate": "essex-powerbi-visual-scripts install-certificate",
-    "build": "cross-env NODE_ENV=production essex-powerbi-visual-scripts package",
-    "start": "essex-powerbi-visual-scripts start"
-  },
-  "author": {
-    "name": "Microsoft (experimental)",
-    "email": "msrvizsupport@microsoft.com"
-  },
-  "dependencies": {
-    "@essex/d3-coloring-scales": "^2.0.0",
-    "@essex/react-heat-streams": "^1.1.1",
-    "@types/node": "^10.1.2",
-    "@types/object-assign": "^4.0.30",
-    "@types/react": "^16.3.14",
-    "@types/react-dom": "^16.0.5",
-    "debug": "^3.1.0",
-    "es6-object-assign": "^1.1.0",
-    "es6-promise": "^4.2.4",
-    "lodash": "^4.17.10",
-    "object-assign": "^4.1.1",
-    "powerbi-models": "^1.0.5",
-    "powerbi-visuals-tools": "^1.12.0",
-    "powerbi-visuals-utils-dataviewutils": "^1.4.1",
-    "powerbi-visuals-utils-svgutils": "^1.1.0",
-    "powerbi-visuals-utils-typeutils": "^1.1.0",
-    "react": "^16.3.2",
-    "react-dom": "^16.3.2"
-  },
-  "devDependencies": {
-    "@essex/powerbi-visual-scripts": "^2.0.11",
-    "cross-env": "^5.1.5",
-    "powerbi-visuals-tools": "^1.12.0",
-    "rimraf": "^2.6.2",
-    "typescript": "^2.8.3"
-  }
+	"name": "@essex/visual-heat-streams",
+	"private": true,
+	"version": "1.1.2",
+	"license": "MIT",
+	"main": "src/Visual.ts",
+	"scripts": {
+		"clean": "rimraf dist",
+		"install-certificate": "essex-powerbi-visual-scripts install-certificate",
+		"build": "cross-env NODE_ENV=production essex-powerbi-visual-scripts package",
+		"start": "essex-powerbi-visual-scripts start"
+	},
+	"author": {
+		"name": "Microsoft (experimental)",
+		"email": "msrvizsupport@microsoft.com"
+	},
+	"dependencies": {
+		"@essex/d3-coloring-scales": "^3.0.0",
+		"@essex/react-heat-streams": "^1.1.1",
+		"@types/object-assign": "^4.0.30",
+		"@types/react": "16.7.7",
+		"@types/react-dom": "16.0.10",
+		"debug": "^4.1.0",
+		"es6-object-assign": "^1.1.0",
+		"es6-promise": "^4.2.5",
+		"lodash": "^4.17.11",
+		"object-assign": "^4.1.1",
+		"powerbi-models": "^1.0.13",
+		"powerbi-visuals-tools": "^1.12.0",
+		"powerbi-visuals-utils-dataviewutils": "^1.4.1",
+		"powerbi-visuals-utils-svgutils": "^1.1.0",
+		"powerbi-visuals-utils-typeutils": "^1.1.0",
+		"react": "^16.6.3",
+		"react-dom": "^16.6.3"
+	},
+	"devDependencies": {
+		"@essex/powerbi-visual-scripts": "^3.0.0",
+		"cross-env": "^5.2.0",
+		"powerbi-visuals-tools": "^1.12.0",
+		"rimraf": "^2.6.2",
+		"typescript": "^3.1.6"
+	}
 }
