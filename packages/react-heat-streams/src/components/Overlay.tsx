@@ -79,8 +79,7 @@ class Overlay extends React.PureComponent<IOverlayProps, IOverlayState> {
 		)
 	}
 
-	@autobind
-	private onMouseDown(evt) {
+	private onMouseDown = evt => {
 		if (this.state.dragging) {
 			this.cutDrag(evt)
 		} else {
@@ -93,15 +92,13 @@ class Overlay extends React.PureComponent<IOverlayProps, IOverlayState> {
 		}
 	}
 
-	@autobind
-	private onMouseUp(evt) {
+	private onMouseUp = evt => {
 		if (this.state.dragging) {
 			this.cutDrag(evt)
 		}
 	}
 
-	@autobind
-	private onMouseMove(evt) {
+	private onMouseMove = evt => {
 		if (this.state.dragging) {
 			this.setState({
 				...this.state,
@@ -110,8 +107,7 @@ class Overlay extends React.PureComponent<IOverlayProps, IOverlayState> {
 		}
 	}
 
-	@autobind
-	private onMouseLeave(evt) {
+	private onMouseLeave = evt => {
 		if (this.state.dragging) {
 			this.cutDrag(evt)
 		}

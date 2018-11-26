@@ -137,13 +137,9 @@ export default class CategoryList extends React.PureComponent<
 		)
 	}
 
-	@autobind
-	private onWheel(evt: React.WheelEvent<SVGGElement>) {
+	private onWheel = (evt: React.WheelEvent<SVGGElement>) =>
 		this.props.onScroll(evt.deltaX, evt.deltaY)
-	}
 
-	@autobind
-	private onDragOverlay(bounds: Array<number | Date>) {
+	private onDragOverlay = (bounds: Array<number | Date>) =>
 		this.props.onScrub(bounds)
-	}
 }

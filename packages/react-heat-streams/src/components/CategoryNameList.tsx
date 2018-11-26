@@ -36,8 +36,7 @@ class BoundCategoryName extends React.PureComponent<IBoundCategoryNameProps> {
 		)
 	}
 
-	@autobind
-	private onClick(evt: React.MouseEvent<any>) {
+	private onClick = (evt: React.MouseEvent<any>) => {
 		const { onClickCategory, category } = this.props
 		onClickCategory(category, evt.ctrlKey || evt.metaKey)
 		evt.stopPropagation()
