@@ -1,10 +1,4 @@
 import {
-	Colorizer,
-	DivergingScaler,
-	isDivergingColorScheme,
-	LinearScaler,
-} from '@essex/d3-coloring-scales'
-import {
 	HeatStreamsChart,
 	ICategory,
 	Scrub,

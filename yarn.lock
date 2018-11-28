@@ -232,10 +232,10 @@
   resolved "https://registry.yarnpkg.com/@essex/oss-report-builder/-/oss-report-builder-3.0.0.tgz#ab57d1d094f5a275a83de5a9a14d105304053bc6"
   integrity sha512-9xxIkR1xVGpy9H3bnTDg930GwefDCbjM0yhuz2aUBrDdXaFqAAhgzQ7MdZzH6NtOdY6LiG9I+Tz7P2T/2AljAQ==
 
-"@essex/powerbi-visual-scripts@^3.0.0":
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/@essex/powerbi-visual-scripts/-/powerbi-visual-scripts-3.0.0.tgz#61186b055a333239a6653253e4a05d1b8407ffc8"
-  integrity sha512-bO/nE/MiKKN/62zUsgOz/uSKVEcjcStH/6atMrkxlIlOf573x39UifSCms6QdUGeQy1trGl8sm4QVSXoswHHlQ==
+"@essex/powerbi-visual-scripts@^3.0.1":
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/@essex/powerbi-visual-scripts/-/powerbi-visual-scripts-3.0.1.tgz#5a7d4c1612edb5e5bdb97dbc77e502102e4d4b78"
+  integrity sha512-S4+S7uvijd5JPR0470g9YeE1VEcxvZ8YGodtS/t6qizbRCtHBLtpa9hWoKDjP+E/llimHe7Q/baqpjAoMfpGpg==
   dependencies:
     "@essex/oss-report-builder" "^3.0.0"
     "@essex/visual-config" "^3.0.0"
