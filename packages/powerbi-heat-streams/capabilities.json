@@ -42,6 +42,9 @@
                     "description": "When a date domain is used, this specifies date-bucket granularity.",
                     "type": {
                         "enumeration": [
+                            { "displayName": "Milliseconds", "value": "milliseconds" },
+                            { "displayName": "Seconds", "value": "seconds" },
+                            { "displayName": "Minutes", "value": "minutes" },
                             { "displayName": "Hourly", "value": "hours" },
                             { "displayName": "Daily", "value": "days" },
                             { "displayName": "Monthly", "value": "months" },

@@ -3,7 +3,7 @@ import { Colorizer } from '@essex/d3-coloring-scales'
 /**
  * The coarseness of x-aggregated blocks (when using dates)
  */
-export type DateAggregation = 'hours' | 'days' | 'months' | 'years'
+export type DateAggregation = 'milliseconds' | 'seconds' | 'minutes' | 'hours' | 'days' | 'months' | 'years'
 
 /**
  * Represents the X-Domain of the Visual

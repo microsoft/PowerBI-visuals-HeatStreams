@@ -1,5 +1,23 @@
 import { DateAggregation } from './interfaces'
 
+export function addMilliseconds(date: Date, num: number): Date {
+	const result = new Date(date)
+	result.setUTCMilliseconds(result.getUTCMilliseconds() + num)
+	return result
+}
+
+export function addSeconds(date: Date, num: number): Date {
+	const result = new Date(date)
+	result.setUTCSeconds(result.getUTCSeconds() + num)
+	return result
+}
+
+export function addMinutes(date: Date, num: number): Date {
+	const result = new Date(date)
+	result.setUTCMinutes(result.getUTCMinutes() + num)
+	return result
+}
+
 export function addHours(date: Date, num: number): Date {
 	const result = new Date(date)
 	result.setUTCHours(result.getUTCHours() + num)
@@ -28,7 +46,13 @@ export function dateSliceEnd(
 	start: Date,
 	dateAggregation: DateAggregation,
 ): Date {
-	if (dateAggregation === 'hours') {
+  if (dateAggregation === 'milliseconds') {
+		return addMilliseconds(start, 1)
+	}	else if (dateAggregation === 'seconds') {
+		return addSeconds(start, 1)
+	}	else if (dateAggregation === 'minutes') {
+		return addMinutes(start, 1)
+	}	else if (dateAggregation === 'hours') {
 		return addHours(start, 1)
 	} else if (dateAggregation === 'days') {
 		return addDays(start, 1)
