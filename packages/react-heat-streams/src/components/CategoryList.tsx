@@ -29,6 +29,7 @@ export interface ICategoryListProps {
 	numAxisTicks: number
 	xDomain: XDomain
 	categoryY: (index: number) => number
+	categoryNameFormat: string
 	colorizer: IColorizer
 	xScale: IScaler
 	showValues: boolean
@@ -59,6 +60,7 @@ export default class CategoryList extends React.PureComponent<
 			rowHeight,
 			highlightColor,
 			categoryY,
+			categoryNameFormat,
 			colorizer,
 			xScale,
 			showValues,
@@ -82,6 +84,7 @@ export default class CategoryList extends React.PureComponent<
 					width={width * textPercent}
 					rowHeight={rowHeight}
 					categoryY={categoryY}
+					categoryNameFormat={categoryNameFormat}
 					isCategorySelected={isCategorySelected}
 					onClickCategory={onClickCategory}
 					onClear={onClear}

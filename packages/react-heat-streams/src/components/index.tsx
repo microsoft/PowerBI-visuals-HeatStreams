@@ -25,6 +25,7 @@ export interface IHeatStreamsChartProps {
 	textPercent: number
 	rowHeight: number
 	axisHeight: number
+	categoryNameFormat: string
 	numTicks: number
 	zoomLevel: number
 	xDomain: XDomain
@@ -68,6 +69,7 @@ export default class HeatStreamsChart extends React.PureComponent<
 			showValues,
 			rowHeight,
 			axisHeight,
+			categoryNameFormat,
 			highlightColor,
 			rowGap,
 			categoryValues,
@@ -80,7 +82,7 @@ export default class HeatStreamsChart extends React.PureComponent<
 		const sliceWidth = this.sliceWidth(xScale)
 		const categoryY = (index: number) =>
 			rowHeight * index + (rowGap ? index : 0)
-		const isCategorySelected = (cat: ICategory) => !!selections[cat.name]
+		const isCategorySelected = (cat: ICategory) => !!selections[cat.id]
 		const categoryTextWidth = width * textPercent
 		const chartWidth = width - categoryTextWidth
 
@@ -105,6 +107,7 @@ export default class HeatStreamsChart extends React.PureComponent<
 					axisHeight={axisHeight}
 					axisOffset={axisOffset}
 					categoryY={categoryY}
+					categoryNameFormat={categoryNameFormat}
 					categories={categoriesInView}
 					categoryValues={categoryValues}
 					textPercent={textPercent}

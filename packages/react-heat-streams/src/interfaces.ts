@@ -3,7 +3,14 @@ import { Colorizer } from '@essex/d3-coloring-scales'
 /**
  * The coarseness of x-aggregated blocks (when using dates)
  */
-export type DateAggregation = 'milliseconds' | 'seconds' | 'minutes' | 'hours' | 'days' | 'months' | 'years'
+export type DateAggregation =
+	| 'milliseconds'
+	| 'seconds'
+	| 'minutes'
+	| 'hours'
+	| 'days'
+	| 'months'
+	| 'years'
 
 /**
  * Represents the X-Domain of the Visual
@@ -20,7 +27,7 @@ export type Scrub = Array<Date | number>
  */
 export interface ICategory {
 	id: number
-	name: string
+	value: object
 	metadata?: {
 		[key: string]: number
 	}

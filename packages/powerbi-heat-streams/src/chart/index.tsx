@@ -41,6 +41,7 @@ export default class Chart {
 			numTicks: this.options.renderOptions.numTicks,
 			zoomLevel: this.options.renderOptions.zoomLevel,
 			xDomain: this.options.data.positionDomain,
+			categoryNameFormat: this.options.renderOptions.categoryNameFormat,
 			highlightColor: this.options.renderOptions.highlightColor,
 			showCategories: this.options.renderOptions.showCategories,
 			showValues: this.options.renderOptions.showValues,

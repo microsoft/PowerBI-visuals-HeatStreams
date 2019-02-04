@@ -44,14 +44,12 @@ export default function convertCategoricalDataView(
 ): IChartData {
 	const { categorical } = dataView
 
-	let categories = get(
-		categorical,
-		'categories[0].values',
-		[],
-	).map((t, index) => ({
-		id: index,
-		name: (t || '').toString(),
-	}))
+	let categories = get(categorical, 'categories[0].values', []).map(
+		(t, index) => ({
+			id: index,
+			value: t,
+		}),
+	)
 
 	const categoryData: ICategoryDataMap = {}
 	categories.forEach(category => {

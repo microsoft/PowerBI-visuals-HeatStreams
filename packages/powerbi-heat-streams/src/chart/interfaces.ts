@@ -38,6 +38,7 @@ export interface IVisualDataOptions {
 }
 
 export interface IVisualRenderingOptions {
+	categoryNameFormat: string
 	highlightColor: string
 	rowHeight: number
 	categoryTextPercent: number

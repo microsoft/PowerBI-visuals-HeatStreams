@@ -27,6 +27,7 @@ import { IVisualRenderingOptions } from '../chart/interfaces'
 
 export default class VisualRenderingOptionsImpl
 	implements IVisualRenderingOptions {
+	public categoryNameFormat = 'default'
 	public highlightColor = 'gray'
 	public rowHeight = 15
 	public categoryTextPercent = 10

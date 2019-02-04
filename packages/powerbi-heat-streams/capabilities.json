@@ -3,12 +3,7 @@
         {
             "displayName": "Category",
             "name": "category",
-            "kind": "Grouping",
-            "requiredTypes": [
-                {
-                    "text": true
-                }
-            ]
+            "kind": "Grouping"
         },
         {
             "displayName": "Score",
@@ -105,6 +100,19 @@
         "rendering": {
             "displayName": "View Settings",
             "properties": {
+                "categoryNameFormat": {
+                    "displayName": "Category Name Format",
+                    "description": "The method used to format a category name that is not a string",
+                    "type": {
+                        "enumeration": [
+                            { "displayName": "Default", "value": "default" },
+                            { "displayName": "Locale Time", "value": "localeTime" },
+                            { "displayName": "Locale Date", "value": "localeDate" },
+                            { "displayName": "Locale Date-Time", "value": "localeDateTime" },
+                            { "displayName": "Locale Number", "value": "localeNumber" }
+                        ]
+                    }
+                },
                 "highlightColor": {
                     "displayName": "Highlight Color",
                     "description": "The selected category highlight color value",
