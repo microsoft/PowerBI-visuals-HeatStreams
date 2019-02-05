@@ -48,22 +48,22 @@ function sliceStart(
 	} else if (dateAggregation === 'hours') {
 		result.setUTCMilliseconds(0)
 		result.setUTCSeconds(0)
- 		result.setUTCMinutes(0)
+		result.setUTCMinutes(0)
 	} else if (dateAggregation === 'days') {
 		result.setUTCMilliseconds(0)
 		result.setUTCSeconds(0)
- 		result.setUTCMinutes(0)
+		result.setUTCMinutes(0)
 		result.setUTCHours(0)
 	} else if (dateAggregation === 'months') {
 		result.setUTCMilliseconds(0)
 		result.setUTCSeconds(0)
- 		result.setUTCMinutes(0)
+		result.setUTCMinutes(0)
 		result.setUTCHours(0)
 		result.setUTCDate(1)
 	} else if (dateAggregation === 'years') {
 		result.setUTCMilliseconds(0)
 		result.setUTCSeconds(0)
- 		result.setUTCMinutes(0)
+		result.setUTCMinutes(0)
 		result.setUTCHours(0)
 		result.setUTCDate(1)
 		result.setUTCMonth(1)
@@ -97,7 +97,7 @@ export default function coalesceValueSlices(
 						: sliceStart(cd.position, dateAggregation, positionDomain as [
 								Date,
 								Date
-							]).toUTCString()
+						  ]).toUTCString()
 
 					if (!valuePositions[start]) {
 						valuePositions[start] = []

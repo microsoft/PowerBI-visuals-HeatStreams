@@ -49,7 +49,7 @@
                 },
                 "numericAggregation": {
                     "displayName": "Value Buckets",
-                    "description": "When a NUMERIC domain is used, this specifies number-bucket granularity.",
+                    "description": "The bucket granularity.",
                     "type": {
                         "numeric": true
                     }

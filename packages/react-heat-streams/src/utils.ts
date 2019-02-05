@@ -45,21 +45,22 @@ export function addYears(date: Date, num: number): Date {
 export function dateSliceEnd(
 	start: Date,
 	dateAggregation: DateAggregation,
+	sliceLength: number,
 ): Date {
-  if (dateAggregation === 'milliseconds') {
-		return addMilliseconds(start, 1)
-	}	else if (dateAggregation === 'seconds') {
-		return addSeconds(start, 1)
-	}	else if (dateAggregation === 'minutes') {
-		return addMinutes(start, 1)
-	}	else if (dateAggregation === 'hours') {
-		return addHours(start, 1)
+	if (dateAggregation === 'milliseconds') {
+		return addMilliseconds(start, sliceLength)
+	} else if (dateAggregation === 'seconds') {
+		return addSeconds(start, sliceLength)
+	} else if (dateAggregation === 'minutes') {
+		return addMinutes(start, sliceLength)
+	} else if (dateAggregation === 'hours') {
+		return addHours(start, sliceLength)
 	} else if (dateAggregation === 'days') {
-		return addDays(start, 1)
+		return addDays(start, sliceLength)
 	} else if (dateAggregation === 'months') {
-		return addMonths(start, 1)
+		return addMonths(start, sliceLength)
 	} else if (dateAggregation === 'years') {
-		return addYears(start, 1)
+		return addYears(start, sliceLength)
 	} else {
 		throw new Error('unknown aggregation: ' + dateAggregation)
 	}
@@ -73,5 +74,5 @@ export function getSliceEnd(
 	const isNumber = typeof start === 'number'
 	return isNumber
 		? (start as number) + numericAggregation
-		: dateSliceEnd(start as Date, dateAggregation)
+		: dateSliceEnd(start as Date, dateAggregation, numericAggregation)
 }
