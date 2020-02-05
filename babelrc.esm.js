@@ -15,7 +15,8 @@ module.exports = {
 				targets: {
 					browsers,
 				},
-				useBuiltIns: false,
+        useBuiltIns: 'usage',
+        corejs: { version: 3 }
 			},
 		],
 	],
