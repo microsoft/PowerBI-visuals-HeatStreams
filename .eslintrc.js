@@ -51,7 +51,7 @@ module.exports = {
 		},
 	],
 	rules: {
-		'header/header': [2, headerFile],
+		'header/header': [2, 'header.js'],
 
 		// Custom Rules
 		'@essex/adjacent-await': 'warn',
