@@ -11,12 +11,7 @@ const jsRuleSets = [
 	'prettier/react',
 ]
 module.exports = {
-	plugins: [
-		'header',
-		'@typescript-eslint',
-		'jsx-a11y',
-		'jest',
-	],
+	plugins: ['header', '@typescript-eslint', 'jsx-a11y', 'jest'],
 	env: {
 		node: true,
 		browser: true,
@@ -34,6 +29,10 @@ module.exports = {
 				/* Disable TypeScript styling rules */
 				'prettier/@typescript-eslint',
 			],
+			rules: {
+				'@typescript-eslint/interface-name-prefix': 0,
+				'@typescript-eslint/no-non-null-assertion': 0,
+			},
 		},
 		{
 			files: '*.js*',
@@ -48,16 +47,15 @@ module.exports = {
 					modules: true,
 				},
 			},
+			rules: {
+				'no-irregular-whitespace': 0,
+			},
 		},
 	],
 	rules: {
 		'header/header': [2, 'header.js'],
 
-		// Custom Rules
-		'@essex/adjacent-await': 'warn',
-
 		// Rules that we don"t find useful
 		'no-plusplus': 0,
-		'@typescript-eslint/interface-name-prefix': 0,
 	},
 }

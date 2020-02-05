@@ -1,44 +1,16 @@
-/*
- *  Power BI Visual CLI
- *
- *  Copyright (c) Microsoft Corporation
- *  All rights reserved.
- *  MIT License
- *
- *  Permission is hereby granted, free of charge, to any person obtaining a copy
- *  of this software and associated documentation files (the ""Software""), to deal
- *  in the Software without restriction, including without limitation the rights
- *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- *  copies of the Software, and to permit persons to whom the Software is
- *  furnished to do so, subject to the following conditions:
- *
- *  The above copyright notice and this permission notice shall be included in
- *  all copies or substantial portions of the Software.
- *
- *  THE SOFTWARE IS PROVIDED *AS IS*, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- *  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- *  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- *  THE SOFTWARE.
+/*!
+ * Copyright (c) Microsoft. All rights reserved.
+ * Licensed under the MIT license. See LICENSE file in the project.
  */
-// tslint:disable no-var-requires no-string-literal no-reference
-/// <reference path="../node_modules/powerbi-visuals-tools/templates/visuals/.api/v1.11.0/PowerBI-visuals.d.ts" />
-'use strict'
-
+/* eslint-disable @typescript-eslint/no-var-requires */
 import Chart from './chart'
 import ChartOptions from './chart/ChartOptions'
 import DataViewConverter from './data/DataViewConverter'
 import Interactions from './Interactions'
 import VisualSettings from './settings/VisualSettings'
-const get = require('lodash/get')
 import * as logger from './logger'
+const get = require('lodash/get')
 const packageJson = require('../package.json')
-
-// Polyfills for IE11
-require('es6-promise').polyfill()
-require('es6-object-assign').polyfill()
 
 export class Visual implements powerbi.extensibility.IVisual {
 	private static parseSettings(dataView: powerbi.DataView): VisualSettings {

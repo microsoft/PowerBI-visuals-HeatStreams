@@ -1,5 +1,7 @@
-import { Colorizer } from '@essex/d3-coloring-scales'
-
+/*!
+ * Copyright (c) Microsoft. All rights reserved.
+ * Licensed under the MIT license. See LICENSE file in the project.
+ */
 /**
  * The coarseness of x-aggregated blocks (when using dates)
  */

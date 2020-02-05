@@ -1,3 +1,7 @@
+/*!
+ * Copyright (c) Microsoft. All rights reserved.
+ * Licensed under the MIT license. See LICENSE file in the project.
+ */
 import { scaleLinear, scaleTime } from 'd3-scale'
 import * as React from 'react'
 import {
@@ -55,7 +59,7 @@ export default class HeatStreamsChart extends React.PureComponent<
 		}
 	}
 
-	public render() {
+	public render(): JSX.Element {
 		const { axisOffset, categoriesInView } = this
 		const {
 			colorizer,
@@ -72,14 +76,14 @@ export default class HeatStreamsChart extends React.PureComponent<
 			categoryValues,
 			selections,
 			numTicks,
-			zoomLevel,
 			xDomain,
 		} = this.props
 		const xScale = this.getXScale(xDomain)
 		const sliceWidth = this.sliceWidth(xScale)
-		const categoryY = (index: number) =>
+		const categoryY = (index: number): number =>
 			rowHeight * index + (rowGap ? index : 0)
-		const isCategorySelected = (cat: ICategory) => !!selections[cat.name]
+		const isCategorySelected = (cat: ICategory): boolean =>
+			!!selections[cat.name]
 		const categoryTextWidth = width * textPercent
 		const chartWidth = width - categoryTextWidth
 
@@ -129,7 +133,7 @@ export default class HeatStreamsChart extends React.PureComponent<
 		)
 	}
 
-	private onClick = (x: number, y: number, ctrlKey: boolean) => {
+	private onClick = (x: number, y: number, ctrlKey: boolean): void => {
 		const { rowGap, timeScrub, rowHeight } = this.props
 		if (timeScrub) {
 			this.props.onClearSelection()
@@ -176,7 +180,7 @@ export default class HeatStreamsChart extends React.PureComponent<
 		)
 	}
 
-	private onScroll = (deltaX, deltaY) => {
+	private onScroll = (deltaX: number, deltaY: number): void => {
 		const panPosition =
 			this.props.zoomLevel === 1
 				? 0

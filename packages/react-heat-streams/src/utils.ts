@@ -1,3 +1,7 @@
+/*!
+ * Copyright (c) Microsoft. All rights reserved.
+ * Licensed under the MIT license. See LICENSE file in the project.
+ */
 import { DateAggregation } from './interfaces'
 
 export function addHours(date: Date, num: number): Date {
@@ -45,9 +49,9 @@ export function getSliceEnd(
 	start: Date | number,
 	numericAggregation?: number,
 	dateAggregation?: DateAggregation,
-) {
+): Date | number {
 	const isNumber = typeof start === 'number'
 	return isNumber
-		? (start as number) + numericAggregation
-		: dateSliceEnd(start as Date, dateAggregation)
+		? (start as number) + numericAggregation!
+		: dateSliceEnd(start as Date, dateAggregation!)
 }

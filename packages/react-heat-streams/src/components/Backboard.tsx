@@ -1,3 +1,7 @@
+/*!
+ * Copyright (c) Microsoft. All rights reserved.
+ * Licensed under the MIT license. See LICENSE file in the project.
+ */
 import * as React from 'react'
 
 /* Having this in the background allows the top-level g element to catch scroll and click events */

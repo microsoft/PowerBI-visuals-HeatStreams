@@ -1,4 +1,8 @@
-// tslint:disable no-var-requires
+/*!
+ * Copyright (c) Microsoft. All rights reserved.
+ * Licensed under the MIT license. See LICENSE file in the project.
+ */
+/* eslint-disable @typescript-eslint/no-var-requires */
 import { ICategory } from '@essex/react-heat-streams'
 import buildDomainScrub from './data/buildDomainScrub'
 const get = require('lodash/get')

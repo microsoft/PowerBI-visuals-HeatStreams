@@ -1,5 +1,10 @@
+/*!
+ * Copyright (c) Microsoft. All rights reserved.
+ * Licensed under the MIT license. See LICENSE file in the project.
+ */
 import * as React from 'react'
-const { Axis, axisPropsFromTickScale, BOTTOM } = require('react-d3-axis') // tslint:disable-line no-var-requires
+/* eslint-disable-next-line @typescript-eslint/no-var-requires */
+const { Axis, axisPropsFromTickScale, BOTTOM } = require('react-d3-axis')
 
 export interface ITimeAxisProps {
 	x: number
@@ -21,7 +26,7 @@ const styles: { [key: string]: React.CSSProperties } = {
 	} as any,
 }
 
-const AxisScrub = ({ height, timeScrub, xScale }) => (
+const AxisScrub: React.FC = ({ height, timeScrub, xScale }) => (
 	<rect
 		className="axis-scrub-extent"
 		height={height}
@@ -34,8 +39,6 @@ const TimeAxis: React.StatelessComponent<ITimeAxisProps> = ({
 	xPan,
 	offset,
 	xScale,
-	width,
-	x,
 	timeScrub,
 	height,
 	numTicks = 10,
