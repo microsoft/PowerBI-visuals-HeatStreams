@@ -27,10 +27,8 @@
 	},
 	"dependencies": {
 		"@essex/d3-coloring-scales": "^3.0.0",		
-		"autobind-decorator": "^2.4.0",
 		"d3-color": "^1.4.0",
 		"d3-scale": "^3.2.1",
-		"is-integer": "^1.0.7",
 		"react-d3-axis": "^0.1.2"
 	}
 }

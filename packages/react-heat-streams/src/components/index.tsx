@@ -12,7 +12,6 @@ import {
 } from '../interfaces'
 import { getSliceEnd } from '../utils'
 import CategoryList from './CategoryList'
-import autobind from 'autobind-decorator'
 
 export interface IHeatStreamsState {
 	scrollPosition: number

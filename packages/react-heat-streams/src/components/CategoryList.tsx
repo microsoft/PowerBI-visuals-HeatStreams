@@ -1,5 +1,4 @@
 import * as React from 'react'
-import autobind from 'autobind-decorator'
 import {
 	ICategory,
 	ICategoryValueMap,

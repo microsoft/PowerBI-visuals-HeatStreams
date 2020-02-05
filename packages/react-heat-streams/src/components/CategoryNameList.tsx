@@ -1,7 +1,6 @@
 import * as React from 'react'
 import { ICategory } from '../interfaces'
 import CategoryText from './CategoryText'
-import autobind from 'autobind-decorator'
 
 export interface ICategoryNameListProps {
 	categories: ICategory[]
