@@ -6,7 +6,7 @@ import { dataViewObjectsParser } from 'powerbi-visuals-utils-dataviewutils'
 import DataViewObjectsParser = dataViewObjectsParser.DataViewObjectsParser
 
 export class VisualSettings extends DataViewObjectsParser {
-	public dataPoint: DataPointSettings = new dataPointSettings()
+	public dataPoint: DataPointSettings = new DataPointSettings()
 }
 
 export class DataPointSettings {

@@ -1,17 +1,22 @@
 {
 	"visual": {
-		"name": "derp",
-		"displayName": "derp",
-		"guid": "derpF1072F39F892461E9F8A27159CE895D0",
+		"name": "heat-streams",
+		"displayName": "Heat Streams",
+		"guid": "heatStreams74779FE5319F4655BE62C4C5FD0ABFB1",
 		"visualClassName": "Visual",
-		"version": "1.0.0",
-		"description": "",
-		"supportUrl": "",
-		"gitHubUrl": ""
+		"description": "Visualize and compare categorical data values over time using heatmap-style color gradients.",
+		"supportUrl": "https://github.com/microsoft/PowerBI-visuals-HeatStreams/issues",
+		"gitHubUrl": "https://github.com/microsoft/PowerBI-visuals-HeatStreams"
 	},
+	"output": "dist/heatstreams.pbiviz",
 	"apiVersion": "2.6.0",
-	"author": { "name": "", "email": "" },
-	"assets": { "icon": "assets/icon.png" },
+	"author": {
+		"name": "Microsoft (experimental)",
+		"email": "msrvizsupport@microsoft.com"
+	},
+	"assets": {
+		"icon": "assets/icon.png"
+	},
 	"externalJS": null,
 	"style": "style/visual.less",
 	"capabilities": "capabilities.json",
