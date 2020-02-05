@@ -1,17 +1,3 @@
 {
-  "compilerOptions": {
-    "target": "es5",
-    "module": "commonjs",
-    "jsx": "react",
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "declaration": true,
-    "sourceMap": true,
-    "suppressImplicitAnyIndexErrors": true,
-    "outDir": "lib",
-    "lib": [
-      "es2017",
-      "dom"
-    ]
-  }
+  "extends": "../../tsconfig.json"
 }
