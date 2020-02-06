@@ -3,6 +3,7 @@
 		"allowJs": false,
 		"emitDecoratorMetadata": true,
 		"experimentalDecorators": true,
+		"forceConsistentCasingInFileNames": true,
 		"target": "es6",
 		"jsx": "react",
 		"sourceMap": true,
@@ -11,5 +12,5 @@
 		"declaration": true,
 		"lib": ["es2015", "dom"]
 	},
-	"files": ["./src/visual.ts"]
+	"files": ["./src/Visual.ts"]
 }

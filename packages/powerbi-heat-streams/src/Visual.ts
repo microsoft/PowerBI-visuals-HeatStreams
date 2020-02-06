@@ -23,7 +23,7 @@ export class Visual implements powerbi.extensibility.IVisual {
 	private chart: Chart
 	private chartOptions: ChartOptions
 	private interactions: Interactions
-	private dataView: powerbi.DataView
+	private dataView: powerbi.DataView | undefined
 
 	constructor(options: powerbi.extensibility.visual.VisualConstructorOptions) {
 		const target = options.element
@@ -34,8 +34,8 @@ export class Visual implements powerbi.extensibility.IVisual {
 		this.chartOptions = new ChartOptions(converter, target)
 		this.chart = new Chart(this.chartOptions)
 		this.interactions = new Interactions(host, selectionManager)
-		this.interactions.onRestoreSelection(this.onRestoreSelection.bind(this))
-		global['setLogLevel'] = logger.setLevel
+		this.interactions.onRestoreSelection(this.onRestoreSelection)
+		;(global as any)['setLogLevel'] = logger.setLevel
 		// tslint:disable-next-line no-console
 		console.log(
 			`%c🔥🔥 HeatStreams ${packageJson.version}🔥🔥%c
@@ -90,19 +90,19 @@ export class Visual implements powerbi.extensibility.IVisual {
 	/**
 	 * Handler for when selection should be restored from PowerBI
 	 */
-	private onRestoreSelection(): void {
-		this.chartOptions.loadSelections(this.dataView)
+	private onRestoreSelection = (): void => {
+		this.chartOptions.loadSelections(this.dataView!)
 		this.render()
 	}
 
 	private render(): void {
 		const { interactions } = this
 		this.chart.onSelectionChanged((cat, multi) => {
-			interactions.selectCategory(cat, multi, this.dataView)
+			interactions.selectCategory(cat, multi, this.dataView!)
 		})
 		this.chart.onSelectionCleared(() => interactions.clearSelections())
 		this.chart.onScrub(bounds =>
-			interactions.scrub(bounds as TimeDomain, this.dataView),
+			interactions.scrub(bounds as TimeDomain, this.dataView!),
 		)
 		logger.info('Render', this.chartOptions)
 		this.chart.render()

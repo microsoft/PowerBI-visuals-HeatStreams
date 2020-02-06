@@ -4,7 +4,7 @@
  */
 /* eslint-disable @typescript-eslint/no-var-requires */
 import powerbi from 'powerbi-visuals-api'
-import { ICategory, TimeDomain } from '@essex/react-heat-streams'
+import { TimeDomain, ICategory } from '@essex/react-heat-streams'
 import { IChartData, IVisualDataOptions } from '../chart/interfaces'
 import { convertCategoricalDataView } from './convertCategoricalDataView'
 import * as logger from '../logger'
@@ -13,7 +13,9 @@ const get = require('lodash/get')
 const isEqual = require('lodash/isEqual')
 
 export class DataViewConverter {
-	constructor(private selectionManager: any) {} // tslint:disable-line no-empty
+	constructor(
+		private selectionManager: powerbi.extensibility.ISelectionManager,
+	) {} // tslint:disable-line no-empty
 
 	public convertDataView(
 		dataView: powerbi.DataView,
@@ -33,7 +35,7 @@ export class DataViewConverter {
 		const selection = this.selectionManager.getSelectionIds()
 		const category = get(dataView, 'categorical.categories[0]')
 
-		const selectedCategories = {}
+		const selectedCategories: any = {}
 		if (category) {
 			selection.forEach(s => {
 				try {
@@ -60,7 +62,7 @@ export class DataViewConverter {
 	}
 
 	public unpackDomainScrub(dataView: powerbi.DataView): TimeDomain | null {
-		const castScrubPoint = v => {
+		const castScrubPoint = (v: any) => {
 			if (typeof v === 'string') {
 				const isNum = /^\d+$/.test(v)
 				if (isNum) {

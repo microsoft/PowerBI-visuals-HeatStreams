@@ -22,14 +22,14 @@ export function convertCategoricalDataView(
 	const { categorical } = dataView
 
 	let categories = get(categorical, 'categories[0].values', []).map(
-		(t, index) => ({
+		(t: any, index: number) => ({
 			id: index,
 			name: (t || '').toString(),
 		}),
 	)
 
 	const categoryData: ICategoryDataMap = {}
-	categories.forEach(category => {
+	categories.forEach((category: any) => {
 		categoryData[category.id] = categorical.values.map(
 			(categoricalValue: any) => {
 				const position = categoricalValue.source.groupName

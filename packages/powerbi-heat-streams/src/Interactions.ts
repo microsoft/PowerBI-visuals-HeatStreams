@@ -54,7 +54,7 @@ export class Interactions {
 	 * @param listener The listener for the event
 	 */
 	public onRestoreSelection(
-		listener: (ids: powerbi.visuals.ISelectionId[]) => any,
+		listener: (ids: powerbi.extensibility.ISelectionId[]) => void,
 	): void {
 		this.selectionManager.registerOnSelectCallback(listener)
 	}
@@ -89,6 +89,6 @@ export class Interactions {
 					selector: null,
 				},
 			],
-		})
+		} as any)
 	}
 }

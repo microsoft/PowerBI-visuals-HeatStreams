@@ -11,16 +11,16 @@ export enum LogLevel {
 }
 
 function getLogLevel(): number {
-	if (window['logLevel'] === undefined) {
+	if ((window as any)['logLevel'] === undefined) {
 		return LogLevel.ERROR
 	} else {
-		return window['logLevel']
+		return (window as any)['logLevel']
 	}
 }
 
 export function setLevel(level: LogLevel): void {
 	console.log('Set Log Level to ', level)
-	window['logLevel'] = level
+	;(window as any)['logLevel'] = level
 }
 
 export function info(message: string, ...args: any[]): void {
