@@ -10,8 +10,8 @@ import {
 	LinearScaler,
 } from '@essex/d3-coloring-scales'
 import { ICategory, TimeDomain } from '@essex/react-heat-streams'
-import DataViewConverter from '../data/DataViewConverter'
-import VisualSettings from '../settings/VisualSettings'
+import { DataViewConverter } from '../data/DataViewConverter'
+import { VisualSettings } from '../settings/VisualSettings'
 import {
 	IChartData,
 	IChartOptions,

@@ -10,8 +10,8 @@ import {
 	IVisualDataOptions,
 } from '../chart/interfaces'
 import { coalesceValueSlices } from './coalesceValueSlices'
-import determinePositionDomain from './determinePositionDomain'
-import sortCategories from './sortCategories'
+import { determinePositionDomain } from './determinePositionDomain'
+import { sortCategories } from './sortCategories'
 
 const get = require('lodash/get')
 
