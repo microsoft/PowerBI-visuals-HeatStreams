@@ -15,7 +15,7 @@ export type XDomain = TimeDomain
 /**
  * A user scrub over the X-Domain of the Visual
  */
-export type Scrub = Array<Date | number>
+export type Scrub = TimeDomain
 
 /**
  * A Visualized Category
