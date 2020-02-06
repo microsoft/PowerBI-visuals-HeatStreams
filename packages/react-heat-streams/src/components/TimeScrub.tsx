@@ -3,6 +3,7 @@
  * Licensed under the MIT license. See LICENSE file in the project.
  */
 import * as React from 'react'
+import { memo } from 'react'
 import { IScaler } from '../interfaces'
 
 export interface ITimeScrubProps {
@@ -12,23 +13,19 @@ export interface ITimeScrubProps {
 	color: string
 }
 
-const TimeScrub: React.StatelessComponent<ITimeScrubProps> = ({
-	data,
-	xScale,
-	height,
-	color,
-}) => {
-	const isScrubValid = data !== null && data.length === 2
-	return isScrubValid ? (
-		<rect
-			className="time-scrub"
-			width={xScale(data[1]) - xScale(data[0])}
-			height={height}
-			x={xScale(data[0])}
-			y={0}
-			stroke={color}
-		/>
-	) : null
-}
-
-export default TimeScrub
+export const TimeScrub: React.FC<ITimeScrubProps> = memo(
+	({ data, xScale, height, color }) => {
+		const isScrubValid = data !== null && data.length === 2
+		return isScrubValid ? (
+			<rect
+				className="time-scrub"
+				width={xScale(data[1]) - xScale(data[0])}
+				height={height}
+				x={xScale(data[0])}
+				y={0}
+				stroke={color}
+			/>
+		) : null
+	},
+)
+TimeScrub.displayName = 'TimeScrub'

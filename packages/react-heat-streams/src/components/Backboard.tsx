@@ -3,6 +3,7 @@
  * Licensed under the MIT license. See LICENSE file in the project.
  */
 import * as React from 'react'
+import { memo } from 'react'
 
 /* Having this in the background allows the top-level g element to catch scroll and click events */
 
@@ -13,19 +14,15 @@ export interface IBackboardProps {
 	onClick: () => void
 }
 
-const Backboard: React.StatelessComponent<IBackboardProps> = ({
-	height,
-	width,
-	x,
-	onClick,
-}) => (
-	<rect
-		className="backboard"
-		x={x}
-		height={height}
-		width={width}
-		onClick={onClick}
-	/>
+export const Backboard: React.FC<IBackboardProps> = memo(
+	({ height, width, x, onClick }) => (
+		<rect
+			className="backboard"
+			x={x}
+			height={height}
+			width={width}
+			onClick={onClick}
+		/>
+	),
 )
-
-export default Backboard
+Backboard.displayName = 'Backboard'

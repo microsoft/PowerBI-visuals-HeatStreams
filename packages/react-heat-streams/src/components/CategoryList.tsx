@@ -3,6 +3,7 @@
  * Licensed under the MIT license. See LICENSE file in the project.
  */
 import * as React from 'react'
+import { memo, useCallback } from 'react'
 import {
 	ICategory,
 	ICategoryValueMap,
@@ -12,12 +13,12 @@ import {
 	XDomain,
 	TimeDomain,
 } from '../interfaces'
-import Axis from './Axis'
-import Backboard from './Backboard'
-import CategoryChartList from './CategoryChartList'
-import CategoryNameList from './CategoryNameList'
-import Overlay from './Overlay'
-import TimeScrub from './TimeScrub'
+import { TimeAxis as Axis } from './Axis'
+import { Backboard } from './Backboard'
+import { CategoryChartList } from './CategoryChartList'
+import { CategoryNameList } from './CategoryNameList'
+import { Overlay } from './Overlay'
+import { TimeScrub } from './TimeScrub'
 
 export interface ICategoryListProps {
 	axisHeight: number
@@ -47,37 +48,46 @@ export interface ICategoryListProps {
 	timeScrub: TimeDomain
 }
 
-export default class CategoryList extends React.PureComponent<
-	ICategoryListProps
-> {
-	public render(): JSX.Element {
-		const {
-			axisHeight,
-			width,
-			height,
-			axisOffset,
-			textPercent,
-			showCategories,
-			categories,
-			categoryValues,
-			rowHeight,
-			highlightColor,
-			categoryY,
-			colorizer,
-			xScale,
-			showValues,
-			isCategorySelected,
-			sliceWidth,
-			onClick,
-			onClickCategory,
-			onClear,
-			xPan,
-			timeScrub,
-			numAxisTicks,
-			xDomain,
-		} = this.props
+export const CategoryList: React.FC<ICategoryListProps> = memo(
+	({
+		axisHeight,
+		width,
+		height,
+		axisOffset,
+		textPercent,
+		showCategories,
+		categories,
+		categoryValues,
+		rowHeight,
+		highlightColor,
+		categoryY,
+		colorizer,
+		xScale,
+		showValues,
+		isCategorySelected,
+		sliceWidth,
+		onClick,
+		onClickCategory,
+		onClear,
+		xPan,
+		timeScrub,
+		numAxisTicks,
+		xDomain,
+		onScroll,
+		onScrub,
+	}) => {
+		const onWheel = useCallback(
+			(evt: React.WheelEvent<SVGGElement>): void =>
+				onScroll(evt.deltaX, evt.deltaY),
+			[onScroll],
+		)
+
+		const onDragOverlay = useCallback(
+			(bounds: TimeDomain): void => onScrub(bounds),
+			[onScrub],
+		)
 		return (
-			<g className="category-list" onWheel={this.onWheel}>
+			<g className="category-list" onWheel={onWheel}>
 				<CategoryNameList
 					categories={categories}
 					showCategories={showCategories}
@@ -130,18 +140,13 @@ export default class CategoryList extends React.PureComponent<
 					x={textPercent * width}
 					height={axisOffset + axisHeight}
 					xScale={xScale}
-					onDrag={this.onDragOverlay}
+					onDrag={onDragOverlay}
 					timeScrub={timeScrub}
 					highlightColor={highlightColor}
 					onClick={onClick}
 				/>
 			</g>
 		)
-	}
-
-	private onWheel = (evt: React.WheelEvent<SVGGElement>): void =>
-		this.props.onScroll(evt.deltaX, evt.deltaY)
-
-	private onDragOverlay = (bounds: TimeDomain): void =>
-		this.props.onScrub(bounds)
-}
+	},
+)
+CategoryList.displayName = 'CategoryList'

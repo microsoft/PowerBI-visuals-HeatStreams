@@ -3,6 +3,7 @@
  * Licensed under the MIT license. See LICENSE file in the project.
  */
 import * as React from 'react'
+import { memo, useCallback, useState } from 'react'
 import { TimeDomain } from '../interfaces'
 
 export interface IOverlayProps {
@@ -16,41 +17,86 @@ export interface IOverlayProps {
 	timeScrub: TimeDomain
 }
 
-export interface IOverlayState {
-	dragging: boolean
-	dragStart: number | null
-	dragEnd: number | null
-	dragEndTime: number | null
-	dragStartTime: number | null
-}
+export const Overlay: React.FC<IOverlayProps> = memo(
+	({
+		height,
+		width,
+		x,
+		xScale,
+		highlightColor,
+		timeScrub: timeScrubProps,
+		onDrag,
+		onClick,
+	}) => {
+		const [dragStart, setDragStart] = useState<number | null>(null)
+		const [dragEnd, setDragEnd] = useState<number | null>(null)
+		const [isDragging, setIsDragging] = useState(false)
+		const timeScrub = isDragging ? [dragStart, dragEnd] : timeScrubProps
 
-const INITIAL_STATE: IOverlayState = Object.freeze({
-	dragEnd: null,
-	dragEndTime: null,
-	dragStart: null,
-	dragStartTime: null,
-	dragging: false,
-})
+		// TODO: re-enable this when we can support time scrubbing in tandem with category selection
+		/*const dragEndTime = +Date.now()
+		const timeDiff = dragEndTime - this.state.dragStartTime
+		const distDiff = this.dragEnd - this.dragStart
+		return timeDiff > CLICK_TIME_CUTOFF || distDiff > CLICK_DISTANCE_CUTOFF*/
+		const isDragAction = false
 
-class Overlay extends React.PureComponent<IOverlayProps, IOverlayState> {
-	constructor(props: IOverlayProps) {
-		super(props)
-		this.state = INITIAL_STATE
-	}
+		const cutDrag = useCallback(
+			(evt: React.MouseEvent): void => {
+				if (isDragAction) {
+					const bounds = [
+						xScale.invert(dragStart),
+						xScale.invert(dragEnd),
+					] as TimeDomain
+					onDrag(bounds)
+				} else {
+					onClick(evt.clientX, evt.clientY, evt.ctrlKey || evt.metaKey)
+				}
+				setDragStart(null)
+				setDragEnd(null)
+				setIsDragging(false)
+			},
+			[xScale, dragStart, dragEnd, isDragAction, onClick, onDrag],
+		)
 
-	public render(): JSX.Element {
-		const {
-			height,
-			width,
-			x,
-			xScale,
-			highlightColor,
-			timeScrub: timeScrubProps,
-		} = this.props
+		const onMouseDown = useCallback(
+			(evt: React.MouseEvent): void => {
+				if (isDragging) {
+					cutDrag(evt)
+				} else {
+					setDragEnd(evt.clientX)
+					setDragStart(evt.clientX)
+					setIsDragging(true)
+				}
+			},
+			[isDragging, cutDrag, setDragEnd, setDragStart, setIsDragging],
+		)
 
-		const timeScrub = this.state.dragging
-			? [this.dragStart, this.dragEnd]
-			: timeScrubProps
+		const onMouseUp = useCallback(
+			(evt: React.MouseEvent): void => {
+				if (isDragging) {
+					cutDrag(evt)
+				}
+			},
+			[isDragging, cutDrag],
+		)
+
+		const onMouseMove = useCallback(
+			(evt: React.MouseEvent): void => {
+				if (isDragging) {
+					setDragEnd(evt.clientX)
+				}
+			},
+			[isDragging, setDragEnd],
+		)
+
+		const onMouseLeave = useCallback(
+			(evt: React.MouseEvent): void => {
+				if (isDragging) {
+					cutDrag(evt)
+				}
+			},
+			[isDragging, cutDrag],
+		)
 
 		const isScrubValid = timeScrub !== null && timeScrub.length === 2
 		const scrub = isScrubValid ? (
@@ -70,81 +116,14 @@ class Overlay extends React.PureComponent<IOverlayProps, IOverlayState> {
 					x={x}
 					height={height}
 					width={width}
-					onMouseDown={this.onMouseDown}
-					onMouseMove={this.onMouseMove}
-					onMouseUp={this.onMouseUp}
-					onMouseLeave={this.onMouseLeave}
+					onMouseDown={onMouseDown}
+					onMouseMove={onMouseMove}
+					onMouseUp={onMouseUp}
+					onMouseLeave={onMouseLeave}
 				/>
 				{scrub}
 			</g>
 		)
-	}
-
-	private onMouseDown = (evt: React.MouseEvent): void => {
-		if (this.state.dragging) {
-			this.cutDrag(evt)
-		} else {
-			this.setState({
-				dragEnd: evt.clientX,
-				dragStart: evt.clientX,
-				dragStartTime: +Date.now(),
-				dragging: true,
-			})
-		}
-	}
-
-	private onMouseUp = (evt: React.MouseEvent): void => {
-		if (this.state.dragging) {
-			this.cutDrag(evt)
-		}
-	}
-
-	private onMouseMove = (evt: React.MouseEvent): void => {
-		if (this.state.dragging) {
-			this.setState({
-				...this.state,
-				dragEnd: evt.clientX,
-			})
-		}
-	}
-
-	private onMouseLeave = (evt: React.MouseEvent): void => {
-		if (this.state.dragging) {
-			this.cutDrag(evt)
-		}
-	}
-
-	private cutDrag(evt: React.MouseEvent): void {
-		const { xScale } = this.props
-		if (this.isDragAction) {
-			const bounds = [
-				xScale.invert(this.dragStart),
-				xScale.invert(this.dragEnd),
-			] as TimeDomain
-			this.setState(INITIAL_STATE)
-			this.props.onDrag(bounds)
-		} else {
-			this.setState(INITIAL_STATE)
-			this.props.onClick(evt.clientX, evt.clientY, evt.ctrlKey || evt.metaKey)
-		}
-	}
-
-	private get isDragAction(): boolean {
-		// TODO: re-enable this when we can support time scrubbing in tandem with category selection
-		return false
-		/*const dragEndTime = +Date.now()
-		const timeDiff = dragEndTime - this.state.dragStartTime
-		const distDiff = this.dragEnd - this.dragStart
-		return timeDiff > CLICK_TIME_CUTOFF || distDiff > CLICK_DISTANCE_CUTOFF*/
-	}
-
-	private get dragStart(): number {
-		return Math.min(this.state.dragStart || 0, this.state.dragEnd || 0)
-	}
-
-	private get dragEnd(): number {
-		return Math.max(this.state.dragStart || 0, this.state.dragEnd || 0)
-	}
-}
-
-export default Overlay
+	},
+)
+Overlay.displayName = 'Overlay'
