@@ -7,7 +7,7 @@ import { getSliceEnd, XDomain } from '@essex/react-heat-streams'
 import { extent } from 'd3-array'
 import { ICategoryDataMap, IVisualDataOptions } from '../chart/interfaces'
 
-export default function determinePositionDomain(
+export function determinePositionDomain(
 	data: ICategoryDataMap,
 	options: IVisualDataOptions,
 ): XDomain {

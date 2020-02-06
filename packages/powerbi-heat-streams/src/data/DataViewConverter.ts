@@ -6,13 +6,13 @@
 import powerbi from 'powerbi-visuals-api'
 import { ICategory, TimeDomain } from '@essex/react-heat-streams'
 import { IChartData, IVisualDataOptions } from '../chart/interfaces'
-import convertCategoricalDataView from './convertCategoricalDataView'
+import { convertCategoricalDataView } from './convertCategoricalDataView'
 import * as logger from '../logger'
 
 const get = require('lodash/get')
 const isEqual = require('lodash/isEqual')
 
-export default class DataViewConverter {
+export class DataViewConverter {
 	constructor(private selectionManager: any) {} // tslint:disable-line no-empty
 
 	public convertDataView(

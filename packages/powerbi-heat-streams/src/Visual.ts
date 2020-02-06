@@ -4,11 +4,11 @@
  */
 /* eslint-disable @typescript-eslint/no-var-requires */
 import powerbi from 'powerbi-visuals-api'
-import Chart from './chart'
-import ChartOptions from './chart/ChartOptions'
-import DataViewConverter from './data/DataViewConverter'
-import Interactions from './Interactions'
-import VisualSettings from './settings/VisualSettings'
+import { Chart } from './chart'
+import { ChartOptions } from './chart/ChartOptions'
+import { DataViewConverter } from './data/DataViewConverter'
+import { Interactions } from './Interactions'
+import { VisualSettings } from './settings/VisualSettings'
 import * as logger from './logger'
 import { TimeDomain } from '@essex/react-heat-streams'
 const get = require('lodash/get')

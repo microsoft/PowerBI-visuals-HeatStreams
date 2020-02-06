@@ -15,7 +15,7 @@ import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 import { IChartOptions } from './interfaces'
 
-export default class Chart {
+export class Chart {
 	private selectionChangedHandler: SelectionChangedHandler | undefined
 	private selectionClearedHandler: SelectionClearedHandler | undefined
 	private scrubbedHandler: ScrubbedHandler | undefined

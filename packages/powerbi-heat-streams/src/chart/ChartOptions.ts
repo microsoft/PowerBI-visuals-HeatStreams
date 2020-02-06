@@ -19,7 +19,7 @@ import {
 	IVisualRenderingOptions,
 } from './interfaces'
 
-export default class ChartOptions implements IChartOptions {
+export class ChartOptions implements IChartOptions {
 	public _dataOptions: IVisualDataOptions | undefined
 	public _renderOptions: IVisualRenderingOptions | undefined
 	public _data: IChartData | undefined

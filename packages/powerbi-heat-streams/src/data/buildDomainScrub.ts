@@ -14,7 +14,7 @@ function getTarget(column: any): models.IFilterColumnTarget {
 	} as models.IFilterColumnTarget
 }
 
-export default function buildDomainScrub(
+export function buildDomainScrub(
 	bounds: TimeDomain,
 	column: powerbi.data.ISQExpr,
 ): models.AdvancedFilter {

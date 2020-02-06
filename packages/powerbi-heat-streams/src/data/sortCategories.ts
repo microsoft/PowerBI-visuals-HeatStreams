@@ -61,7 +61,7 @@ function getSortComparator(
 	return isInverted ? invert(comparator) : comparator
 }
 
-export default function sortCategories(
+export function sortCategories(
 	categories: ICategory[],
 	categoryData: ICategoryDataMap,
 	options: IVisualDataOptions,

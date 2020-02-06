@@ -7,12 +7,12 @@ import {
 	IVisualDataOptions,
 	IVisualRenderingOptions,
 } from '../chart/interfaces'
-import VisualDataOptionsImpl from './VisualDataOptionsImpl'
-import VisualRenderingOptionsImpl from './VisualRenderingOptionsImpl'
+import { VisualDataOptionsImpl } from './VisualDataOptionsImpl'
+import { VisualRenderingOptionsImpl } from './VisualRenderingOptionsImpl'
 import { dataViewObjectsParser } from 'powerbi-visuals-utils-dataviewutils'
 import DataViewObjectsParser = dataViewObjectsParser.DataViewObjectsParser
 
-export default class VisualSettings extends DataViewObjectsParser {
+export class VisualSettings extends DataViewObjectsParser {
 	public rendering: IVisualRenderingOptions = new VisualRenderingOptionsImpl()
 	public data: IVisualDataOptions = new VisualDataOptionsImpl()
 }

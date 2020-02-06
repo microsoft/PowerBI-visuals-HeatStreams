@@ -5,11 +5,11 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import powerbi from 'powerbi-visuals-api'
 import { ICategory, TimeDomain } from '@essex/react-heat-streams'
-import buildDomainScrub from './data/buildDomainScrub'
+import { buildDomainScrub } from './data/buildDomainScrub'
 const get = require('lodash/get')
 const logger = require('./logger')
 
-export default class Interactions {
+export class Interactions {
 	constructor(
 		private host: powerbi.extensibility.visual.IVisualHost,
 		private selectionManager: powerbi.extensibility.ISelectionManager,

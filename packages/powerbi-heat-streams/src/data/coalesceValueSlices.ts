@@ -36,7 +36,7 @@ function sliceStart(
 	return result
 }
 
-export default function coalesceValueSlices(
+export function coalesceValueSlices(
 	data: ICategoryDataMap,
 	positionDomain: XDomain,
 	dateAggregation: DateAggregation,

@@ -1,5 +1,6 @@
 {
-	"name": "visual",
+	"name": "@essex/powerbi-visual-heat-streams",
+	"private": true,
 	"license": "MIT",
 	"scripts": {
 		"pbiviz": "pbiviz",

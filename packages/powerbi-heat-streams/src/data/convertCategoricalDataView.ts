@@ -9,13 +9,13 @@ import {
 	IChartData,
 	IVisualDataOptions,
 } from '../chart/interfaces'
-import coalesceValueSlices from './coalesceValueSlices'
+import { coalesceValueSlices } from './coalesceValueSlices'
 import determinePositionDomain from './determinePositionDomain'
 import sortCategories from './sortCategories'
 
 const get = require('lodash/get')
 
-export default function convertCategoricalDataView(
+export function convertCategoricalDataView(
 	dataView: any,
 	options: IVisualDataOptions,
 ): IChartData {
