@@ -6,12 +6,7 @@ import { Colorizer } from '@essex/d3-coloring-scales'
 import {
 	DateAggregation,
 	ICategory,
-	ICategorySelectionMap,
 	ICategoryValueMap,
-	IColorizer,
-	IScaler,
-	IValueSlice,
-	Scrub,
 	XDomain,
 	TimeDomain,
 } from '@essex/react-heat-streams'
