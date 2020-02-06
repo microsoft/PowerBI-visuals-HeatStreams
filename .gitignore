@@ -5,3 +5,4 @@ lib/
 package-lock.json
 *-debug.log
 *-error.log
+webpack.statistics.*.html

@@ -1,36 +1,15 @@
-/*
- *  Power BI Visual CLI
- *
- *  Copyright (c) Microsoft Corporation
- *  All rights reserved.
- *  MIT License
- *
- *  Permission is hereby granted, free of charge, to any person obtaining a copy
- *  of this software and associated documentation files (the ""Software""), to deal
- *  in the Software without restriction, including without limitation the rights
- *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- *  copies of the Software, and to permit persons to whom the Software is
- *  furnished to do so, subject to the following conditions:
- *
- *  The above copyright notice and this permission notice shall be included in
- *  all copies or substantial portions of the Software.
- *
- *  THE SOFTWARE IS PROVIDED *AS IS*, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- *  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- *  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- *  THE SOFTWARE.
+/*!
+ * Copyright (c) Microsoft. All rights reserved.
+ * Licensed under the MIT license. See LICENSE file in the project.
  */
-'use strict'
+
 import {
 	DateAggregation,
 	getSliceEnd,
 	ICategoryValueMap,
 	XDomain,
 } from '@essex/react-heat-streams'
-import * as d3 from 'd3'
+import { mean } from 'd3-array'
 import { ICategoryDataMap } from '../chart/interfaces'
 
 function sliceStart(
@@ -57,14 +36,17 @@ function sliceStart(
 	return result
 }
 
-export default function coalesceValueSlices(
+export function coalesceValueSlices(
 	data: ICategoryDataMap,
 	positionDomain: XDomain,
 	dateAggregation: DateAggregation,
 	numericAggregation: number,
-) {
-	let valueMin: number
-	let valueMax: number
+): {
+	categoryValues: ICategoryValueMap
+	valueDomain: [number, number]
+} {
+	let valueMin = 0
+	let valueMax = 0
 	const isNumericDomain = typeof positionDomain[0] === 'number'
 
 	const categoryIds = Object.keys(data)
@@ -79,10 +61,11 @@ export default function coalesceValueSlices(
 				if (cd.value !== undefined && cd.value !== null) {
 					const start = isNumericDomain
 						? `${cd.position}`
-						: sliceStart(cd.position, dateAggregation, positionDomain as [
-								Date,
-								Date
-							]).toUTCString()
+						: sliceStart(
+								cd.position,
+								dateAggregation,
+								positionDomain as [Date, Date],
+						  ).toUTCString()
 
 					if (!valuePositions[start]) {
 						valuePositions[start] = []
@@ -105,7 +88,7 @@ export default function coalesceValueSlices(
 				return {
 					start,
 					end,
-					value: d3.mean(valuePositions[vp]),
+					value: mean(valuePositions[vp]) as number,
 				}
 			})
 			agg[current] = slices

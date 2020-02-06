@@ -1,3 +1,7 @@
+/*!
+ * Copyright (c) Microsoft. All rights reserved.
+ * Licensed under the MIT license. See LICENSE file in the project.
+ */
 import {
 	HeatStreamsChart,
 	ICategory,
@@ -5,32 +9,33 @@ import {
 	ScrubbedHandler,
 	SelectionChangedHandler,
 	SelectionClearedHandler,
+	TimeDomain,
 } from '@essex/react-heat-streams'
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 import { IChartOptions } from './interfaces'
 
-export default class Chart {
-	private selectionChangedHandler: SelectionChangedHandler
-	private selectionClearedHandler: SelectionClearedHandler
-	private scrubbedHandler: ScrubbedHandler
+export class Chart {
+	private selectionChangedHandler: SelectionChangedHandler | undefined
+	private selectionClearedHandler: SelectionClearedHandler | undefined
+	private scrubbedHandler: ScrubbedHandler | undefined
 
 	// tslint:disable-next-line no-empty
 	constructor(private options: IChartOptions) {}
 
-	public onSelectionChanged(handler: SelectionChangedHandler) {
+	public onSelectionChanged(handler: SelectionChangedHandler): void {
 		this.selectionChangedHandler = handler
 	}
 
-	public onSelectionCleared(handler: SelectionClearedHandler) {
+	public onSelectionCleared(handler: SelectionClearedHandler): void {
 		this.selectionClearedHandler = handler
 	}
 
-	public onScrub(handler: ScrubbedHandler) {
+	public onScrub(handler: ScrubbedHandler): void {
 		this.scrubbedHandler = handler
 	}
 
-	public render() {
+	public render(): void {
 		const { width, height, colorizer } = this.options
 		const renderProps = {
 			width,
@@ -45,16 +50,16 @@ export default class Chart {
 			showCategories: this.options.renderOptions.showCategories,
 			showValues: this.options.renderOptions.showValues,
 			rowGap: this.options.renderOptions.rowGap,
-			timeScrub: this.options.timeScrub,
-			colorizer: v => colorizer.color(v).toString(),
+			timeScrub: this.options.timeScrub as TimeDomain,
+			colorizer: (v: any): string => colorizer.color(v).toString(),
 			categories: this.options.data.categories,
 			categoryValues: this.options.data.categoryValues,
 			selections: this.options.selections,
 			dateAggregation: this.options.dataOptions.dateAggregation,
 			numericAggregation: this.options.dataOptions.numericAggregation,
-			onClearSelection: this.onClearSelection.bind(this),
-			onClickCategory: this.onClickCategory.bind(this),
-			onScrub: this.onScrubbed.bind(this),
+			onClearSelection: this.onClearSelection,
+			onClickCategory: this.onClickCategory,
+			onScrub: this.onScrubbed,
 		}
 		return ReactDOM.render(
 			<HeatStreamsChart {...renderProps} />,
@@ -62,15 +67,15 @@ export default class Chart {
 		)
 	}
 
-	private onScrubbed(bounds: Scrub) {
-		this.scrubbedHandler(bounds)
+	private onScrubbed = (bounds: Scrub): void => {
+		this.scrubbedHandler && this.scrubbedHandler(bounds)
 	}
 
-	private onClickCategory(category: ICategory, ctrl: boolean) {
-		this.selectionChangedHandler(category, ctrl)
+	private onClickCategory = (category: ICategory, ctrl: boolean): void => {
+		this.selectionChangedHandler && this.selectionChangedHandler(category, ctrl)
 	}
 
-	private onClearSelection() {
-		this.selectionClearedHandler()
+	private onClearSelection = (): void => {
+		this.selectionClearedHandler && this.selectionClearedHandler()
 	}
 }

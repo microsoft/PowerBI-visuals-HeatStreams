@@ -1,14 +1,14 @@
+/*!
+ * Copyright (c) Microsoft. All rights reserved.
+ * Licensed under the MIT license. See LICENSE file in the project.
+ */
 import { Colorizer } from '@essex/d3-coloring-scales'
 import {
 	DateAggregation,
 	ICategory,
-	ICategorySelectionMap,
 	ICategoryValueMap,
-	IColorizer,
-	IScaler,
-	IValueSlice,
-	Scrub,
 	XDomain,
+	TimeDomain,
 } from '@essex/react-heat-streams'
 
 export interface ICategoryData {
@@ -27,9 +27,9 @@ export interface IChartData {
 export type SortBy = 'name' | 'average' | 'max' | 'density'
 
 export interface IVisualDataOptions {
-	valueMin: number
-	valueMax: number
-	scoreSplit: number
+	valueMin: number | undefined
+	valueMax: number | undefined
+	scoreSplit: number | undefined
 	numericAggregation: number
 	dateAggregation: DateAggregation
 	isLogScale: boolean
@@ -63,7 +63,7 @@ export interface IChartOptions {
 	dataOptions: IVisualDataOptions
 	data: IChartData
 	selections: { [key: string]: ICategory }
-	timeScrub: Array<Date | number>
+	timeScrub: TimeDomain | null
 	width: number
 	height: number
 	colorizer: Colorizer

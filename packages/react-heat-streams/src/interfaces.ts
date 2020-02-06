@@ -1,5 +1,7 @@
-import { Colorizer } from '@essex/d3-coloring-scales'
-
+/*!
+ * Copyright (c) Microsoft. All rights reserved.
+ * Licensed under the MIT license. See LICENSE file in the project.
+ */
 /**
  * The coarseness of x-aggregated blocks (when using dates)
  */
@@ -8,12 +10,12 @@ export type DateAggregation = 'hours' | 'days' | 'months' | 'years'
 /**
  * Represents the X-Domain of the Visual
  */
-export type XDomain = [number, number] | [Date, Date]
+export type XDomain = TimeDomain
 
 /**
  * A user scrub over the X-Domain of the Visual
  */
-export type Scrub = Array<Date | number>
+export type Scrub = TimeDomain
 
 /**
  * A Visualized Category
@@ -70,3 +72,5 @@ export type SelectionClearedHandler = () => void
  * Callback Signature for when the user has performed a domain-scrub operation
  */
 export type ScrubbedHandler = (bounds: Scrub) => void
+
+export type TimeDomain = [number, number] | [Date, Date]

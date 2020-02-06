@@ -1,4 +1,8 @@
-// tslint:disable no-console no-string-literal
+/*!
+ * Copyright (c) Microsoft. All rights reserved.
+ * Licensed under the MIT license. See LICENSE file in the project.
+ */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export enum LogLevel {
 	NONE = 0,
 	ERROR = 1,
@@ -6,7 +10,7 @@ export enum LogLevel {
 	DEBUG = 3,
 }
 
-function getLogLevel() {
+function getLogLevel(): number {
 	if (window['logLevel'] === undefined) {
 		return LogLevel.ERROR
 	} else {
@@ -14,24 +18,24 @@ function getLogLevel() {
 	}
 }
 
-export function setLevel(level: LogLevel) {
+export function setLevel(level: LogLevel): void {
 	console.log('Set Log Level to ', level)
 	window['logLevel'] = level
 }
 
-export function info(message: string, ...args) {
+export function info(message: string, ...args: any[]): void {
 	if (getLogLevel() >= LogLevel.INFO) {
 		console.log(message, ...args)
 	}
 }
 
-export function debug(message: string, ...args) {
+export function debug(message: string, ...args: any[]): void {
 	if (getLogLevel() >= LogLevel.DEBUG) {
 		console.debug(message, ...args)
 	}
 }
 
-export function error(message: string, ...args) {
+export function error(message: string, ...args: any[]): void {
 	if (getLogLevel() >= LogLevel.ERROR) {
 		console.error(message, ...args)
 	}

@@ -1,51 +1,25 @@
-/*
- *  Power BI Visual CLI
- *
- *  Copyright (c) Microsoft Corporation
- *  All rights reserved.
- *  MIT License
- *
- *  Permission is hereby granted, free of charge, to any person obtaining a copy
- *  of this software and associated documentation files (the ""Software""), to deal
- *  in the Software without restriction, including without limitation the rights
- *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- *  copies of the Software, and to permit persons to whom the Software is
- *  furnished to do so, subject to the following conditions:
- *
- *  The above copyright notice and this permission notice shall be included in
- *  all copies or substantial portions of the Software.
- *
- *  THE SOFTWARE IS PROVIDED *AS IS*, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- *  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- *  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- *  THE SOFTWARE.
+/*!
+ * Copyright (c) Microsoft. All rights reserved.
+ * Licensed under the MIT license. See LICENSE file in the project.
  */
-// tslint:disable no-var-requires no-string-literal no-reference
-/// <reference path="../node_modules/powerbi-visuals-tools/templates/visuals/.api/v1.11.0/PowerBI-visuals.d.ts" />
-'use strict'
-
-import Chart from './chart'
-import ChartOptions from './chart/ChartOptions'
-import DataViewConverter from './data/DataViewConverter'
-import Interactions from './Interactions'
-import VisualSettings from './settings/VisualSettings'
-const get = require('lodash/get')
+/* eslint-disable @typescript-eslint/no-var-requires */
+import powerbi from 'powerbi-visuals-api'
+import { Chart } from './chart'
+import { ChartOptions } from './chart/ChartOptions'
+import { DataViewConverter } from './data/DataViewConverter'
+import { Interactions } from './Interactions'
+import { VisualSettings } from './settings/VisualSettings'
 import * as logger from './logger'
+import { TimeDomain } from '@essex/react-heat-streams'
+const get = require('lodash/get')
 const packageJson = require('../package.json')
-
-// Polyfills for IE11
-require('es6-promise').polyfill()
-require('es6-object-assign').polyfill()
 
 export class Visual implements powerbi.extensibility.IVisual {
 	private static parseSettings(dataView: powerbi.DataView): VisualSettings {
 		return VisualSettings.parse(dataView) as VisualSettings
 	}
 
-	private settings: VisualSettings
+	private settings: VisualSettings | undefined
 	private chart: Chart
 	private chartOptions: ChartOptions
 	private interactions: Interactions
@@ -83,7 +57,9 @@ export class Visual implements powerbi.extensibility.IVisual {
 		)
 	}
 
-	public update(options: powerbi.extensibility.VisualUpdateOptions) {
+	public update(
+		options: powerbi.extensibility.visual.VisualUpdateOptions,
+	): void {
 		try {
 			this.dataView = get(options, 'dataViews[0]')
 			if (this.dataView) {
@@ -114,18 +90,20 @@ export class Visual implements powerbi.extensibility.IVisual {
 	/**
 	 * Handler for when selection should be restored from PowerBI
 	 */
-	private onRestoreSelection() {
+	private onRestoreSelection(): void {
 		this.chartOptions.loadSelections(this.dataView)
 		this.render()
 	}
 
-	private render() {
+	private render(): void {
 		const { interactions } = this
 		this.chart.onSelectionChanged((cat, multi) => {
 			interactions.selectCategory(cat, multi, this.dataView)
 		})
 		this.chart.onSelectionCleared(() => interactions.clearSelections())
-		this.chart.onScrub(bounds => interactions.scrub(bounds, this.dataView))
+		this.chart.onScrub(bounds =>
+			interactions.scrub(bounds as TimeDomain, this.dataView),
+		)
 		logger.info('Render', this.chartOptions)
 		this.chart.render()
 	}
