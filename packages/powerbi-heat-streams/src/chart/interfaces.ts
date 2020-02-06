@@ -32,9 +32,9 @@ export interface IChartData {
 export type SortBy = 'name' | 'average' | 'max' | 'density'
 
 export interface IVisualDataOptions {
-	valueMin: number
-	valueMax: number
-	scoreSplit: number
+	valueMin: number | undefined
+	valueMax: number | undefined
+	scoreSplit: number | undefined
 	numericAggregation: number
 	dateAggregation: DateAggregation
 	isLogScale: boolean

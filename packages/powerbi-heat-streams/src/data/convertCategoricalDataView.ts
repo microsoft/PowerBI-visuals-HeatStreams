@@ -30,11 +30,13 @@ export default function convertCategoricalDataView(
 
 	const categoryData: ICategoryDataMap = {}
 	categories.forEach(category => {
-		categoryData[category.id] = categorical.values.map(categoricalValue => {
-			const position = categoricalValue.source.groupName
-			const value = categoricalValue.values[category.id]
-			return { position, value } as ICategoryData
-		})
+		categoryData[category.id] = categorical.values.map(
+			(categoricalValue: any) => {
+				const position = categoricalValue.source.groupName
+				const value = categoricalValue.values[category.id]
+				return { position, value } as ICategoryData
+			},
+		)
 	})
 
 	const positionDomain = determinePositionDomain(categoryData, options)

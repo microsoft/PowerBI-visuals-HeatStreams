@@ -2,6 +2,8 @@
  * Copyright (c) Microsoft. All rights reserved.
  * Licensed under the MIT license. See LICENSE file in the project.
  */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import powerbi from 'powerbi-visuals-api'
 import * as models from 'powerbi-models'
 import { TimeDomain } from '@essex/react-heat-streams'
 
@@ -18,7 +20,7 @@ export default function buildDomainScrub(
 ): models.AdvancedFilter {
 	const start = bounds[0]
 	const end = bounds[1]
-	const filterVal = v => (typeof v === 'number' ? v : v)
+	const filterVal = (v: any): any => (typeof v === 'number' ? v : v)
 	return new models.AdvancedFilter(
 		getTarget(column),
 		'And',

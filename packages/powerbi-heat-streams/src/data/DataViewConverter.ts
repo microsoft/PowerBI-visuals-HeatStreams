@@ -3,7 +3,8 @@
  * Licensed under the MIT license. See LICENSE file in the project.
  */
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { ICategory } from '@essex/react-heat-streams'
+import powerbi from 'powerbi-visuals-api'
+import { ICategory, TimeDomain } from '@essex/react-heat-streams'
 import { IChartData, IVisualDataOptions } from '../chart/interfaces'
 import convertCategoricalDataView from './convertCategoricalDataView'
 import * as logger from '../logger'
@@ -58,7 +59,7 @@ export default class DataViewConverter {
 		return selectedCategories
 	}
 
-	public unpackDomainScrub(dataView: powerbi.DataView) {
+	public unpackDomainScrub(dataView: powerbi.DataView): TimeDomain | null {
 		const castScrubPoint = v => {
 			if (typeof v === 'string') {
 				const isNum = /^\d+$/.test(v)

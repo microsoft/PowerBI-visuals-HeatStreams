@@ -3,12 +3,14 @@
  * Licensed under the MIT license. See LICENSE file in the project.
  */
 /* eslint-disable @typescript-eslint/no-var-requires */
+import powerbi from 'powerbi-visuals-api'
 import Chart from './chart'
 import ChartOptions from './chart/ChartOptions'
 import DataViewConverter from './data/DataViewConverter'
 import Interactions from './Interactions'
 import VisualSettings from './settings/VisualSettings'
 import * as logger from './logger'
+import { TimeDomain } from '@essex/react-heat-streams'
 const get = require('lodash/get')
 const packageJson = require('../package.json')
 
@@ -17,7 +19,7 @@ export class Visual implements powerbi.extensibility.IVisual {
 		return VisualSettings.parse(dataView) as VisualSettings
 	}
 
-	private settings: VisualSettings
+	private settings: VisualSettings | undefined
 	private chart: Chart
 	private chartOptions: ChartOptions
 	private interactions: Interactions
@@ -55,7 +57,9 @@ export class Visual implements powerbi.extensibility.IVisual {
 		)
 	}
 
-	public update(options: powerbi.extensibility.VisualUpdateOptions) {
+	public update(
+		options: powerbi.extensibility.visual.VisualUpdateOptions,
+	): void {
 		try {
 			this.dataView = get(options, 'dataViews[0]')
 			if (this.dataView) {
@@ -86,18 +90,20 @@ export class Visual implements powerbi.extensibility.IVisual {
 	/**
 	 * Handler for when selection should be restored from PowerBI
 	 */
-	private onRestoreSelection() {
+	private onRestoreSelection(): void {
 		this.chartOptions.loadSelections(this.dataView)
 		this.render()
 	}
 
-	private render() {
+	private render(): void {
 		const { interactions } = this
 		this.chart.onSelectionChanged((cat, multi) => {
 			interactions.selectCategory(cat, multi, this.dataView)
 		})
 		this.chart.onSelectionCleared(() => interactions.clearSelections())
-		this.chart.onScrub(bounds => interactions.scrub(bounds, this.dataView))
+		this.chart.onScrub(bounds =>
+			interactions.scrub(bounds as TimeDomain, this.dataView),
+		)
 		logger.info('Render', this.chartOptions)
 		this.chart.render()
 	}

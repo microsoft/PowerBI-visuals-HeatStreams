@@ -41,9 +41,12 @@ export default function coalesceValueSlices(
 	positionDomain: XDomain,
 	dateAggregation: DateAggregation,
 	numericAggregation: number,
-) {
-	let valueMin: number
-	let valueMax: number
+): {
+	categoryValues: ICategoryValueMap
+	valueDomain: [number, number]
+} {
+	let valueMin = 0
+	let valueMax = 0
 	const isNumericDomain = typeof positionDomain[0] === 'number'
 
 	const categoryIds = Object.keys(data)
@@ -85,7 +88,7 @@ export default function coalesceValueSlices(
 				return {
 					start,
 					end,
-					value: mean(valuePositions[vp]),
+					value: mean(valuePositions[vp]) as number,
 				}
 			})
 			agg[current] = slices

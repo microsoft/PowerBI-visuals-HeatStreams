@@ -7,8 +7,10 @@ import { ICategory } from '@essex/react-heat-streams'
 import { ICategoryDataMap, IVisualDataOptions } from '../chart/interfaces'
 
 type Sorter = (cat1: ICategory, cat2: ICategory) => number
-const invert = (sortComparator: Sorter) => (cat1: ICategory, cat2: ICategory) =>
-	-1 * sortComparator(cat1, cat2)
+const invert = (sortComparator: Sorter) => (
+	cat1: ICategory,
+	cat2: ICategory,
+): number => -1 * sortComparator(cat1, cat2)
 
 function getSortComparator(
 	categories: ICategory[],
@@ -34,9 +36,9 @@ function getSortComparator(
 	const valueCompare = (field: string) => (
 		cat1: ICategory,
 		cat2: ICategory,
-	) => {
-		const v1 = cat1.metadata[field]
-		const v2 = cat2.metadata[field]
+	): number => {
+		const v1 = (cat1.metadata && cat1.metadata[field]) || 0
+		const v2 = (cat2.metadata && cat2.metadata[field]) || 0
 		return v2 - v1
 	}
 
@@ -63,7 +65,7 @@ export default function sortCategories(
 	categories: ICategory[],
 	categoryData: ICategoryDataMap,
 	options: IVisualDataOptions,
-) {
+): ICategory[] {
 	const comparator = getSortComparator(categories, categoryData, options)
 	return categories.sort(comparator)
 }

@@ -20,7 +20,7 @@ export default function determinePositionDomain(
 	const mergedDomains = [...domainsByCategory]
 
 	// Get the extent of the domain
-	const domain = extent(mergedDomains) as XDomain
+	const domain = extent(mergedDomains as any[]) as XDomain
 
 	// The actual end should be the end of the final slice
 	domain[1] = getSliceEnd(
