@@ -4,6 +4,7 @@
 		"emitDecoratorMetadata": true,
 		"experimentalDecorators": true,
 		"target": "es6",
+		"jsx": "react",
 		"sourceMap": true,
 		"outDir": "./.tmp/build/",
 		"moduleResolution": "node",
