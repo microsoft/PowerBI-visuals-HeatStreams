@@ -7,9 +7,9 @@
 		"start": "lerna run start --no-sort --concurrency 2 --stream",
 		"build": "lerna run build --stream",
 		"lint": "eslint . --ext .js,.ts,.jsx,.tsx",
-		"precommit": "lint-staged",
-		"format": "prettier --write \"src/**/*.ts*\"",
-		"test": "cross-env NODE_ENV=production run-s clean lint build"
+		"check_formatting": "pretty-quick --check",
+		"ci": "NODE_ENV=production npm-run-all clean -p lint check_formatting -s build",
+		"precommit": "lint-staged"
 	},
 	"author": {
 		"name": "Microsoft (experimental)",
