@@ -3,6 +3,7 @@
  * Licensed under the MIT license. See LICENSE file in the project.
  */
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import powerbi from 'powerbi-visuals-api'
 import * as models from 'powerbi-models'
 import { TimeDomain } from '@essex/react-heat-streams'
 

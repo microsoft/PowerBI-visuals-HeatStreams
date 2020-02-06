@@ -3,6 +3,7 @@
  * Licensed under the MIT license. See LICENSE file in the project.
  */
 /* eslint-disable @typescript-eslint/no-var-requires */
+import powerbi from 'powerbi-visuals-api'
 import { ICategory, TimeDomain } from '@essex/react-heat-streams'
 import { IChartData, IVisualDataOptions } from '../chart/interfaces'
 import convertCategoricalDataView from './convertCategoricalDataView'

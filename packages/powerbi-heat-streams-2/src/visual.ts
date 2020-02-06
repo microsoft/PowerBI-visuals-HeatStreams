@@ -3,6 +3,7 @@
  * Licensed under the MIT license. See LICENSE file in the project.
  */
 /* eslint-disable @typescript-eslint/no-var-requires */
+import powerbi from 'powerbi-visuals-api'
 import Chart from './chart'
 import ChartOptions from './chart/ChartOptions'
 import DataViewConverter from './data/DataViewConverter'
@@ -14,7 +15,7 @@ const get = require('lodash/get')
 const packageJson = require('../package.json')
 
 export class Visual implements powerbi.extensibility.IVisual {
-	private static parseSettings(dataView: DataView): VisualSettings {
+	private static parseSettings(dataView: powerbi.DataView): VisualSettings {
 		return VisualSettings.parse(dataView) as VisualSettings
 	}
 
@@ -24,7 +25,7 @@ export class Visual implements powerbi.extensibility.IVisual {
 	private interactions: Interactions
 	private dataView: powerbi.DataView
 
-	constructor(options: powerbi.extensibility.visal.VisualConstructorOptions) {
+	constructor(options: powerbi.extensibility.visual.VisualConstructorOptions) {
 		const target = options.element
 		const host = options.host
 		const selectionManager = host.createSelectionManager()
@@ -57,7 +58,7 @@ export class Visual implements powerbi.extensibility.IVisual {
 	}
 
 	public update(
-		options: powerbi.extensibility.visal.VisualUpdateOptions,
+		options: powerbi.extensibility.visual.VisualUpdateOptions,
 	): void {
 		try {
 			this.dataView = get(options, 'dataViews[0]')

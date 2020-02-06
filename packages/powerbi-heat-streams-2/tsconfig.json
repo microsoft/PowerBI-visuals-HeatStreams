@@ -1,8 +1,6 @@
 {
-	"extends": "../../tsconfig.json",
 	"compilerOptions": {
 		"allowJs": false,
-		"noImplicitAny": false,
 		"emitDecoratorMetadata": true,
 		"experimentalDecorators": true,
 		"target": "es6",

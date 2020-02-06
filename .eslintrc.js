@@ -31,7 +31,10 @@ module.exports = {
 			],
 			rules: {
 				'@typescript-eslint/interface-name-prefix': 0,
+
+				// TODO: Turn these rules back on
 				'@typescript-eslint/no-non-null-assertion': 0,
+				'@typescript-eslint/no-explicit-any': 0,
 			},
 		},
 		{
@@ -57,8 +60,5 @@ module.exports = {
 
 		// Rules that we don"t find useful
 		'no-plusplus': 0,
-
-		// TODO: Turn these rules back on
-		'@typescript-eslint/no-explicit-any': 0,
 	},
 }
