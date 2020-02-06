@@ -24,10 +24,10 @@
 	"workspaces": {
 		"packages": [
 			"packages/*"
-    ],
-    "nohoist": [
-      "@essex/powerbi-visual-heat-streams/**"
-    ]
+		],
+		"nohoist": [
+			"**"
+		]
 	},
 	"husky": {
 		"hooks": {
