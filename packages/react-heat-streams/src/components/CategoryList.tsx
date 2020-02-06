@@ -70,8 +70,6 @@ export default class CategoryList extends React.PureComponent<
 			sliceWidth,
 			onClick,
 			onClickCategory,
-			onScroll,
-			onScrub,
 			onClear,
 			xPan,
 			timeScrub,
@@ -141,9 +139,9 @@ export default class CategoryList extends React.PureComponent<
 		)
 	}
 
-	private onWheel = (evt: React.WheelEvent<SVGGElement>) =>
+	private onWheel = (evt: React.WheelEvent<SVGGElement>): void =>
 		this.props.onScroll(evt.deltaX, evt.deltaY)
 
-	private onDragOverlay = (bounds: Array<number | Date>) =>
+	private onDragOverlay = (bounds: TimeDomain): void =>
 		this.props.onScrub(bounds)
 }

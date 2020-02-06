@@ -11,7 +11,7 @@ export interface IOverlayProps {
 	x: number
 	xScale: any
 	highlightColor: string
-	onDrag: (bounds: Array<number | Date>) => void
+	onDrag: (bounds: TimeDomain) => void
 	onClick: (x: number, y: number, ctrl: boolean) => void
 	timeScrub: TimeDomain
 }
@@ -120,7 +120,7 @@ class Overlay extends React.PureComponent<IOverlayProps, IOverlayState> {
 			const bounds = [
 				xScale.invert(this.dragStart),
 				xScale.invert(this.dragEnd),
-			]
+			] as TimeDomain
 			this.setState(INITIAL_STATE)
 			this.props.onDrag(bounds)
 		} else {
