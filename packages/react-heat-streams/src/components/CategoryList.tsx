@@ -10,6 +10,7 @@ import {
 	IScaler,
 	Scrub,
 	XDomain,
+	TimeDomain,
 } from '../interfaces'
 import Axis from './Axis'
 import Backboard from './Backboard'
@@ -43,13 +44,13 @@ export interface ICategoryListProps {
 	onScroll: (deltaX: number, deltaY: number) => void
 	onClear: () => void
 	xPan: number
-	timeScrub: Array<number | Date>
+	timeScrub: TimeDomain
 }
 
 export default class CategoryList extends React.PureComponent<
 	ICategoryListProps
 > {
-	public render() {
+	public render(): JSX.Element {
 		const {
 			axisHeight,
 			width,

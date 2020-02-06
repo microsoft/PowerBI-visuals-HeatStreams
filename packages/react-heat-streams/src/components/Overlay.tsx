@@ -3,6 +3,7 @@
  * Licensed under the MIT license. See LICENSE file in the project.
  */
 import * as React from 'react'
+import { TimeDomain } from '../interfaces'
 
 export interface IOverlayProps {
 	height: number
@@ -12,21 +13,18 @@ export interface IOverlayProps {
 	highlightColor: string
 	onDrag: (bounds: Array<number | Date>) => void
 	onClick: (x: number, y: number, ctrl: boolean) => void
-	timeScrub: any
+	timeScrub: TimeDomain
 }
-
-const CLICK_TIME_CUTOFF = 200
-const CLICK_DISTANCE_CUTOFF = 15
 
 export interface IOverlayState {
 	dragging: boolean
-	dragStart: number
-	dragEnd: number
-	dragEndTime: number
-	dragStartTime: number
+	dragStart: number | null
+	dragEnd: number | null
+	dragEndTime: number | null
+	dragStartTime: number | null
 }
 
-const INITIAL_STATE = Object.freeze({
+const INITIAL_STATE: IOverlayState = Object.freeze({
 	dragEnd: null,
 	dragEndTime: null,
 	dragStart: null,
@@ -40,7 +38,7 @@ class Overlay extends React.PureComponent<IOverlayProps, IOverlayState> {
 		this.state = INITIAL_STATE
 	}
 
-	public render() {
+	public render(): JSX.Element {
 		const {
 			height,
 			width,
@@ -82,7 +80,7 @@ class Overlay extends React.PureComponent<IOverlayProps, IOverlayState> {
 		)
 	}
 
-	private onMouseDown = evt => {
+	private onMouseDown = (evt: React.MouseEvent): void => {
 		if (this.state.dragging) {
 			this.cutDrag(evt)
 		} else {
@@ -95,13 +93,13 @@ class Overlay extends React.PureComponent<IOverlayProps, IOverlayState> {
 		}
 	}
 
-	private onMouseUp = evt => {
+	private onMouseUp = (evt: React.MouseEvent): void => {
 		if (this.state.dragging) {
 			this.cutDrag(evt)
 		}
 	}
 
-	private onMouseMove = evt => {
+	private onMouseMove = (evt: React.MouseEvent): void => {
 		if (this.state.dragging) {
 			this.setState({
 				...this.state,
@@ -110,13 +108,13 @@ class Overlay extends React.PureComponent<IOverlayProps, IOverlayState> {
 		}
 	}
 
-	private onMouseLeave = evt => {
+	private onMouseLeave = (evt: React.MouseEvent): void => {
 		if (this.state.dragging) {
 			this.cutDrag(evt)
 		}
 	}
 
-	private cutDrag(evt) {
+	private cutDrag(evt: React.MouseEvent): void {
 		const { xScale } = this.props
 		if (this.isDragAction) {
 			const bounds = [
@@ -131,7 +129,7 @@ class Overlay extends React.PureComponent<IOverlayProps, IOverlayState> {
 		}
 	}
 
-	private get isDragAction() {
+	private get isDragAction(): boolean {
 		// TODO: re-enable this when we can support time scrubbing in tandem with category selection
 		return false
 		/*const dragEndTime = +Date.now()
@@ -140,12 +138,12 @@ class Overlay extends React.PureComponent<IOverlayProps, IOverlayState> {
 		return timeDiff > CLICK_TIME_CUTOFF || distDiff > CLICK_DISTANCE_CUTOFF*/
 	}
 
-	private get dragStart() {
-		return Math.min(this.state.dragStart, this.state.dragEnd)
+	private get dragStart(): number {
+		return Math.min(this.state.dragStart || 0, this.state.dragEnd || 0)
 	}
 
-	private get dragEnd() {
-		return Math.max(this.state.dragStart, this.state.dragEnd)
+	private get dragEnd(): number {
+		return Math.max(this.state.dragStart || 0, this.state.dragEnd || 0)
 	}
 }
 

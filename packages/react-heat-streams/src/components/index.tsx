@@ -13,6 +13,7 @@ import {
 	IScaler,
 	Scrub,
 	XDomain,
+	TimeDomain,
 } from '../interfaces'
 import { getSliceEnd } from '../utils'
 import CategoryList from './CategoryList'
@@ -35,7 +36,7 @@ export interface IHeatStreamsChartProps {
 	showCategories: boolean
 	rowGap: boolean
 	showValues: boolean
-	timeScrub: Array<number | Date>
+	timeScrub: TimeDomain
 	colorizer: IColorizer
 	categories: ICategory[]
 	categoryValues: ICategoryValueMap

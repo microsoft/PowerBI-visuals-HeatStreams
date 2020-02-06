@@ -10,7 +10,7 @@ export type DateAggregation = 'hours' | 'days' | 'months' | 'years'
 /**
  * Represents the X-Domain of the Visual
  */
-export type XDomain = [number, number] | [Date, Date]
+export type XDomain = TimeDomain
 
 /**
  * A user scrub over the X-Domain of the Visual
@@ -72,3 +72,5 @@ export type SelectionClearedHandler = () => void
  * Callback Signature for when the user has performed a domain-scrub operation
  */
 export type ScrubbedHandler = (bounds: Scrub) => void
+
+export type TimeDomain = [number, number] | [Date, Date]

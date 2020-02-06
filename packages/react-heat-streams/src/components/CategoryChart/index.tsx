@@ -31,7 +31,6 @@ export interface ICategoryChartProps {
 	xPan: number
 	xDomain: XDomain
 }
-
 const CategoryChart: React.StatelessComponent<ICategoryChartProps> = ({
 	category,
 	categoryData,
@@ -49,7 +48,7 @@ const CategoryChart: React.StatelessComponent<ICategoryChartProps> = ({
 }) => {
 	const categoryChart = categoryData.map(cd => {
 		const cellColor = colorizer(cd.value)
-		const textColor = hsl(color(cellColor)).l > 0.5 ? '#000' : '#fff'
+		const textColor = hsl(color(cellColor)!).l > 0.5 ? '#000' : '#fff'
 		const text = printValue(cd.value)
 		const start = xPan + Math.max(xScale(xDomain[0]), xScale(cd.start))
 		const end = xPan + xScale(cd.end)

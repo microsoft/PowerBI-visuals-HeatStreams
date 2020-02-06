@@ -21,23 +21,25 @@ export default class ValueText extends React.PureComponent<
 	IValueTextProps,
 	{}
 > {
-	private textElement: SVGTextElement
+	private textElement: SVGTextElement | null = null
 
-	public componentDidMount() {
+	public componentDidMount(): void {
 		this.remeasure()
 	}
 
-	public componentDidUpdate() {
+	public componentDidUpdate(): void {
 		this.remeasure()
 	}
 
-	public render() {
+	public render(): JSX.Element {
 		const { text, height, x, y, color, width } = this.props
 		const fontSize = height > 10 ? FONT_SIZE : height - 4
 		const pad = (height - fontSize) / 2
 		return (
 			<text
-				ref={e => (this.textElement = e)}
+				ref={(e: any) => {
+					this.textElement = e
+				}}
 				className="value-text"
 				fontSize={`${fontSize}px`}
 				x={x + width - 2}
@@ -49,7 +51,10 @@ export default class ValueText extends React.PureComponent<
 		)
 	}
 
-	private remeasure() {
+	private remeasure(): void {
+		if (!this.textElement) {
+			return
+		}
 		const { width, color } = this.props
 		const box = this.textElement.getBBox()
 		const spaceNeeded = box.width + SIDE_PADS

@@ -6,7 +6,6 @@
 		"jsx": "react",
 		"sourceMap": true,
 		"suppressImplicitAnyIndexErrors": true,
-		"outDir": "lib",
 		"strict": true,
 		"incremental": true,
 		"declaration": true,

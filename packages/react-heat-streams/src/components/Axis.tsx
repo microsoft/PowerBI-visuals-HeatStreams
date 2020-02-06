@@ -3,6 +3,8 @@
  * Licensed under the MIT license. See LICENSE file in the project.
  */
 import * as React from 'react'
+import { TimeDomain } from '../interfaces'
+
 /* eslint-disable-next-line @typescript-eslint/no-var-requires */
 const { Axis, axisPropsFromTickScale, BOTTOM } = require('react-d3-axis')
 
@@ -13,7 +15,7 @@ export interface ITimeAxisProps {
 	xPan: number
 	offset: number
 	numTicks: number
-	timeScrub: Array<number | Date>
+	timeScrub: TimeDomain
 	xScale: (input: number | Date) => number
 }
 
@@ -26,7 +28,12 @@ const styles: { [key: string]: React.CSSProperties } = {
 	} as any,
 }
 
-const AxisScrub: React.FC = ({ height, timeScrub, xScale }) => (
+interface AxisScrubProps {
+	height: number
+	timeScrub: TimeDomain
+	xScale: any
+}
+const AxisScrub: React.FC<AxisScrubProps> = ({ height, timeScrub, xScale }) => (
 	<rect
 		className="axis-scrub-extent"
 		height={height}
