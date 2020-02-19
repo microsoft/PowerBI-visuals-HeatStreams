@@ -1,39 +1,46 @@
 {
-	"name": "@essex/react-heat-streams",
-	"version": "1.1.4",
-	"private": true,
-	"license": "MIT",
-	"main": "dist/cjs/index.js",
-	"module": "dist/esm/index.js",
-	"types": "lib/index.d.ts",
-	"scripts": {
-		"build:tsc": "tsc",
-		"build:babel:esm": "babel --config-file ../../babelrc.esm.js -d dist/esm lib",
-		"build:babel:cjs": "babel --config-file ../../babelrc.cjs.js -d dist/cjs lib",
-		"build": "npm-run-all -s build:tsc -p build:babel:*",
-		"clean": "rimraf lib dist",
-		"start": "tsc -w"
-	},
-	"author": {
-		"name": "Microsoft (experimental)",
-		"email": "msrvizsupport@microsoft.com"
-	},
-	"devDependencies": {
-		"@types/react": "^16.9.19",
-		"@types/react-dom": "^16.9.5",
-		"@types/d3-color": "^1.2.2",
-		"@types/d3-scale": "^2.1.1",
-		"@types/d3-shape": "^1.3.2",
-		"@types/node": "^13.7.0",
-		"react": "^16.12.0"
-	},
-	"peerDependencies": {
-		"react": ">= 16.12"
-	},
-	"dependencies": {
-		"@essex/d3-coloring-scales": "^3.0.0",
-		"d3-color": "^1.4.0",
-		"d3-scale": "^3.2.1",
-		"react-d3-axis": "^0.1.2"
-	}
+  "name": "@essex/react-heat-streams",
+  "version": "1.1.4",
+  "private": true,
+  "license": "MIT",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "build:tsc": "tsc",
+    "build:babel:esm": "babel --config-file ../../babelrc.esm.js -d dist/esm lib",
+    "build:babel:cjs": "babel --config-file ../../babelrc.cjs.js -d dist/cjs lib",
+    "build": "npm-run-all -s build:tsc -p build:babel:*",
+    "clean": "rimraf lib dist",
+    "start": "tsc -w",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
+  },
+  "author": {
+    "name": "Microsoft (experimental)",
+    "email": "msrvizsupport@microsoft.com"
+  },
+  "devDependencies": {
+    "@storybook/react": "^5.3.13",
+    "@types/node": "^13.7.0",
+    "@types/react": "^16.9.19",
+    "@types/react-dom": "^16.9.5",
+    "@types/d3-color": "^1.2.2",
+    "@types/d3-scale": "^2.1.1",
+    "@types/d3-shape": "^1.3.2",
+    "@babel/core": "^7.8.4",
+    "babel-loader": "^8.0.6",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "webpack": "^4.41.6"
+  },
+  "peerDependencies": {
+    "react": ">= 16.12"
+  },
+  "dependencies": {
+    "@essex/d3-coloring-scales": "^3.0.0",
+    "d3-color": "^1.4.0",
+    "d3-scale": "^3.2.1",
+    "react-d3-axis": "github:darthtrevino/react-d3-axis"
+  }
 }
