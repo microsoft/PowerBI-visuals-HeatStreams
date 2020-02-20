@@ -29,6 +29,7 @@ export interface InteractiveChartProps {
 	rowHeight: number
 	axisHeight: number
 	numTicks: number
+	colorScheme: string
 }
 
 export const InteractiveChart: React.FC<InteractiveChartProps> = memo(
@@ -41,15 +42,15 @@ export const InteractiveChart: React.FC<InteractiveChartProps> = memo(
 		rowHeight,
 		axisHeight,
 		numTicks,
+		colorScheme,
 	}) {
 		const colorizer = useMemo(() => {
-			const colorScheme = 'RdBu'
 			const isLogScale = false
 			const scaler = isDivergingColorScheme(colorScheme)
 				? new DivergingScaler(valueMin, valueMid, valueMax, isLogScale)
 				: new LinearScaler(valueMin, valueMax, isLogScale)
 			return new Colorizer(scaler, colorScheme)
-		}, [valueMin, valueMax, valueMid])
+		}, [valueMin, valueMax, valueMid, colorScheme])
 
 		const categories: ICategory[] = useMemo(
 			() =>

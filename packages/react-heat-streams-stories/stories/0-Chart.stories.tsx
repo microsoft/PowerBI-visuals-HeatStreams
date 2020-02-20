@@ -3,17 +3,24 @@
  * Licensed under the MIT license. See LICENSE file in the project.
  */
 import React from 'react'
-import { withKnobs, number } from '@storybook/addon-knobs'
+import { withKnobs, number, select } from '@storybook/addon-knobs'
 import { InteractiveChart } from './InteractiveChart'
+import * as colors from 'd3-scale-chromatic'
 
 export default {
 	title: 'Heat-Streams Chart',
 	decorators: [withKnobs],
 }
 
+const colorKeys = Object.keys(colors)
+	.filter(t => t.startsWith('interpolate'))
+	.map(t => t.replace('interpolate', ''))
+
 const VIEW_OPTS = 'View Options'
 const DATA_OPTS = 'Data Options'
+
 export const BasicExample = () => {
+	const colorScheme = select('Color Scheme', colorKeys, colorKeys[0], VIEW_OPTS)
 	const width = number(
 		'Chart Width',
 		900,
@@ -51,6 +58,7 @@ export const BasicExample = () => {
 	console.log('ayoo')
 	return (
 		<InteractiveChart
+			colorScheme={colorScheme}
 			width={width}
 			height={height}
 			rowHeight={rowHeight}

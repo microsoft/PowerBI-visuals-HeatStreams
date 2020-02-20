@@ -24,32 +24,6 @@ export interface IChartData {
 	valueDomain: [number, number]
 }
 
-export type SortBy = 'name' | 'average' | 'max' | 'density'
-
-export interface IVisualDataOptions {
-	valueMin: number | undefined
-	valueMax: number | undefined
-	scoreSplit: number | undefined
-	numericAggregation: number
-	dateAggregation: DateAggregation
-	isLogScale: boolean
-	sortBy: SortBy
-	sortInvert: boolean
-}
-
-export interface IVisualRenderingOptions {
-	highlightColor: string
-	rowHeight: number
-	categoryTextPercent: number
-	axisHeight: number
-	rowGap: boolean
-	colorScheme: string
-	zoomLevel: number
-	numTicks: number
-	showValues: boolean
-	showCategories: boolean
-}
-
 export interface IChartProps {
 	options: IChartOptions
 }

@@ -2,8 +2,11 @@
  * Copyright (c) Microsoft. All rights reserved.
  * Licensed under the MIT license. See LICENSE file in the project.
  */
-import { IVisualRenderingOptions } from '../chart/interfaces'
+import { IVisualRenderingOptions } from './types'
 
+/**
+ * PowerBI: Visual Rendering Options
+ */
 export class VisualRenderingOptionsImpl implements IVisualRenderingOptions {
 	public highlightColor = 'gray'
 	public rowHeight = 15
@@ -15,4 +18,5 @@ export class VisualRenderingOptionsImpl implements IVisualRenderingOptions {
 	public numTicks = 30
 	public showValues = true
 	public showCategories = true
+	public invertColors = false
 }
