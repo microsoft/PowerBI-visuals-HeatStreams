@@ -29,23 +29,25 @@ const styles: Record<string, React.CSSProperties> = {
 	} as any,
 }
 
-export const TimeAxis: React.FC<ITimeAxisProps> = memo(
-	({ xPan, offset, xScale, timeScrub, height, numTicks = 10 }) => {
-		const axisScrub =
-			timeScrub == null || timeScrub.length !== 2 ? null : (
-				<AxisScrub height={height} timeScrub={timeScrub} xScale={xScale} />
-			)
-		return (
-			<g transform={`translate(${xPan}, ${offset})`} style={styles.grouping}>
-				{axisScrub}
-				<Axis
-					{...axisPropsFromTickScale(xScale, numTicks)}
-					style={styles.axis}
-				/>
-			</g>
+export const TimeAxis: React.FC<ITimeAxisProps> = memo(function TimeAxis({
+	xPan,
+	offset,
+	xScale,
+	timeScrub,
+	height,
+	numTicks = 10,
+}) {
+	const axisScrub =
+		timeScrub == null || timeScrub.length !== 2 ? null : (
+			<AxisScrub height={height} timeScrub={timeScrub} xScale={xScale} />
 		)
-	},
-)
+	return (
+		<g transform={`translate(${xPan}, ${offset})`} style={styles.grouping}>
+			{axisScrub}
+			<Axis {...axisPropsFromTickScale(xScale, numTicks)} style={styles.axis} />
+		</g>
+	)
+})
 TimeAxis.displayName = 'TimeAxis'
 
 interface AxisScrubProps {
@@ -53,14 +55,17 @@ interface AxisScrubProps {
 	timeScrub: TimeDomain
 	xScale: any
 }
-const AxisScrub: React.FC<AxisScrubProps> = memo(
-	({ height, timeScrub, xScale }) => (
+const AxisScrub: React.FC<AxisScrubProps> = memo(function AxisScrub({
+	height,
+	timeScrub,
+	xScale,
+}) {
+	return (
 		<rect
 			className="axis-scrub-extent"
 			height={height}
 			x={xScale(timeScrub[0])}
 			width={xScale(timeScrub[1]) - xScale(timeScrub[0])}
 		/>
-	),
-)
-AxisScrub.displayName = 'AxisScrub'
+	)
+})

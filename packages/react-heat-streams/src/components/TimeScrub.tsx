@@ -13,21 +13,23 @@ export interface ITimeScrubProps {
 	color: string
 }
 
-export const TimeScrub: React.FC<ITimeScrubProps> = memo(
-	({ data, xScale, height, color }) => {
-		if (!data || !data.length) {
-			return null
-		}
-		return (
-			<rect
-				className="time-scrub"
-				width={xScale(data[1]) - xScale(data[0])}
-				height={height}
-				x={xScale(data[0])}
-				y={0}
-				stroke={color}
-			/>
-		)
-	},
-)
-TimeScrub.displayName = 'TimeScrub'
+export const TimeScrub: React.FC<ITimeScrubProps> = memo(function TimeScrub({
+	data,
+	xScale,
+	height,
+	color,
+}) {
+	if (!data || !data.length) {
+		return null
+	}
+	return (
+		<rect
+			className="time-scrub"
+			width={xScale(data[1]) - xScale(data[0])}
+			height={height}
+			x={xScale(data[0])}
+			y={0}
+			stroke={color}
+		/>
+	)
+})

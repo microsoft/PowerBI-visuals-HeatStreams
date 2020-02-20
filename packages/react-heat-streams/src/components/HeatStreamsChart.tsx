@@ -37,6 +37,10 @@ export interface IHeatStreamsChartProps {
 	timeScrub?: TimeDomain
 	rowGap?: boolean
 	showValues?: boolean
+	/**
+	 * A flag that determines whether the category names are shown.
+	 * @default true
+	 */
 	showCategories?: boolean
 	axisHeight?: number
 	rowHeight?: number
@@ -58,7 +62,7 @@ const DEFAULT_HIGHLIGHT_COLOR = '#FF0000'
 const DEFAULT_SELECTIONS = {}
 
 export const HeatStreamsChart: React.FC<IHeatStreamsChartProps> = memo(
-	({
+	function HeatStreamsChart({
 		colorizer,
 		width,
 		height,
@@ -71,7 +75,7 @@ export const HeatStreamsChart: React.FC<IHeatStreamsChartProps> = memo(
 		highlightColor = DEFAULT_HIGHLIGHT_COLOR,
 		timeScrub = undefined,
 		rowGap = false,
-		showCategories = false,
+		showCategories = true,
 		showValues = false,
 		zoomLevel = DEFAULT_ZOOM_LEVEL,
 		numTicks = DEFAULT_NUM_TICKS,
@@ -81,7 +85,7 @@ export const HeatStreamsChart: React.FC<IHeatStreamsChartProps> = memo(
 		onClickCategory = NO_OP,
 		onClearSelection = NO_OP,
 		onScrub = NO_OP,
-	}) => {
+	}) {
 		const [panPosition, setPanPosition] = useState(0)
 		const [scrollPosition, setScrollPosition] = useState(0)
 		const getXScale = useCallback(
@@ -224,4 +228,3 @@ export const HeatStreamsChart: React.FC<IHeatStreamsChartProps> = memo(
 		)
 	},
 )
-HeatStreamsChart.displayName = 'HeatStreamsChart'

@@ -30,7 +30,7 @@ export interface ICategoryChartListProps {
 }
 
 export const CategoryChartList: React.FC<ICategoryChartListProps> = memo(
-	({
+	function CategoryChartList({
 		categories,
 		categoryValues,
 		xScale,
@@ -44,7 +44,7 @@ export const CategoryChartList: React.FC<ICategoryChartListProps> = memo(
 		sliceWidth,
 		xPan,
 		xDomain,
-	}) => {
+	}) {
 		const charts = categories.map((cat, index) => (
 			<CategoryChart
 				key={cat.id}

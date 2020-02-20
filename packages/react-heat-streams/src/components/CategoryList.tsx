@@ -49,7 +49,7 @@ export interface ICategoryListProps {
 }
 
 export const CategoryList: React.FC<ICategoryListProps> = memo(
-	({
+	function CategoryList({
 		axisHeight,
 		width,
 		height,
@@ -75,7 +75,7 @@ export const CategoryList: React.FC<ICategoryListProps> = memo(
 		xDomain,
 		onScroll,
 		onScrub,
-	}) => {
+	}) {
 		const onWheel = useCallback(
 			(evt: React.WheelEvent<SVGGElement>): void =>
 				onScroll(evt.deltaX, evt.deltaY),
@@ -88,16 +88,17 @@ export const CategoryList: React.FC<ICategoryListProps> = memo(
 		)
 		return (
 			<g className="category-list" onWheel={onWheel}>
-				<CategoryNameList
-					categories={categories}
-					showCategories={showCategories}
-					width={width * textPercent}
-					rowHeight={rowHeight}
-					categoryY={categoryY}
-					isCategorySelected={isCategorySelected}
-					onClickCategory={onClickCategory}
-					onClear={onClear}
-				/>
+				{showCategories ? (
+					<CategoryNameList
+						categories={categories}
+						width={width * textPercent}
+						rowHeight={rowHeight}
+						categoryY={categoryY}
+						isCategorySelected={isCategorySelected}
+						onClickCategory={onClickCategory}
+						onClear={onClear}
+					/>
+				) : null}
 				<Backboard
 					width={width - textPercent * width}
 					x={textPercent * width}
@@ -149,4 +150,3 @@ export const CategoryList: React.FC<ICategoryListProps> = memo(
 		)
 	},
 )
-CategoryList.displayName = 'CategoryList'
