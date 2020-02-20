@@ -3,13 +3,14 @@
  * Licensed under the MIT license. See LICENSE file in the project.
  */
 import * as React from 'react'
-import { HeatStreamsChart } from '../src/index'
+import { HeatStreamsChart, ICategoryValueMap } from '../src/index'
 import {
 	Colorizer,
 	DivergingScaler,
 	isDivergingColorScheme,
 	LinearScaler,
 } from '@essex/d3-coloring-scales'
+import { color } from 'd3-color'
 
 export default {
 	title: 'HeatStreamsChart',
@@ -25,18 +26,29 @@ const scaler = isDivergingColorScheme(colorScheme)
 	? new DivergingScaler(valueMin, valueMid, valueMax, isLogScale)
 	: new LinearScaler(valueMin, valueMax, isLogScale)
 const colorizer = new Colorizer(scaler, colorScheme)
+const categories = [
+	{ id: 1, name: 'Pikachu' },
+	{ id: 2, name: 'Squirtle' },
+	{ id: 3, name: 'Evee' },
+]
+const categoryValues: ICategoryValueMap = {
+	'1': [{ start: 0, end: 1, value: 30 }],
+	'2': [{ start: 0, end: 1, value: 30 }],
+	'3': [{ start: 0, end: 1, value: 30 }],
+}
 
 export const ToStorybook = () => (
 	<HeatStreamsChart
 		axisHeight={30}
-		width={800}
-		height={500}
+		width={900}
+		height={600}
 		numTicks={20}
-		rowHeight={30}
-		categories={[]}
-		categoryValues={{}}
+		rowHeight={50}
+		categories={categories}
+		categoryValues={categoryValues}
+		dateAggregation={'years'}
 		numericAggregation={1}
-		colorizer={colorizer.color}
+		colorizer={(value: any) => colorizer.color(value)}
 		xDomain={[0, 100]}
 		highlightColor={'#FF0000'}
 	/>

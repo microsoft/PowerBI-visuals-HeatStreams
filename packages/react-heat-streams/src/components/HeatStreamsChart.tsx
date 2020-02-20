@@ -32,7 +32,7 @@ export interface IHeatStreamsChartProps {
 	categoryValues: ICategoryValueMap
 	numericAggregation: number
 	selections?: ICategorySelectionMap
-	dateAggregation?: DateAggregation
+	dateAggregation: DateAggregation
 	highlightColor?: string
 	timeScrub?: TimeDomain
 	rowGap?: boolean
@@ -50,7 +50,7 @@ export interface IHeatStreamsChartProps {
 
 const NO_OP = () => null
 const DEFAULT_NUM_TICKS = 20
-const DEFAULT_TEXT_PERCENT = 20
+const DEFAULT_TEXT_PERCENT = 0.15
 const DEFAULT_ZOOM_LEVEL = 1
 const DEFAULT_ROW_HEIGHT = 20
 const DEFAULT_AXIS_HEIGHT = 20
@@ -62,11 +62,11 @@ export const HeatStreamsChart: React.FC<IHeatStreamsChartProps> = memo(
 		colorizer,
 		width,
 		height,
+		categories,
 		categoryValues,
 		xDomain,
 		numericAggregation,
 		dateAggregation,
-		categories,
 		selections = DEFAULT_SELECTIONS,
 		highlightColor = DEFAULT_HIGHLIGHT_COLOR,
 		timeScrub = undefined,
