@@ -9,7 +9,8 @@
 		"lint": "eslint . --ext .js,.ts,.jsx,.tsx",
 		"check_formatting": "pretty-quick --check",
 		"ci": "NODE_ENV=production npm-run-all clean -p lint check_formatting -s build",
-		"precommit": "lint-staged"
+		"precommit": "lint-staged",
+		"release": "lerna publish"
 	},
 	"author": {
 		"name": "Microsoft (experimental)",
