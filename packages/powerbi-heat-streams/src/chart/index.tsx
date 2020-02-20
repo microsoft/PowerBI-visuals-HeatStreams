@@ -10,7 +10,7 @@ import {
 	SelectionChangedHandler,
 	SelectionClearedHandler,
 	TimeDomain,
-} from '@essex/react-heat-streams'
+} from 'react-heat-streams'
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 import { IChartOptions } from './interfaces'

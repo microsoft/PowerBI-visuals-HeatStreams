@@ -3,7 +3,7 @@
  * Licensed under the MIT license. See LICENSE file in the project.
  */
 
-import { ICategory } from '@essex/react-heat-streams'
+import { ICategory } from 'react-heat-streams'
 import { ICategoryDataMap, IVisualDataOptions } from '../chart/interfaces'
 
 type Sorter = (cat1: ICategory, cat2: ICategory) => number

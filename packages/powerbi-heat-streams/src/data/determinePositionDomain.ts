@@ -3,7 +3,7 @@
  * Licensed under the MIT license. See LICENSE file in the project.
  */
 
-import { getSliceEnd, XDomain } from '@essex/react-heat-streams'
+import { getSliceEnd, XDomain } from 'react-heat-streams'
 import { extent } from 'd3-array'
 import { ICategoryDataMap, IVisualDataOptions } from '../chart/interfaces'
 

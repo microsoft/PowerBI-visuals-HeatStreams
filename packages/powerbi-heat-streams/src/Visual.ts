@@ -10,7 +10,9 @@ import { DataViewConverter } from './data/DataViewConverter'
 import { Interactions } from './Interactions'
 import { VisualSettings } from './settings/VisualSettings'
 import * as logger from './logger'
-import { TimeDomain } from '@essex/react-heat-streams'
+import { TimeDomain } from 'react-heat-streams'
+
+require('react-heat-streams/style/heat-streams.css')
 const get = require('lodash/get')
 const packageJson = require('../package.json')
 

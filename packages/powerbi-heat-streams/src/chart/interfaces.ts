@@ -9,7 +9,7 @@ import {
 	ICategoryValueMap,
 	XDomain,
 	TimeDomain,
-} from '@essex/react-heat-streams'
+} from 'react-heat-streams'
 
 export interface ICategoryData {
 	position: Date
