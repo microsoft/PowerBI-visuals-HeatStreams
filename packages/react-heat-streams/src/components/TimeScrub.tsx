@@ -4,7 +4,7 @@
  */
 import * as React from 'react'
 import { memo } from 'react'
-import { IScaler } from '../interfaces'
+import { IScaler } from '../types'
 
 export interface ITimeScrubProps {
 	data?: Array<number | Date>

@@ -13,7 +13,7 @@ import {
 } from 'react-heat-streams'
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
-import { IChartOptions } from './interfaces'
+import { IChartOptions } from './types'
 
 export class Chart {
 	private selectionChangedHandler: SelectionChangedHandler | undefined

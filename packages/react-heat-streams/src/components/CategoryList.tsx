@@ -12,7 +12,7 @@ import {
 	Scrub,
 	XDomain,
 	TimeDomain,
-} from '../interfaces'
+} from '../types'
 import { TimeAxis as Axis } from './Axis'
 import { Backboard } from './Backboard'
 import { CategoryChartList } from './CategoryChartList'

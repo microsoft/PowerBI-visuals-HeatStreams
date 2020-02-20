@@ -4,7 +4,7 @@
  */
 import * as React from 'react'
 import { memo, useCallback, useState } from 'react'
-import { TimeDomain } from '../interfaces'
+import { TimeDomain } from '../types'
 
 const NO_OP = () => null
 

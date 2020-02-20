@@ -4,7 +4,7 @@
  */
 import * as React from 'react'
 import { memo, useMemo, useCallback } from 'react'
-import { ICategory } from '../interfaces'
+import { ICategory } from '../types'
 
 export interface ICategoryNameListProps {
 	categories: ICategory[]

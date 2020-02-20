@@ -5,7 +5,8 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import powerbi from 'powerbi-visuals-api'
 import { TimeDomain, ICategory } from 'react-heat-streams'
-import { IChartData, IVisualDataOptions } from '../chart/interfaces'
+import { IChartData } from '../chart/types'
+import { IVisualDataOptions } from '../settings/types'
 import { convertCategoricalDataView } from './convertCategoricalDataView'
 import * as logger from '../logger'
 

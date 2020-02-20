@@ -4,7 +4,8 @@
  */
 
 import { ICategory } from 'react-heat-streams'
-import { ICategoryDataMap, IVisualDataOptions } from '../chart/interfaces'
+import { ICategoryDataMap } from '../chart/types'
+import { IVisualDataOptions } from '../settings/types'
 
 type Sorter = (cat1: ICategory, cat2: ICategory) => number
 const invert = (sortComparator: Sorter) => (

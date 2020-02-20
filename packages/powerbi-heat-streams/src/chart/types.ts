@@ -10,6 +10,7 @@ import {
 	XDomain,
 	TimeDomain,
 } from 'react-heat-streams'
+import { IVisualRenderingOptions, IVisualDataOptions } from '../settings/types'
 
 export interface ICategoryData {
 	position: Date
@@ -36,7 +37,7 @@ export interface IChartOptions {
 	renderOptions: IVisualRenderingOptions
 	dataOptions: IVisualDataOptions
 	data: IChartData
-	selections: { [key: string]: ICategory }
+	selections: ICategorySelectionMap
 	timeScrub: TimeDomain | null
 	width: number
 	height: number

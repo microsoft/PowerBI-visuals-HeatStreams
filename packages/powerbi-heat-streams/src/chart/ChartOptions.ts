@@ -12,12 +12,8 @@ import {
 import { ICategory, TimeDomain } from 'react-heat-streams'
 import { DataViewConverter } from '../data/DataViewConverter'
 import { VisualSettings } from '../settings/VisualSettings'
-import {
-	IChartData,
-	IChartOptions,
-	IVisualDataOptions,
-	IVisualRenderingOptions,
-} from './interfaces'
+import { IChartData, IChartOptions } from './types'
+import { IVisualDataOptions, IVisualRenderingOptions } from '../settings/types'
 
 export class ChartOptions implements IChartOptions {
 	public _dataOptions: IVisualDataOptions | undefined

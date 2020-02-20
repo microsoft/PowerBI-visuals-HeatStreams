@@ -2,7 +2,7 @@
  * Copyright (c) Microsoft. All rights reserved.
  * Licensed under the MIT license. See LICENSE file in the project.
  */
-import { DateAggregation } from './interfaces'
+import { DateAggregation } from './types'
 
 export function addHours(date: Date, num: number): Date {
 	const result = new Date(date)

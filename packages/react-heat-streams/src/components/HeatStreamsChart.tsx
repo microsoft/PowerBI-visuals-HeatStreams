@@ -14,7 +14,7 @@ import {
 	Scrub,
 	XDomain,
 	TimeDomain,
-} from '../interfaces'
+} from '../types'
 import { getSliceEnd } from '../utils'
 import { CategoryList } from './CategoryList'
 

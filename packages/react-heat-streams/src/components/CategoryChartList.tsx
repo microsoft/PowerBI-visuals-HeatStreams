@@ -10,7 +10,7 @@ import {
 	IColorizer,
 	IScaler,
 	XDomain,
-} from '../interfaces'
+} from '../types'
 import { CategoryChart } from './CategoryChart'
 
 export interface ICategoryChartListProps {

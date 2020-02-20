@@ -10,7 +10,7 @@ import {
 	XDomain,
 } from 'react-heat-streams'
 import { mean } from 'd3-array'
-import { ICategoryDataMap } from '../chart/interfaces'
+import { ICategoryDataMap } from '../chart/types'
 
 function sliceStart(
 	date: Date,
