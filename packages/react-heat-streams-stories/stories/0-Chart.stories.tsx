@@ -40,9 +40,9 @@ function InteractiveChart() {
 	}, [])
 	const categories: ICategory[] = useMemo(
 		() => [
-			{ id: 1, name: 'Pikachu' },
-			{ id: 2, name: 'Squirtle' },
-			{ id: 3, name: 'Evee' },
+			{ id: 1, name: 'Category 1' },
+			{ id: 2, name: 'Category 2' },
+			{ id: 3, name: 'Category 3' },
 		],
 		[],
 	)
