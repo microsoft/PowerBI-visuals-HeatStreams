@@ -6,7 +6,7 @@ import { DateAggregation } from 'react-heat-streams'
 import { IVisualDataOptions, SortBy } from '../chart/interfaces'
 
 export class VisualDataOptionsImpl implements IVisualDataOptions {
-	public dateAggregation: DateAggregation = 'days'
+	public dateAggregation: DateAggregation = DateAggregation.Days
 	public numericAggregation = 1
 	public valueMin = undefined
 	public valueMax = undefined

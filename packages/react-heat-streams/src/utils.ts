@@ -32,13 +32,13 @@ export function dateSliceEnd(
 	start: Date,
 	dateAggregation: DateAggregation,
 ): Date {
-	if (dateAggregation === 'hours') {
+	if (dateAggregation === DateAggregation.Hours) {
 		return addHours(start, 1)
-	} else if (dateAggregation === 'days') {
+	} else if (dateAggregation === DateAggregation.Days) {
 		return addDays(start, 1)
-	} else if (dateAggregation === 'months') {
+	} else if (dateAggregation === DateAggregation.Months) {
 		return addMonths(start, 1)
-	} else if (dateAggregation === 'years') {
+	} else if (dateAggregation === DateAggregation.Years) {
 		return addYears(start, 1)
 	} else {
 		throw new Error('unknown aggregation: ' + dateAggregation)

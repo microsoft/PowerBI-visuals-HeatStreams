@@ -30,13 +30,13 @@ export interface IHeatStreamsChartProps {
 	colorizer: IColorizer
 	categories: ICategory[]
 	categoryValues: ICategoryValueMap
-	numericAggregation: number
+	numericAggregation?: number
 	/**
 	 * A map of category id to selected category
 	 * @default empty object
 	 */
 	selections?: ICategorySelectionMap
-	dateAggregation: DateAggregation
+	dateAggregation?: DateAggregation
 	highlightColor?: string
 	timeScrub?: TimeDomain
 	rowGap?: boolean
@@ -74,8 +74,8 @@ export const HeatStreamsChart: React.FC<IHeatStreamsChartProps> = memo(
 		categories,
 		categoryValues,
 		xDomain,
-		numericAggregation,
-		dateAggregation,
+		numericAggregation = 1,
+		dateAggregation = DateAggregation.Days,
 		selections = DEFAULT_SELECTIONS,
 		highlightColor = DEFAULT_HIGHLIGHT_COLOR,
 		timeScrub = undefined,

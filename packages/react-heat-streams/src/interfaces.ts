@@ -5,7 +5,12 @@
 /**
  * The coarseness of x-aggregated blocks (when using dates)
  */
-export type DateAggregation = 'hours' | 'days' | 'months' | 'years'
+export enum DateAggregation {
+	Hours = 'hours',
+	Days = 'days',
+	Months = 'months',
+	Years = 'years',
+}
 
 /**
  * Represents the X-Domain of the Visual
