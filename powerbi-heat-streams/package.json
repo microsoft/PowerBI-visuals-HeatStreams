@@ -11,7 +11,7 @@
 	},
 	"dependencies": {
 		"@essex/d3-coloring-scales": "^3.0.0",
-		"react-heat-streams": "^1.1.4",
+		"react-heat-streams": "^1.2.0",
 		"@types/d3-array": "^2.0.0",
 		"@types/node": "^13.7.0",
 		"@types/react": "^16.9.19",

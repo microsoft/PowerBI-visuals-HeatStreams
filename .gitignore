@@ -3,7 +3,6 @@ node_modules/
 dist/
 lib/
 storybook-static/
-package-lock.json
 *-debug.log
 *-error.log
 webpack.statistics.*.html
