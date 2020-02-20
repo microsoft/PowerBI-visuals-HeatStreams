@@ -16,7 +16,7 @@ export interface IVisualRenderingOptions {
 	numTicks: number
 	showValues: boolean
 	showCategories: boolean
-	invertColors: boolean
+	reverseColorScheme: boolean
 }
 
 export interface IVisualDataOptions {

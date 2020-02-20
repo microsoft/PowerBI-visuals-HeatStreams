@@ -18,5 +18,5 @@ export class VisualRenderingOptionsImpl implements IVisualRenderingOptions {
 	public numTicks = 30
 	public showValues = true
 	public showCategories = true
-	public invertColors = false
+	public reverseColorScheme = false
 }

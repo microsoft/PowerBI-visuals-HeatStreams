@@ -200,8 +200,16 @@
 					}
 				}
 			}
+		},
+		"reverseColorScheme": {
+			"displayName": "Reverse Colors",
+			"description": "Reverses the color range's mapping to the data domain",
+			"type": {
+				"bool": true
+			}
 		}
 	},
+
 	"dataViewMappings": [
 		{
 			"categorical": {

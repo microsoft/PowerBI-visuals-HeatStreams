@@ -38,9 +38,16 @@ export class ChartOptions implements IChartOptions {
 		this._data = this.converter.convertDataView(dataView, settings.data)
 		const { colorScheme } = this.renderOptions
 		const { isLogScale } = this.dataOptions
-		const { valueMin, valueMax, valueMid } = this
+		let { valueMin, valueMax } = this
+
+		// If the color mapping is reversed, reverse the scalar inputs
+		if (this.renderOptions.reverseColorScheme) {
+			const tmp = valueMin
+			valueMin = valueMax
+			valueMax = tmp
+		}
 		const scaler = isDivergingColorScheme(colorScheme)
-			? new DivergingScaler(valueMin, valueMid, valueMax, isLogScale)
+			? new DivergingScaler(valueMin, this.valueMid, valueMax, isLogScale)
 			: new LinearScaler(valueMin, valueMax, isLogScale)
 
 		this._colorizer = new Colorizer(scaler, colorScheme)
