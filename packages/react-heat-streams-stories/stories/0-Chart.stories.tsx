@@ -26,6 +26,15 @@ function getRandomArbitrary(min: number, max: number) {
 	return Math.random() * (max - min) + min
 }
 
+function arrayOfLen(length: number) {
+	const values = []
+	for (let i = 0; i < length; i++) {
+		values.push(i)
+	}
+	console.log('values', values)
+	return values
+}
+
 function InteractiveChart() {
 	const colorizer = useMemo(() => {
 		const colorScheme = 'RdBu'
@@ -39,35 +48,23 @@ function InteractiveChart() {
 		return new Colorizer(scaler, colorScheme)
 	}, [])
 	const categories: ICategory[] = useMemo(
-		() => [
-			{ id: 1, name: 'Category 1' },
-			{ id: 2, name: 'Category 2' },
-			{ id: 3, name: 'Category 3' },
-		],
+		() =>
+			arrayOfLen(100).map(v => ({
+				id: v,
+				name: `Category ${v}`,
+			})),
 		[],
 	)
 	const categoryValues: ICategoryValueMap = useMemo(() => {
-		const values = []
-		for (let i = 0; i < 100; i++) {
-			values.push(i)
-		}
-		return {
-			'1': values.map(v => ({
+		const ary = arrayOfLen(100)
+		return ary.reduce((prev, curr) => {
+			prev[curr] = ary.map(v => ({
 				start: v,
 				end: v + 1,
 				value: getRandomArbitrary(0, 100),
-			})),
-			'2': values.map(v => ({
-				start: v,
-				end: v + 1,
-				value: getRandomArbitrary(0, 100),
-			})),
-			'3': values.map(v => ({
-				start: v,
-				end: v + 1,
-				value: getRandomArbitrary(0, 100),
-			})),
-		}
+			}))
+			return prev
+		}, {} as ICategoryValueMap)
 	}, [])
 	const [selections, setSelections] = useState<ICategorySelectionMap>({})
 
@@ -75,7 +72,7 @@ function InteractiveChart() {
 		<HeatStreamsChart
 			axisHeight={30}
 			width={900}
-			height={600}
+			height={400}
 			numTicks={20}
 			rowHeight={20}
 			categories={categories}
@@ -89,14 +86,15 @@ function InteractiveChart() {
 			showValues={true}
 			onClickCategory={useCallback(
 				(cat: ICategory, ctrl: boolean) => {
-					setSelections(
-						ctrl
-							? ({
-									...selections,
-									[cat.id]: !selections[cat.id],
-							  } as ICategorySelectionMap)
-							: ({ [cat.id]: !selections[cat.id] } as ICategorySelectionMap),
-					)
+					const selection: ICategorySelectionMap = ctrl
+						? {
+								...selections,
+								[cat.id]: !selections[cat.id],
+						  }
+						: {
+								[cat.id]: !selections[cat.id],
+						  }
+					setSelections(selection)
 				},
 				[selections],
 			)}
@@ -106,5 +104,5 @@ function InteractiveChart() {
 
 export const ToStorybook = () => <InteractiveChart />
 ToStorybook.story = {
-	name: 'to Storybook',
+	name: 'basic example',
 }

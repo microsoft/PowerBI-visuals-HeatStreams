@@ -21,7 +21,7 @@ export type Scrub = TimeDomain
  * A Visualized Category
  */
 export interface ICategory {
-	id: number
+	id: CategoryId
 	name: string
 	metadata?: {
 		[key: string]: number
@@ -31,7 +31,8 @@ export interface ICategory {
 /**
  * A Selection of Category IDs
  */
-export type ICategorySelectionMap = Record<string, boolean>
+export type CategoryId = number
+export type ICategorySelectionMap = Record<CategoryId, boolean>
 
 /**
  * Interface for the value to color function
