@@ -67,7 +67,7 @@ const DEFAULT_HIGHLIGHT_COLOR = '#FF0000'
 const DEFAULT_SELECTIONS = {}
 
 export const HeatStreamsChart: React.FC<IHeatStreamsChartProps> = memo(
-	({
+	function HeatStreamsChart({
 		colorizer,
 		width,
 		height,
@@ -90,7 +90,7 @@ export const HeatStreamsChart: React.FC<IHeatStreamsChartProps> = memo(
 		onClickCategory = NO_OP,
 		onClearSelection = NO_OP,
 		onScrub = NO_OP,
-	}) => {
+	}) {
 		const [panPosition, scrollPosition, onScroll] = usePanScroll(zoomLevel)
 		const xScale = useXScale(
 			showCategories,
