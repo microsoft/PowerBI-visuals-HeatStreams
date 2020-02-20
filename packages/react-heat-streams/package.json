@@ -1,11 +1,13 @@
 {
 	"name": "react-heat-streams",
 	"version": "1.1.4",
-	"private": true,
 	"license": "MIT",
 	"main": "dist/cjs/index.js",
 	"module": "dist/esm/index.js",
 	"types": "lib/index.d.ts",
+	"repository": {
+		"url": "https://github.com/microsoft/PowerBI-visuals-HeatStreams"
+	},
 	"scripts": {
 		"build:tsc": "tsc",
 		"build:babel:esm": "babel --config-file ../../babelrc.esm.js -d dist/esm lib",
