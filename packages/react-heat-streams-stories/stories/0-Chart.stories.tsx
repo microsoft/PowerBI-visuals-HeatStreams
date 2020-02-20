@@ -3,6 +3,7 @@
  * Licensed under the MIT license. See LICENSE file in the project.
  */
 import React, { useCallback, useState, useMemo } from 'react'
+import { withKnobs } from '@storybook/addon-knobs'
 import {
 	HeatStreamsChart,
 	ICategory,
@@ -19,9 +20,10 @@ import {
 require('react-heat-streams/style/heat-streams.css')
 
 export default {
-	title: 'HeatStreamsChart',
-	component: HeatStreamsChart,
+	title: 'Heat-Streams Chart',
+	decorators: [withKnobs],
 }
+
 function getRandomArbitrary(min: number, max: number) {
 	return Math.random() * (max - min) + min
 }
@@ -102,7 +104,7 @@ function InteractiveChart() {
 	)
 }
 
-export const ToStorybook = () => <InteractiveChart />
-ToStorybook.story = {
+export const BasicExample = () => <InteractiveChart />
+BasicExample.story = {
 	name: 'basic example',
 }
