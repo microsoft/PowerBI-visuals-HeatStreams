@@ -24,9 +24,6 @@
 	"workspaces": {
 		"packages": [
 			"packages/*"
-		],
-		"nohoist": [
-			"**"
 		]
 	},
 	"husky": {

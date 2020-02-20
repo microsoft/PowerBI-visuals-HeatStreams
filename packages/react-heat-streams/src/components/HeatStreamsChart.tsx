@@ -91,21 +91,7 @@ export const HeatStreamsChart: React.FC<IHeatStreamsChartProps> = memo(
 		onClearSelection = NO_OP,
 		onScrub = NO_OP,
 	}) => {
-		console.log('HEY1')
-		const [panPosition, setPanPosition] = useState(0)
-		const [scrollPosition, setScrollPosition] = useState(0)
-
-		const onScroll = useCallback(
-			(deltaX: number, deltaY: number): void => {
-				const newPanPos =
-					zoomLevel === 1 ? 0 : Math.min(0, panPosition - deltaX)
-				const newScrollPos = Math.max(0, scrollPosition + deltaY)
-				setPanPosition(newPanPos)
-				setScrollPosition(newScrollPos)
-			},
-			[panPosition, scrollPosition, zoomLevel],
-		)
-
+		const [panPosition, scrollPosition, onScroll] = usePanScroll(zoomLevel)
 		const xScale = useXScale(
 			showCategories,
 			width,
@@ -335,4 +321,23 @@ function useOnClickHandler(
 			timeScrub,
 		],
 	)
+}
+
+function usePanScroll(
+	zoomLevel: number,
+): [number, number, (dx: number, dy: number) => void] {
+	const [panPosition, setPanPosition] = useState(0)
+	const [scrollPosition, setScrollPosition] = useState(0)
+
+	const onScroll = useCallback(
+		(dx: number, dy: number): void => {
+			const newPanPos = zoomLevel === 1 ? 0 : Math.min(0, panPosition - dx)
+			const newScrollPos = Math.max(0, scrollPosition + dy)
+			setPanPosition(newPanPos)
+			setScrollPosition(newScrollPos)
+		},
+		[panPosition, scrollPosition, zoomLevel],
+	)
+
+	return [panPosition, scrollPosition, onScroll]
 }
