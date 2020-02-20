@@ -100,7 +100,7 @@ export const Overlay: React.FC<IOverlayProps> = memo(function Overlay({
 	)
 
 	const scrub =
-		timeScrub == null || timeScrub.length != 2 ? null : (
+		timeScrub == null || timeScrub.length !== 2 ? null : (
 			<rect
 				className="selection"
 				height={height}

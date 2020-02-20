@@ -4,11 +4,7 @@
  */
 /* eslint-disable @typescript-eslint/no-var-requires */
 import powerbi from 'powerbi-visuals-api'
-import {
-	TimeDomain,
-	ICategory,
-	ICategorySelectionMap,
-} from 'react-heat-streams'
+import { TimeDomain, ICategorySelectionMap } from 'react-heat-streams'
 import { IChartData } from '../chart/types'
 import { IVisualDataOptions } from '../settings/types'
 import { convertCategoricalDataView } from './convertCategoricalDataView'

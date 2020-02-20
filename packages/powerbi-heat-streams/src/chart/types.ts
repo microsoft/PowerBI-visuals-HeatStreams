@@ -4,7 +4,6 @@
  */
 import { Colorizer } from '@essex/d3-coloring-scales'
 import {
-	DateAggregation,
 	ICategory,
 	ICategoryValueMap,
 	ICategorySelectionMap,

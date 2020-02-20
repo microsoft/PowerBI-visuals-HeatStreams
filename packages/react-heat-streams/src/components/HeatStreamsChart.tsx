@@ -67,7 +67,7 @@ const DEFAULT_HIGHLIGHT_COLOR = '#FF0000'
 const DEFAULT_SELECTIONS = {}
 
 export const HeatStreamsChart: React.FC<IHeatStreamsChartProps> = memo(
-	function HeatStreamsChart({
+	({
 		colorizer,
 		width,
 		height,
@@ -90,8 +90,22 @@ export const HeatStreamsChart: React.FC<IHeatStreamsChartProps> = memo(
 		onClickCategory = NO_OP,
 		onClearSelection = NO_OP,
 		onScrub = NO_OP,
-	}) {
-		const [panPosition, scrollPosition, onScroll] = usePanScroll(zoomLevel)
+	}) => {
+		console.log('HEY1')
+		const [panPosition, setPanPosition] = useState(0)
+		const [scrollPosition, setScrollPosition] = useState(0)
+
+		const onScroll = useCallback(
+			(deltaX: number, deltaY: number): void => {
+				const newPanPos =
+					zoomLevel === 1 ? 0 : Math.min(0, panPosition - deltaX)
+				const newScrollPos = Math.max(0, scrollPosition + deltaY)
+				setPanPosition(newPanPos)
+				setScrollPosition(newScrollPos)
+			},
+			[panPosition, scrollPosition, zoomLevel],
+		)
+
 		const xScale = useXScale(
 			showCategories,
 			width,
@@ -237,25 +251,6 @@ function useCategoryY(rowHeight: number, rowGap: number) {
 		(index: number): number => rowHeight * index + (rowGap ? index : 0),
 		[rowHeight, rowGap],
 	)
-}
-
-function usePanScroll(
-	zoomLevel: number,
-): [number, number, (deltaX: number, deltaY: number) => void] {
-	const [panPosition, setPanPosition] = useState(0)
-	const [scrollPosition, setScrollPosition] = useState(0)
-
-	const onScroll = useCallback(
-		(deltaX: number, deltaY: number): void => {
-			const newPanPos = zoomLevel === 1 ? 0 : Math.min(0, panPosition - deltaX)
-			const newScrollPos = Math.max(0, scrollPosition + deltaY)
-			setPanPosition(newPanPos)
-			setScrollPosition(newScrollPos)
-		},
-		[panPosition, scrollPosition, zoomLevel],
-	)
-
-	return [panPosition, scrollPosition, onScroll]
 }
 
 function useAxisOffset(

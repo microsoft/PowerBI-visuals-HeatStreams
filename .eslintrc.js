@@ -11,7 +11,7 @@ const jsRuleSets = [
 	'prettier/react',
 ]
 module.exports = {
-	plugins: ['header', '@typescript-eslint', 'jsx-a11y', 'jest'],
+	plugins: ['header', '@typescript-eslint', 'jsx-a11y', 'jest', 'react-hooks'],
 	env: {
 		node: true,
 		browser: true,
@@ -35,6 +35,9 @@ module.exports = {
 				// TODO: Turn these rules back on
 				'@typescript-eslint/no-non-null-assertion': 0,
 				'@typescript-eslint/no-explicit-any': 0,
+
+				'react-hooks/rules-of-hooks': 'error', // Checks rules of Hooks
+				'react-hooks/exhaustive-deps': 'warn', // Checks effect dependencies
 			},
 		},
 		{
@@ -52,6 +55,9 @@ module.exports = {
 			},
 			rules: {
 				'no-irregular-whitespace': 0,
+
+				'react-hooks/rules-of-hooks': 'error', // Checks rules of Hooks
+				'react-hooks/exhaustive-deps': 'warn', // Checks effect dependencies
 			},
 		},
 	],

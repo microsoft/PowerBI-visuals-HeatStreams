@@ -38,7 +38,7 @@ export const CategoryNameList: React.FC<ICategoryNameListProps> = memo(
 						y={categoryY(index) + rowHeight - 1}
 					/>
 				)),
-			[categories, isCategorySelected],
+			[categories, isCategorySelected, categoryY, onClickCategory, rowHeight],
 		)
 		return (
 			<g className="category-names">
