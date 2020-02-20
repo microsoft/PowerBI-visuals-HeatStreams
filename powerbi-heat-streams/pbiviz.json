@@ -18,7 +18,7 @@
 	"assets": {
 		"icon": "assets/icon.png"
 	},
-	"externalJS": null,
+	"externalJS": [],
 	"capabilities": "capabilities.json",
 	"dependencies": null,
 	"stringResources": []
