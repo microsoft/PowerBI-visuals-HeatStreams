@@ -26,52 +26,61 @@ export interface IHeatStreamsState {
 export interface IHeatStreamsChartProps {
 	width: number
 	height: number
-	textPercent: number
-	rowHeight: number
-	axisHeight: number
-	numTicks: number
-	zoomLevel: number
 	xDomain: XDomain
-	highlightColor: string
-	showCategories: boolean
-	rowGap: boolean
-	showValues: boolean
-	timeScrub: TimeDomain
 	colorizer: IColorizer
 	categories: ICategory[]
 	categoryValues: ICategoryValueMap
-	selections: ICategorySelectionMap
-	numericAggregation?: number
+	numericAggregation: number
+	selections?: ICategorySelectionMap
 	dateAggregation?: DateAggregation
-	onClearSelection: () => void
-	onClickCategory: (category: ICategory, ctrl: boolean) => void
-	onScrub: (bounds: Scrub) => void
+	highlightColor?: string
+	timeScrub?: TimeDomain
+	rowGap?: boolean
+	showValues?: boolean
+	showCategories?: boolean
+	axisHeight?: number
+	rowHeight?: number
+	textPercent?: number
+	numTicks?: number
+	zoomLevel?: number
+	onClearSelection?: () => void
+	onClickCategory?: (category: ICategory, ctrl: boolean) => void
+	onScrub?: (bounds: Scrub) => void
 }
+
+const NO_OP = () => null
+const DEFAULT_NUM_TICKS = 20
+const DEFAULT_TEXT_PERCENT = 20
+const DEFAULT_ZOOM_LEVEL = 1
+const DEFAULT_ROW_HEIGHT = 20
+const DEFAULT_AXIS_HEIGHT = 20
+const DEFAULT_HIGHLIGHT_COLOR = '#FF0000'
+const DEFAULT_SELECTIONS = {}
 
 export const HeatStreamsChart: React.FC<IHeatStreamsChartProps> = memo(
 	({
 		colorizer,
-		timeScrub,
 		width,
 		height,
-		textPercent,
-		showCategories,
-		showValues,
-		rowHeight,
-		axisHeight,
-		highlightColor,
-		rowGap,
 		categoryValues,
-		selections,
-		numTicks,
 		xDomain,
-		onClickCategory,
-		onClearSelection,
-		zoomLevel,
 		numericAggregation,
 		dateAggregation,
 		categories,
-		onScrub,
+		selections = DEFAULT_SELECTIONS,
+		highlightColor = DEFAULT_HIGHLIGHT_COLOR,
+		timeScrub = undefined,
+		rowGap = false,
+		showCategories = false,
+		showValues = false,
+		zoomLevel = DEFAULT_ZOOM_LEVEL,
+		numTicks = DEFAULT_NUM_TICKS,
+		axisHeight = DEFAULT_AXIS_HEIGHT,
+		rowHeight = DEFAULT_ROW_HEIGHT,
+		textPercent = DEFAULT_TEXT_PERCENT,
+		onClickCategory = NO_OP,
+		onClearSelection = NO_OP,
+		onScrub = NO_OP,
 	}) => {
 		const [panPosition, setPanPosition] = useState(0)
 		const [scrollPosition, setScrollPosition] = useState(0)

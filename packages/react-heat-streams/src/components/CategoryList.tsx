@@ -45,7 +45,7 @@ export interface ICategoryListProps {
 	onScroll: (deltaX: number, deltaY: number) => void
 	onClear: () => void
 	xPan: number
-	timeScrub: TimeDomain
+	timeScrub?: TimeDomain
 }
 
 export const CategoryList: React.FC<ICategoryListProps> = memo(

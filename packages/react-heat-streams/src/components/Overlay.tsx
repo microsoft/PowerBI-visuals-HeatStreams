@@ -6,15 +6,17 @@ import * as React from 'react'
 import { memo, useCallback, useState } from 'react'
 import { TimeDomain } from '../interfaces'
 
+const NO_OP = () => null
+
 export interface IOverlayProps {
 	height: number
 	width: number
 	x: number
 	xScale: any
 	highlightColor: string
-	onDrag: (bounds: TimeDomain) => void
-	onClick: (x: number, y: number, ctrl: boolean) => void
-	timeScrub: TimeDomain
+	onDrag?: (bounds: TimeDomain) => void
+	onClick?: (x: number, y: number, ctrl: boolean) => void
+	timeScrub?: TimeDomain
 }
 
 export const Overlay: React.FC<IOverlayProps> = memo(
@@ -25,8 +27,8 @@ export const Overlay: React.FC<IOverlayProps> = memo(
 		xScale,
 		highlightColor,
 		timeScrub: timeScrubProps,
-		onDrag,
-		onClick,
+		onDrag = NO_OP,
+		onClick = NO_OP,
 	}) => {
 		const [dragStart, setDragStart] = useState<number | null>(null)
 		const [dragEnd, setDragEnd] = useState<number | null>(null)
@@ -98,17 +100,17 @@ export const Overlay: React.FC<IOverlayProps> = memo(
 			[isDragging, cutDrag],
 		)
 
-		const isScrubValid = timeScrub !== null && timeScrub.length === 2
-		const scrub = isScrubValid ? (
-			<rect
-				className="selection"
-				height={height}
-				width={xScale(timeScrub[1]) - xScale(timeScrub[0])}
-				x={xScale(timeScrub[0])}
-				stroke={highlightColor}
-				strokeWidth={1}
-			/>
-		) : null
+		const scrub =
+			timeScrub == null || timeScrub.length != 2 ? null : (
+				<rect
+					className="selection"
+					height={height}
+					width={xScale(timeScrub[1]) - xScale(timeScrub[0])}
+					x={xScale(timeScrub[0])}
+					stroke={highlightColor}
+					strokeWidth={1}
+				/>
+			)
 		return (
 			<g className="overlay">
 				<rect

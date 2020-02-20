@@ -16,7 +16,7 @@ export interface ITimeAxisProps {
 	xPan: number
 	offset: number
 	numTicks: number
-	timeScrub: TimeDomain
+	timeScrub?: TimeDomain
 	xScale: (input: number | Date) => number
 }
 
@@ -31,10 +31,10 @@ const styles: Record<string, React.CSSProperties> = {
 
 export const TimeAxis: React.FC<ITimeAxisProps> = memo(
 	({ xPan, offset, xScale, timeScrub, height, numTicks = 10 }) => {
-		const isScrubValid = timeScrub !== null && timeScrub.length === 2
-		const axisScrub = isScrubValid ? (
-			<AxisScrub height={height} timeScrub={timeScrub} xScale={xScale} />
-		) : null
+		const axisScrub =
+			timeScrub == null || timeScrub.length !== 2 ? null : (
+				<AxisScrub height={height} timeScrub={timeScrub} xScale={xScale} />
+			)
 		return (
 			<g transform={`translate(${xPan}, ${offset})`} style={styles.grouping}>
 				{axisScrub}
