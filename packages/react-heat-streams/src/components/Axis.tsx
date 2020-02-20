@@ -4,7 +4,7 @@
  */
 import * as React from 'react'
 import { memo } from 'react'
-import { TimeDomain } from '../interfaces'
+import { TimeDomain } from '../types'
 
 /* eslint-disable-next-line @typescript-eslint/no-var-requires */
 const { Axis, axisPropsFromTickScale, BOTTOM } = require('react-d3-axis')

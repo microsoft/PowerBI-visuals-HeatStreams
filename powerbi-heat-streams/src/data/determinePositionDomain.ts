@@ -5,7 +5,8 @@
 
 import { getSliceEnd, XDomain } from 'react-heat-streams'
 import { extent } from 'd3-array'
-import { ICategoryDataMap, IVisualDataOptions } from '../chart/interfaces'
+import { ICategoryDataMap } from '../chart/types'
+import { IVisualDataOptions } from '../settings/types'
 
 export function determinePositionDomain(
 	data: ICategoryDataMap,

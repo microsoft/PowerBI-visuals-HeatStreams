@@ -10,7 +10,7 @@ import {
 	XDomain,
 } from 'react-heat-streams'
 import { mean } from 'd3-array'
-import { ICategoryDataMap } from '../chart/interfaces'
+import { ICategoryDataMap } from '../chart/types'
 
 function sliceStart(
 	date: Date,
@@ -22,12 +22,12 @@ function sliceStart(
 	result.setUTCSeconds(0)
 	result.setUTCMinutes(0)
 
-	if (dateAggregation === 'days') {
+	if (dateAggregation === DateAggregation.Days) {
 		result.setUTCHours(0)
-	} else if (dateAggregation === 'months') {
+	} else if (dateAggregation === DateAggregation.Months) {
 		result.setUTCHours(0)
 		result.setUTCDate(1)
-	} else if (dateAggregation === 'years') {
+	} else if (dateAggregation === DateAggregation.Years) {
 		result.setUTCHours(0)
 		result.setUTCDate(1)
 		result.setUTCMonth(1)

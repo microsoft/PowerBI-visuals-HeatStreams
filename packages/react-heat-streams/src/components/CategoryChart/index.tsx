@@ -11,7 +11,7 @@ import {
 	IScaler,
 	IValueSlice,
 	XDomain,
-} from '../../interfaces'
+} from '../../types'
 import { printValue } from '../printValue'
 import { CategoryView } from './CategoryView'
 import { ValueRun } from './ValueRun'

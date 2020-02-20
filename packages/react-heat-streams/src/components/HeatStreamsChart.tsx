@@ -14,7 +14,7 @@ import {
 	Scrub,
 	XDomain,
 	TimeDomain,
-} from '../interfaces'
+} from '../types'
 import { getSliceEnd } from '../utils'
 import { CategoryList } from './CategoryList'
 
@@ -30,13 +30,13 @@ export interface IHeatStreamsChartProps {
 	colorizer: IColorizer
 	categories: ICategory[]
 	categoryValues: ICategoryValueMap
-	numericAggregation: number
+	numericAggregation?: number
 	/**
 	 * A map of category id to selected category
 	 * @default empty object
 	 */
 	selections?: ICategorySelectionMap
-	dateAggregation: DateAggregation
+	dateAggregation?: DateAggregation
 	highlightColor?: string
 	timeScrub?: TimeDomain
 	rowGap?: boolean
@@ -74,8 +74,8 @@ export const HeatStreamsChart: React.FC<IHeatStreamsChartProps> = memo(
 		categories,
 		categoryValues,
 		xDomain,
-		numericAggregation,
-		dateAggregation,
+		numericAggregation = 1,
+		dateAggregation = DateAggregation.Days,
 		selections = DEFAULT_SELECTIONS,
 		highlightColor = DEFAULT_HIGHLIGHT_COLOR,
 		timeScrub = undefined,
@@ -239,25 +239,6 @@ function useCategoryY(rowHeight: number, rowGap: number) {
 	)
 }
 
-function usePanScroll(
-	zoomLevel: number,
-): [number, number, (deltaX: number, deltaY: number) => void] {
-	const [panPosition, setPanPosition] = useState(0)
-	const [scrollPosition, setScrollPosition] = useState(0)
-
-	const onScroll = useCallback(
-		(deltaX: number, deltaY: number): void => {
-			const newPanPos = zoomLevel === 1 ? 0 : Math.min(0, panPosition - deltaX)
-			const newScrollPos = Math.max(0, scrollPosition + deltaY)
-			setPanPosition(newPanPos)
-			setScrollPosition(newScrollPos)
-		},
-		[panPosition, scrollPosition, zoomLevel],
-	)
-
-	return [panPosition, scrollPosition, onScroll]
-}
-
 function useAxisOffset(
 	height: number,
 	axisHeight: number,
@@ -340,4 +321,23 @@ function useOnClickHandler(
 			timeScrub,
 		],
 	)
+}
+
+function usePanScroll(
+	zoomLevel: number,
+): [number, number, (dx: number, dy: number) => void] {
+	const [panPosition, setPanPosition] = useState(0)
+	const [scrollPosition, setScrollPosition] = useState(0)
+
+	const onScroll = useCallback(
+		(dx: number, dy: number): void => {
+			const newPanPos = zoomLevel === 1 ? 0 : Math.min(0, panPosition - dx)
+			const newScrollPos = Math.max(0, scrollPosition + dy)
+			setPanPosition(newPanPos)
+			setScrollPosition(newScrollPos)
+		},
+		[panPosition, scrollPosition, zoomLevel],
+	)
+
+	return [panPosition, scrollPosition, onScroll]
 }

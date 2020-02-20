@@ -2,107 +2,74 @@
  * Copyright (c) Microsoft. All rights reserved.
  * Licensed under the MIT license. See LICENSE file in the project.
  */
-import React, { useCallback, useState, useMemo } from 'react'
-import {
-	HeatStreamsChart,
-	ICategory,
-	ICategoryValueMap,
-	ICategorySelectionMap,
-} from 'react-heat-streams'
-import {
-	Colorizer,
-	DivergingScaler,
-	isDivergingColorScheme,
-	LinearScaler,
-} from '@essex/d3-coloring-scales'
-
-require('react-heat-streams/style/heat-streams.css')
+import React from 'react'
+import { withKnobs, number, select } from '@storybook/addon-knobs'
+import { InteractiveChart } from './InteractiveChart'
+import * as colors from 'd3-scale-chromatic'
 
 export default {
-	title: 'HeatStreamsChart',
-	component: HeatStreamsChart,
-}
-function getRandomArbitrary(min: number, max: number) {
-	return Math.random() * (max - min) + min
+	title: 'Heat-Streams Chart',
+	decorators: [withKnobs],
 }
 
-function arrayOfLen(length: number) {
-	const values = []
-	for (let i = 0; i < length; i++) {
-		values.push(i)
-	}
-	console.log('values', values)
-	return values
-}
+const colorKeys = Object.keys(colors)
+	.filter(t => t.startsWith('interpolate'))
+	.map(t => t.replace('interpolate', ''))
 
-function InteractiveChart() {
-	const colorizer = useMemo(() => {
-		const colorScheme = 'RdBu'
-		const isLogScale = false
-		const valueMin = 0
-		const valueMid = 50
-		const valueMax = 100
-		const scaler = isDivergingColorScheme(colorScheme)
-			? new DivergingScaler(valueMin, valueMid, valueMax, isLogScale)
-			: new LinearScaler(valueMin, valueMax, isLogScale)
-		return new Colorizer(scaler, colorScheme)
-	}, [])
-	const categories: ICategory[] = useMemo(
-		() =>
-			arrayOfLen(100).map(v => ({
-				id: v,
-				name: `Category ${v}`,
-			})),
-		[],
+const VIEW_OPTS = 'View Options'
+const DATA_OPTS = 'Data Options'
+
+export const BasicExample = () => {
+	const colorScheme = select('Color Scheme', colorKeys, colorKeys[0], VIEW_OPTS)
+	const width = number(
+		'Chart Width',
+		900,
+		{ min: 100, max: 1500, step: 10 },
+		VIEW_OPTS,
 	)
-	const categoryValues: ICategoryValueMap = useMemo(() => {
-		const ary = arrayOfLen(100)
-		return ary.reduce((prev, curr) => {
-			prev[curr] = ary.map(v => ({
-				start: v,
-				end: v + 1,
-				value: getRandomArbitrary(0, 100),
-			}))
-			return prev
-		}, {} as ICategoryValueMap)
-	}, [])
-	const [selections, setSelections] = useState<ICategorySelectionMap>({})
+	const height = number(
+		'Chart Height',
+		350,
+		{ min: 100, max: 900, step: 10 },
+		VIEW_OPTS,
+	)
+	const axisHeight = number(
+		'Axis Height',
+		30,
+		{ min: 0, max: 100, step: 10 },
+		VIEW_OPTS,
+	)
+	const rowHeight = number(
+		'Row Height',
+		20,
+		{ min: 1, max: 50, step: 1 },
+		VIEW_OPTS,
+	)
+	const numTicks = number(
+		'# Axis Ticks',
+		30,
+		{ min: 0, max: 100, step: 1 },
+		VIEW_OPTS,
+	)
+	const valueMin = number('Min Value', 0, undefined, DATA_OPTS)
+	const valueMid = number('Mid Value', 50, undefined, DATA_OPTS)
+	const valueMax = number('Max Value', 100, undefined, DATA_OPTS)
 
+	console.log('ayoo')
 	return (
-		<HeatStreamsChart
-			axisHeight={30}
-			width={900}
-			height={400}
-			numTicks={20}
-			rowHeight={20}
-			categories={categories}
-			categoryValues={categoryValues}
-			dateAggregation={'years'}
-			numericAggregation={1}
-			colorizer={(value: any) => colorizer.color(value)}
-			xDomain={[0, 100]}
-			highlightColor={'#FF00FF'}
-			selections={selections}
-			showValues={true}
-			onClickCategory={useCallback(
-				(cat: ICategory, ctrl: boolean) => {
-					const selection: ICategorySelectionMap = ctrl
-						? {
-								...selections,
-								[cat.id]: !selections[cat.id],
-						  }
-						: {
-								[cat.id]: !selections[cat.id],
-						  }
-					setSelections(selection)
-				},
-				[selections],
-			)}
+		<InteractiveChart
+			colorScheme={colorScheme}
+			width={width}
+			height={height}
+			rowHeight={rowHeight}
+			axisHeight={axisHeight}
+			numTicks={numTicks}
+			valueMin={valueMin}
+			valueMid={valueMid}
+			valueMax={valueMax}
 		/>
 	)
 }
-
-export const ToStorybook = () => <InteractiveChart />
-ToStorybook.story = {
+BasicExample.story = {
 	name: 'basic example',
 }

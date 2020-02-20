@@ -9,21 +9,17 @@ import {
 	isDivergingColorScheme,
 	LinearScaler,
 } from '@essex/d3-coloring-scales'
-import { ICategory, TimeDomain } from 'react-heat-streams'
+import { TimeDomain, ICategorySelectionMap } from 'react-heat-streams'
 import { DataViewConverter } from '../data/DataViewConverter'
 import { VisualSettings } from '../settings/VisualSettings'
-import {
-	IChartData,
-	IChartOptions,
-	IVisualDataOptions,
-	IVisualRenderingOptions,
-} from './interfaces'
+import { IChartData, IChartOptions } from './types'
+import { IVisualDataOptions, IVisualRenderingOptions } from '../settings/types'
 
 export class ChartOptions implements IChartOptions {
 	public _dataOptions: IVisualDataOptions | undefined
 	public _renderOptions: IVisualRenderingOptions | undefined
 	public _data: IChartData | undefined
-	public _selections: Record<string, ICategory> | undefined
+	public _selections: ICategorySelectionMap | undefined
 	public _timeScrub: TimeDomain | null | undefined
 	public _colorizer: Colorizer | undefined
 
@@ -42,9 +38,16 @@ export class ChartOptions implements IChartOptions {
 		this._data = this.converter.convertDataView(dataView, settings.data)
 		const { colorScheme } = this.renderOptions
 		const { isLogScale } = this.dataOptions
-		const { valueMin, valueMax, valueMid } = this
+		let { valueMin, valueMax } = this
+
+		// If the color mapping is reversed, reverse the scalar inputs
+		if (this.renderOptions.reverseColorScheme) {
+			const tmp = valueMin
+			valueMin = valueMax
+			valueMax = tmp
+		}
 		const scaler = isDivergingColorScheme(colorScheme)
-			? new DivergingScaler(valueMin, valueMid, valueMax, isLogScale)
+			? new DivergingScaler(valueMin, this.valueMid, valueMax, isLogScale)
 			: new LinearScaler(valueMin, valueMax, isLogScale)
 
 		this._colorizer = new Colorizer(scaler, colorScheme)
@@ -55,8 +58,8 @@ export class ChartOptions implements IChartOptions {
 		return this._timeScrub as TimeDomain | null
 	}
 
-	public get selections(): Record<string, ICategory> {
-		return this._selections as Record<string, ICategory>
+	public get selections(): ICategorySelectionMap {
+		return this._selections as ICategorySelectionMap
 	}
 
 	public get data(): IChartData {

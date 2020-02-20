@@ -3,12 +3,8 @@
  * Licensed under the MIT license. See LICENSE file in the project.
  */
 /* eslint-disable @typescript-eslint/no-var-requires */
-import {
-	ICategoryData,
-	ICategoryDataMap,
-	IChartData,
-	IVisualDataOptions,
-} from '../chart/interfaces'
+import { ICategoryData, ICategoryDataMap, IChartData } from '../chart/types'
+import { IVisualDataOptions } from '../settings/types'
 import { coalesceValueSlices } from './coalesceValueSlices'
 import { determinePositionDomain } from './determinePositionDomain'
 import { sortCategories } from './sortCategories'

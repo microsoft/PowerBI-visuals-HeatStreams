@@ -4,12 +4,13 @@
  */
 import { Colorizer } from '@essex/d3-coloring-scales'
 import {
-	DateAggregation,
 	ICategory,
 	ICategoryValueMap,
+	ICategorySelectionMap,
 	XDomain,
 	TimeDomain,
 } from 'react-heat-streams'
+import { IVisualRenderingOptions, IVisualDataOptions } from '../settings/types'
 
 export interface ICategoryData {
 	position: Date
@@ -24,32 +25,6 @@ export interface IChartData {
 	valueDomain: [number, number]
 }
 
-export type SortBy = 'name' | 'average' | 'max' | 'density'
-
-export interface IVisualDataOptions {
-	valueMin: number | undefined
-	valueMax: number | undefined
-	scoreSplit: number | undefined
-	numericAggregation: number
-	dateAggregation: DateAggregation
-	isLogScale: boolean
-	sortBy: SortBy
-	sortInvert: boolean
-}
-
-export interface IVisualRenderingOptions {
-	highlightColor: string
-	rowHeight: number
-	categoryTextPercent: number
-	axisHeight: number
-	rowGap: boolean
-	colorScheme: string
-	zoomLevel: number
-	numTicks: number
-	showValues: boolean
-	showCategories: boolean
-}
-
 export interface IChartProps {
 	options: IChartOptions
 }
@@ -62,7 +37,7 @@ export interface IChartOptions {
 	renderOptions: IVisualRenderingOptions
 	dataOptions: IVisualDataOptions
 	data: IChartData
-	selections: { [key: string]: ICategory }
+	selections: ICategorySelectionMap
 	timeScrub: TimeDomain | null
 	width: number
 	height: number

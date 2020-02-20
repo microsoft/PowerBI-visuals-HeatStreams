@@ -12,8 +12,8 @@ import {
 	TimeDomain,
 } from 'react-heat-streams'
 import * as React from 'react'
-import * as ReactDOM from 'react-dom'
-import { IChartOptions } from './interfaces'
+import { render } from 'react-dom'
+import { IChartOptions } from './types'
 
 export class Chart {
 	private selectionChangedHandler: SelectionChangedHandler | undefined
@@ -61,10 +61,7 @@ export class Chart {
 			onClickCategory: this.onClickCategory,
 			onScrub: this.onScrubbed,
 		}
-		return ReactDOM.render(
-			<HeatStreamsChart {...renderProps} />,
-			this.options.element,
-		)
+		render(<HeatStreamsChart {...renderProps} />, this.options.element)
 	}
 
 	private onScrubbed = (bounds: Scrub): void => {

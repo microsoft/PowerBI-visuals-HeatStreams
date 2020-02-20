@@ -4,7 +4,7 @@
  */
 import * as React from 'react'
 import { memo, useMemo, useCallback } from 'react'
-import { ICategory } from '../interfaces'
+import { ICategory } from '../types'
 
 export interface ICategoryNameListProps {
 	categories: ICategory[]
@@ -38,7 +38,7 @@ export const CategoryNameList: React.FC<ICategoryNameListProps> = memo(
 						y={categoryY(index) + rowHeight - 1}
 					/>
 				)),
-			[categories, isCategorySelected],
+			[categories, isCategorySelected, categoryY, onClickCategory, rowHeight],
 		)
 		return (
 			<g className="category-names">

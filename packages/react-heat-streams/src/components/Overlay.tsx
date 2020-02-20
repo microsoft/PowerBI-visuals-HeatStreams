@@ -4,7 +4,7 @@
  */
 import * as React from 'react'
 import { memo, useCallback, useState } from 'react'
-import { TimeDomain } from '../interfaces'
+import { TimeDomain } from '../types'
 
 const NO_OP = () => null
 
@@ -100,7 +100,7 @@ export const Overlay: React.FC<IOverlayProps> = memo(function Overlay({
 	)
 
 	const scrub =
-		timeScrub == null || timeScrub.length != 2 ? null : (
+		timeScrub == null || timeScrub.length !== 2 ? null : (
 			<rect
 				className="selection"
 				height={height}
