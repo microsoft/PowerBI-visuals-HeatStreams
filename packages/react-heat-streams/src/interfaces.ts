@@ -29,11 +29,9 @@ export interface ICategory {
 }
 
 /**
- * A Selection of Category names
+ * A Selection of Category IDs
  */
-export interface ICategorySelectionMap {
-	[key: string]: ICategory
-}
+export type ICategorySelectionMap = Record<string, boolean>
 
 /**
  * Interface for the value to color function

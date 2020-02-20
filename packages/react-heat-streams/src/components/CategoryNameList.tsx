@@ -33,12 +33,12 @@ export const CategoryNameList: React.FC<ICategoryNameListProps> = memo(
 						key={cat.id}
 						category={cat}
 						height={rowHeight}
-						isSelected={isCategorySelected(cat)}
+						selected={isCategorySelected(cat)}
 						onClick={onClickCategory}
 						y={categoryY(index) + rowHeight - 1}
 					/>
 				)),
-			[categories],
+			[categories, isCategorySelected],
 		)
 		return (
 			<g className="category-names">
@@ -56,7 +56,7 @@ export const CategoryNameList: React.FC<ICategoryNameListProps> = memo(
 interface ICategoryNameProps {
 	category: ICategory
 	height: number
-	isSelected: boolean
+	selected: boolean
 	y: number
 	onClick?: (category: ICategory, ctrlKey: boolean) => void
 }
@@ -64,7 +64,7 @@ interface ICategoryNameProps {
 const CategoryName: React.FC<ICategoryNameProps> = memo(function CategoryName({
 	category,
 	height,
-	isSelected,
+	selected,
 	y,
 	onClick: onClickCategory = NO_OP,
 }) {
@@ -79,7 +79,7 @@ const CategoryName: React.FC<ICategoryNameProps> = memo(function CategoryName({
 		<CategoryText
 			height={height}
 			y={y}
-			selected={isSelected}
+			selected={selected}
 			onClick={onClick}
 			name={category.name}
 		/>

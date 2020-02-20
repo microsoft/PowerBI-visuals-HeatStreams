@@ -84,12 +84,22 @@ function InteractiveChart() {
 			numericAggregation={1}
 			colorizer={(value: any) => colorizer.color(value)}
 			xDomain={[0, 100]}
-			highlightColor={'#FF0000'}
+			highlightColor={'#FF00FF'}
 			selections={selections}
-			onClickCategory={useCallback((cat: ICategory, ctrl: boolean) => {
-				console.log('click cat', cat, ctrl)
-				setSelections({ [cat.id]: cat })
-			}, [])}
+			showValues={true}
+			onClickCategory={useCallback(
+				(cat: ICategory, ctrl: boolean) => {
+					setSelections(
+						ctrl
+							? ({
+									...selections,
+									[cat.id]: !selections[cat.id],
+							  } as ICategorySelectionMap)
+							: ({ [cat.id]: !selections[cat.id] } as ICategorySelectionMap),
+					)
+				},
+				[selections],
+			)}
 		/>
 	)
 }
