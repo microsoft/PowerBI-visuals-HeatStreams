@@ -3,18 +3,10 @@
 	"version": "1.1.4",
 	"private": true,
 	"license": "MIT",
-	"main": "dist/cjs/index.js",
-	"module": "dist/esm/index.js",
-	"types": "lib/index.d.ts",
 	"scripts": {
-		"build:tsc": "tsc",
-		"build:babel:esm": "babel --config-file ../../babelrc.esm.js -d dist/esm lib",
-		"build:babel:cjs": "babel --config-file ../../babelrc.cjs.js -d dist/cjs lib",
-		"build": "npm-run-all -s build:tsc -p build:babel:*",
-		"clean": "rimraf lib dist",
-		"start": "tsc -w",
-		"storybook": "start-storybook -p 6006",
-		"build-storybook": "build-storybook"
+		"clean": "rimraf lib storybook-static",
+		"start": "start-storybook -p 6006",
+		"build": "build-storybook"
 	},
 	"author": {
 		"name": "Microsoft (experimental)",
@@ -48,6 +40,7 @@
 		"react": ">= 16.12"
 	},
 	"dependencies": {
+		"react-heat-streams": "^1.1.4",
 		"@essex/d3-coloring-scales": "^3.0.0",
 		"d3-color": "^1.4.0",
 		"d3-scale": "^3.2.1",

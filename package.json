@@ -4,7 +4,7 @@
 	"license": "MIT",
 	"scripts": {
 		"clean": "lerna run clean --stream",
-		"start": "lerna run start --no-sort --concurrency 2 --stream",
+		"start": "lerna run start --parallel --stream",
 		"build": "lerna run build --stream",
 		"lint": "eslint . --ext .js,.ts,.jsx,.tsx",
 		"check_formatting": "pretty-quick --check",

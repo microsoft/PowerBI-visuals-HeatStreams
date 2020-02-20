@@ -12,7 +12,7 @@
 		"build:babel:cjs": "babel --config-file ../../babelrc.cjs.js -d dist/cjs lib",
 		"build": "npm-run-all -s build:tsc -p build:babel:*",
 		"clean": "rimraf lib dist",
-		"start": "tsc -w"
+		"start": "tsc -w --preserveWatchOutput"
 	},
 	"author": {
 		"name": "Microsoft (experimental)",

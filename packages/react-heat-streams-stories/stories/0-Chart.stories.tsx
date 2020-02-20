@@ -3,14 +3,15 @@
  * Licensed under the MIT license. See LICENSE file in the project.
  */
 import * as React from 'react'
-import { HeatStreamsChart, ICategoryValueMap } from '../src/index'
+import { HeatStreamsChart, ICategoryValueMap } from 'react-heat-streams'
 import {
 	Colorizer,
 	DivergingScaler,
 	isDivergingColorScheme,
 	LinearScaler,
 } from '@essex/d3-coloring-scales'
-import { color } from 'd3-color'
+
+require('react-heat-streams/style/heat-streams.css')
 
 export default {
 	title: 'HeatStreamsChart',
