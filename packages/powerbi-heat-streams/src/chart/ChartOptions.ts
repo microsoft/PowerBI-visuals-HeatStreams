@@ -9,7 +9,11 @@ import {
 	isDivergingColorScheme,
 	LinearScaler,
 } from '@essex/d3-coloring-scales'
-import { ICategory, TimeDomain } from 'react-heat-streams'
+import {
+	ICategory,
+	TimeDomain,
+	ICategorySelectionMap,
+} from 'react-heat-streams'
 import { DataViewConverter } from '../data/DataViewConverter'
 import { VisualSettings } from '../settings/VisualSettings'
 import { IChartData, IChartOptions } from './types'
@@ -19,7 +23,7 @@ export class ChartOptions implements IChartOptions {
 	public _dataOptions: IVisualDataOptions | undefined
 	public _renderOptions: IVisualRenderingOptions | undefined
 	public _data: IChartData | undefined
-	public _selections: Record<string, ICategory> | undefined
+	public _selections: ICategorySelectionMap | undefined
 	public _timeScrub: TimeDomain | null | undefined
 	public _colorizer: Colorizer | undefined
 
@@ -51,8 +55,8 @@ export class ChartOptions implements IChartOptions {
 		return this._timeScrub as TimeDomain | null
 	}
 
-	public get selections(): Record<string, ICategory> {
-		return this._selections as Record<string, ICategory>
+	public get selections(): ICategorySelectionMap {
+		return this._selections as ICategorySelectionMap
 	}
 
 	public get data(): IChartData {

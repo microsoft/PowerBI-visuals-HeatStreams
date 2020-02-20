@@ -7,6 +7,7 @@ import {
 	DateAggregation,
 	ICategory,
 	ICategoryValueMap,
+	ICategorySelectionMap,
 	XDomain,
 	TimeDomain,
 } from 'react-heat-streams'

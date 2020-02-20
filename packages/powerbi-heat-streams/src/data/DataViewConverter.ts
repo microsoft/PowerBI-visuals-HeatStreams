@@ -4,7 +4,11 @@
  */
 /* eslint-disable @typescript-eslint/no-var-requires */
 import powerbi from 'powerbi-visuals-api'
-import { TimeDomain, ICategory } from 'react-heat-streams'
+import {
+	TimeDomain,
+	ICategory,
+	ICategorySelectionMap,
+} from 'react-heat-streams'
 import { IChartData } from '../chart/types'
 import { IVisualDataOptions } from '../settings/types'
 import { convertCategoricalDataView } from './convertCategoricalDataView'
@@ -32,11 +36,11 @@ export class DataViewConverter {
 	 */
 	public unpackSelectedCategories(
 		dataView: powerbi.DataView,
-	): { [key: string]: ICategory } {
+	): ICategorySelectionMap {
 		const selection = this.selectionManager.getSelectionIds()
 		const category = get(dataView, 'categorical.categories[0]')
 
-		const selectedCategories: any = {}
+		const selectedCategories: ICategorySelectionMap = {}
 		if (category) {
 			selection.forEach(s => {
 				try {
