@@ -4,7 +4,7 @@
  */
 /* eslint-disable @typescript-eslint/no-var-requires */
 import powerbi from 'powerbi-visuals-api'
-import { ICategory, TimeDomain } from '@essex/react-heat-streams'
+import { ICategory, TimeDomain } from 'react-heat-streams'
 import { buildDomainScrub } from './data/buildDomainScrub'
 const get = require('lodash/get')
 const logger = require('./logger')

@@ -14,8 +14,13 @@ export interface IBackboardProps {
 	onClick: () => void
 }
 
-export const Backboard: React.FC<IBackboardProps> = memo(
-	({ height, width, x, onClick }) => (
+export const Backboard: React.FC<IBackboardProps> = memo(function Backboard({
+	height,
+	width,
+	x,
+	onClick,
+}) {
+	return (
 		<rect
 			className="backboard"
 			x={x}
@@ -23,6 +28,5 @@ export const Backboard: React.FC<IBackboardProps> = memo(
 			width={width}
 			onClick={onClick}
 		/>
-	),
-)
-Backboard.displayName = 'Backboard'
+	)
+})

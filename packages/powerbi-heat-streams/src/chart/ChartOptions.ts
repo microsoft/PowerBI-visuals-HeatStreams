@@ -9,7 +9,7 @@ import {
 	isDivergingColorScheme,
 	LinearScaler,
 } from '@essex/d3-coloring-scales'
-import { ICategory, TimeDomain } from '@essex/react-heat-streams'
+import { ICategory, TimeDomain } from 'react-heat-streams'
 import { DataViewConverter } from '../data/DataViewConverter'
 import { VisualSettings } from '../settings/VisualSettings'
 import {

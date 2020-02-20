@@ -19,7 +19,6 @@
 		"icon": "assets/icon.png"
 	},
 	"externalJS": null,
-	"style": "style/visual.less",
 	"capabilities": "capabilities.json",
 	"dependencies": null,
 	"stringResources": []

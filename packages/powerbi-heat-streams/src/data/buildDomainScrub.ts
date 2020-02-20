@@ -5,7 +5,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import powerbi from 'powerbi-visuals-api'
 import * as models from 'powerbi-models'
-import { TimeDomain } from '@essex/react-heat-streams'
+import { TimeDomain } from 'react-heat-streams'
 
 function getTarget(column: any): models.IFilterColumnTarget {
 	return {

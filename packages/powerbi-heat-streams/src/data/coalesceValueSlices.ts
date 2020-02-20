@@ -8,7 +8,7 @@ import {
 	getSliceEnd,
 	ICategoryValueMap,
 	XDomain,
-} from '@essex/react-heat-streams'
+} from 'react-heat-streams'
 import { mean } from 'd3-array'
 import { ICategoryDataMap } from '../chart/interfaces'
 

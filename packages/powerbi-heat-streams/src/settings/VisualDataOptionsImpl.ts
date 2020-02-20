@@ -2,7 +2,7 @@
  * Copyright (c) Microsoft. All rights reserved.
  * Licensed under the MIT license. See LICENSE file in the project.
  */
-import { DateAggregation } from '@essex/react-heat-streams'
+import { DateAggregation } from 'react-heat-streams'
 import { IVisualDataOptions, SortBy } from '../chart/interfaces'
 
 export class VisualDataOptionsImpl implements IVisualDataOptions {

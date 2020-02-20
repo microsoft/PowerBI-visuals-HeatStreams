@@ -2,6 +2,7 @@ node_modules/
 .tmp/
 dist/
 lib/
+storybook-static/
 package-lock.json
 *-debug.log
 *-error.log

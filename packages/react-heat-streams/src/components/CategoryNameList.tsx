@@ -3,43 +3,44 @@
  * Licensed under the MIT license. See LICENSE file in the project.
  */
 import * as React from 'react'
-import { memo, useCallback } from 'react'
+import { memo, useMemo, useCallback } from 'react'
 import { ICategory } from '../interfaces'
-import { CategoryText } from './CategoryText'
 
 export interface ICategoryNameListProps {
 	categories: ICategory[]
-	showCategories: boolean
 	width: number
 	rowHeight: number
 	categoryY: (input: number) => number
 	isCategorySelected: (category: ICategory) => boolean
-	onClickCategory: (category: ICategory, ctrlKey: boolean) => void
-	onClear: () => void
+	onClickCategory?: (category: ICategory, ctrlKey: boolean) => void
+	onClear?: () => void
 }
 
 export const CategoryNameList: React.FC<ICategoryNameListProps> = memo(
-	({
+	function CategoryNameList({
 		categories,
-		showCategories,
 		width,
 		rowHeight,
 		categoryY,
 		isCategorySelected,
-		onClickCategory,
-		onClear,
-	}) => {
-		const categoryNames = categories.map((cat, index) => (
-			<BoundCategoryName
-				key={cat.id}
-				category={cat}
-				rowHeight={rowHeight}
-				isSelected={isCategorySelected(cat)}
-				onClickCategory={onClickCategory}
-				y={categoryY(index) + rowHeight - 1}
-			/>
-		))
-		const categoryNameList = showCategories ? (
+		onClickCategory = NO_OP,
+		onClear = NO_OP,
+	}) {
+		const categoryNames = useMemo(
+			() =>
+				categories.map((cat, index) => (
+					<CategoryName
+						key={cat.id}
+						category={cat}
+						height={rowHeight}
+						selected={isCategorySelected(cat)}
+						onClick={onClickCategory}
+						y={categoryY(index) + rowHeight - 1}
+					/>
+				)),
+			[categories, isCategorySelected],
+		)
+		return (
 			<g className="category-names">
 				<rect
 					className="category-name-occluder"
@@ -48,38 +49,66 @@ export const CategoryNameList: React.FC<ICategoryNameListProps> = memo(
 				/>
 				<g className="category-texts">{categoryNames}</g>
 			</g>
-		) : null
-		return <g className="category-names">{categoryNameList}</g>
+		)
 	},
 )
-CategoryNameList.displayName = 'CategoryNameList'
 
-interface IBoundCategoryNameProps {
+interface ICategoryNameProps {
 	category: ICategory
-	rowHeight: number
-	isSelected: boolean
+	height: number
+	selected: boolean
 	y: number
-	onClickCategory: (category: ICategory, ctrlKey: boolean) => void
+	onClick?: (category: ICategory, ctrlKey: boolean) => void
 }
 
-const BoundCategoryName: React.FC<IBoundCategoryNameProps> = memo(
-	({ category, rowHeight, isSelected, y, onClickCategory }) => {
-		const onClick = useCallback(
-			(evt: React.MouseEvent<any>) => {
-				onClickCategory(category, evt.ctrlKey || evt.metaKey)
-				evt.stopPropagation()
-			},
-			[onClickCategory, category],
-		)
+const CategoryName: React.FC<ICategoryNameProps> = memo(function CategoryName({
+	category,
+	height,
+	selected,
+	y,
+	onClick: onClickCategory = NO_OP,
+}) {
+	const onClick = useCallback(
+		(evt: React.MouseEvent<any>) => {
+			onClickCategory(category, evt.ctrlKey || evt.metaKey)
+			evt.stopPropagation()
+		},
+		[onClickCategory, category],
+	)
+	return (
+		<CategoryText
+			height={height}
+			y={y}
+			selected={selected}
+			onClick={onClick}
+			name={category.name}
+		/>
+	)
+})
+
+export interface ICategoryTextProps {
+	height: number
+	y: number
+	selected: boolean
+	name: string
+	onClick?: (ent: React.MouseEvent<any>) => void
+}
+export const CategoryText: React.FC<ICategoryTextProps> = memo(
+	function CategoryText({ height, y, selected, name, onClick = NO_OP }) {
 		return (
-			<CategoryText
-				rowHeight={rowHeight}
+			<text
+				className="category-text"
+				fontSize={`${height - 2}px`}
+				clipPath="url(#clip-category-text)"
+				x={2}
 				y={y}
-				selected={isSelected}
+				fontWeight={selected ? 'bold' : 'normal'}
 				onClick={onClick}
-				name={category.name}
-			/>
+			>
+				{name}
+			</text>
 		)
 	},
 )
-BoundCategoryName.displayName = 'BoundCategoryName'
+
+const NO_OP = () => null

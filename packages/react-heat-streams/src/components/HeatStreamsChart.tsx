@@ -26,147 +26,122 @@ export interface IHeatStreamsState {
 export interface IHeatStreamsChartProps {
 	width: number
 	height: number
-	textPercent: number
-	rowHeight: number
-	axisHeight: number
-	numTicks: number
-	zoomLevel: number
 	xDomain: XDomain
-	highlightColor: string
-	showCategories: boolean
-	rowGap: boolean
-	showValues: boolean
-	timeScrub: TimeDomain
 	colorizer: IColorizer
 	categories: ICategory[]
 	categoryValues: ICategoryValueMap
-	selections: ICategorySelectionMap
-	numericAggregation?: number
-	dateAggregation?: DateAggregation
-	onClearSelection: () => void
-	onClickCategory: (category: ICategory, ctrl: boolean) => void
-	onScrub: (bounds: Scrub) => void
+	numericAggregation: number
+	/**
+	 * A map of category id to selected category
+	 * @default empty object
+	 */
+	selections?: ICategorySelectionMap
+	dateAggregation: DateAggregation
+	highlightColor?: string
+	timeScrub?: TimeDomain
+	rowGap?: boolean
+	showValues?: boolean
+	/**
+	 * A flag that determines whether the category names are shown.
+	 * @default true
+	 */
+	showCategories?: boolean
+	axisHeight?: number
+	rowHeight?: number
+	textPercent?: number
+	numTicks?: number
+	zoomLevel?: number
+	onClearSelection?: () => void
+	onClickCategory?: (category: ICategory, ctrl: boolean) => void
+	onScrub?: (bounds: Scrub) => void
 }
 
+const NO_OP = () => null
+const DEFAULT_NUM_TICKS = 20
+const DEFAULT_TEXT_PERCENT = 0.15
+const DEFAULT_ZOOM_LEVEL = 1
+const DEFAULT_ROW_HEIGHT = 20
+const DEFAULT_ROW_GAP = true
+const DEFAULT_AXIS_HEIGHT = 20
+const DEFAULT_HIGHLIGHT_COLOR = '#FF0000'
+const DEFAULT_SELECTIONS = {}
+
 export const HeatStreamsChart: React.FC<IHeatStreamsChartProps> = memo(
-	({
+	function HeatStreamsChart({
 		colorizer,
-		timeScrub,
 		width,
 		height,
-		textPercent,
-		showCategories,
-		showValues,
-		rowHeight,
-		axisHeight,
-		highlightColor,
-		rowGap,
+		categories,
 		categoryValues,
-		selections,
-		numTicks,
 		xDomain,
-		onClickCategory,
-		onClearSelection,
-		zoomLevel,
 		numericAggregation,
 		dateAggregation,
-		categories,
-		onScrub,
-	}) => {
-		const [panPosition, setPanPosition] = useState(0)
-		const [scrollPosition, setScrollPosition] = useState(0)
-		const getXScale = useCallback(
-			(domain: XDomain): any => {
-				const rangeStart = showCategories ? width * textPercent : 0
-				const range = [rangeStart, width * zoomLevel]
-				const isNumberDomain = typeof domain[0] === 'number'
-				if (isNumberDomain) {
-					return scaleLinear()
-						.domain(domain)
-						.range(range)
-				} else {
-					return scaleTime()
-						.domain(domain)
-						.range(range)
-				}
-			},
-			[showCategories, textPercent, width, zoomLevel],
+		selections = DEFAULT_SELECTIONS,
+		highlightColor = DEFAULT_HIGHLIGHT_COLOR,
+		timeScrub = undefined,
+		showCategories = true,
+		showValues = false,
+		rowGap = DEFAULT_ROW_GAP,
+		zoomLevel = DEFAULT_ZOOM_LEVEL,
+		numTicks = DEFAULT_NUM_TICKS,
+		axisHeight = DEFAULT_AXIS_HEIGHT,
+		rowHeight = DEFAULT_ROW_HEIGHT,
+		textPercent = DEFAULT_TEXT_PERCENT,
+		onClickCategory = NO_OP,
+		onClearSelection = NO_OP,
+		onScrub = NO_OP,
+	}) {
+		const [panPosition, scrollPosition, onScroll] = usePanScroll(zoomLevel)
+		const xScale = useXScale(
+			showCategories,
+			width,
+			textPercent,
+			zoomLevel,
+			xDomain,
 		)
-		const xScale = useMemo(() => getXScale(xDomain), [getXScale, xDomain])
-		const axisOffset = useMemo(() => {
-			return Math.min(
-				height - axisHeight,
-				categories.length * rowHeight + axisHeight,
-			)
-		}, [categories, axisHeight, rowHeight, height])
-
-		const sliceWidth = useMemo(() => {
-			const start = xDomain[0]
-			const end = getSliceEnd(start, numericAggregation, dateAggregation)
-			return xScale(end) - xScale(start)
-		}, [xScale, xDomain, numericAggregation, dateAggregation])
-
-		const categoryY = (index: number): number =>
-			rowHeight * index + (rowGap ? index : 0)
-
-		const isCategorySelected = (cat: ICategory): boolean =>
-			!!selections[cat.name]
+		const axisOffset = useAxisOffset(
+			height,
+			axisHeight,
+			rowHeight,
+			categories.length,
+		)
+		const sliceWidth = useSliceWidth(
+			xDomain,
+			xScale,
+			numericAggregation,
+			dateAggregation,
+		)
+		const categoryY = useCategoryY(rowHeight, rowGap ? 1 : 0)
+		const isCategorySelected = useCallback(
+			(cat: ICategory): boolean => !!selections[cat.id],
+			[selections],
+		)
 		const categoryTextWidth = width * textPercent
 		const chartWidth = width - categoryTextWidth
-
-		const maxCategories = useMemo(() => {
-			const gap = rowGap ? 1 : 0
-			return Math.floor((height - axisHeight) / (rowHeight + gap))
-		}, [rowGap, height, axisHeight, rowHeight])
-
-		const categoryOffsetStart = useMemo(() => {
-			let categoryOffsetStart = Math.floor(scrollPosition / rowHeight)
-			if (categories.length < categoryOffsetStart) {
-				categoryOffsetStart = categories.length - maxCategories
-			}
-			return categoryOffsetStart
-		}, [maxCategories, scrollPosition, rowHeight, categories.length])
-
-		const categoriesInView = useMemo(() => {
-			return categories.slice(
-				categoryOffsetStart,
-				categoryOffsetStart + maxCategories,
-			)
-		}, [categoryOffsetStart, maxCategories, categories])
-
-		const onClick = useCallback(
-			(x: number, y: number, ctrlKey: boolean): void => {
-				if (timeScrub) {
-					onClearSelection()
-				} else {
-					const gap = rowGap ? 1 : 0
-					const category = categoriesInView[Math.floor(y / (rowHeight + gap))]
-					if (category) {
-						onClickCategory(category, ctrlKey)
-					} else {
-						onClearSelection()
-					}
-				}
-			},
-			[
-				categoriesInView,
-				onClearSelection,
-				onClickCategory,
-				rowGap,
-				rowHeight,
-				timeScrub,
-			],
+		const maxCategories = useMaxCategories(
+			rowGap,
+			height,
+			rowHeight,
+			axisHeight,
 		)
-
-		const onScroll = useCallback(
-			(deltaX: number, deltaY: number): void => {
-				const newPanPos =
-					zoomLevel === 1 ? 0 : Math.min(0, panPosition - deltaX)
-				const newScrollPos = Math.max(0, scrollPosition + deltaY)
-				setPanPosition(newPanPos)
-				setScrollPosition(newScrollPos)
-			},
-			[panPosition, scrollPosition, zoomLevel],
+		const categoryOffsetStart = useCategoryOffsetStart(
+			categories,
+			scrollPosition,
+			rowHeight,
+			maxCategories,
+		)
+		const categoriesInView = useCategoriesInView(
+			categories,
+			maxCategories,
+			categoryOffsetStart,
+		)
+		const onClick = useOnClickHandler(
+			categoriesInView,
+			rowHeight,
+			rowGap,
+			timeScrub,
+			onClearSelection,
+			onClickCategory,
 		)
 
 		return (
@@ -215,4 +190,154 @@ export const HeatStreamsChart: React.FC<IHeatStreamsChartProps> = memo(
 		)
 	},
 )
-HeatStreamsChart.displayName = 'HeatStreamsChart'
+
+type XScale = (input: number | Date) => number
+function useXScale(
+	showCategories: boolean,
+	width: number,
+	textPercent: number,
+	zoomLevel: number,
+	xDomain: XDomain,
+): XScale {
+	const getXScale = useCallback(
+		(domain: XDomain): any => {
+			const rangeStart = showCategories ? width * textPercent : 0
+			const range = [rangeStart, width * zoomLevel]
+			const isNumberDomain = typeof domain[0] === 'number'
+			if (isNumberDomain) {
+				return scaleLinear()
+					.domain(domain)
+					.range(range)
+			} else {
+				return scaleTime()
+					.domain(domain)
+					.range(range)
+			}
+		},
+		[showCategories, textPercent, width, zoomLevel],
+	)
+	return useMemo(() => getXScale(xDomain), [getXScale, xDomain])
+}
+
+function useSliceWidth(
+	xDomain: XDomain,
+	xScale: XScale,
+	numericAggregation: number,
+	dateAggregation: DateAggregation,
+): number {
+	return useMemo(() => {
+		const start = xDomain[0]
+		const end = getSliceEnd(start, numericAggregation, dateAggregation)
+		return xScale(end) - xScale(start)
+	}, [xScale, xDomain, numericAggregation, dateAggregation])
+}
+
+function useCategoryY(rowHeight: number, rowGap: number) {
+	return useCallback(
+		(index: number): number => rowHeight * index + (rowGap ? index : 0),
+		[rowHeight, rowGap],
+	)
+}
+
+function usePanScroll(
+	zoomLevel: number,
+): [number, number, (deltaX: number, deltaY: number) => void] {
+	const [panPosition, setPanPosition] = useState(0)
+	const [scrollPosition, setScrollPosition] = useState(0)
+
+	const onScroll = useCallback(
+		(deltaX: number, deltaY: number): void => {
+			const newPanPos = zoomLevel === 1 ? 0 : Math.min(0, panPosition - deltaX)
+			const newScrollPos = Math.max(0, scrollPosition + deltaY)
+			setPanPosition(newPanPos)
+			setScrollPosition(newScrollPos)
+		},
+		[panPosition, scrollPosition, zoomLevel],
+	)
+
+	return [panPosition, scrollPosition, onScroll]
+}
+
+function useAxisOffset(
+	height: number,
+	axisHeight: number,
+	rowHeight: number,
+	numRows: number,
+) {
+	return useMemo(() => {
+		return Math.min(height - axisHeight, numRows * rowHeight + axisHeight)
+	}, [numRows, axisHeight, rowHeight, height])
+}
+
+function useMaxCategories(
+	rowGap: boolean,
+	height: number,
+	rowHeight: number,
+	axisHeight: number,
+) {
+	return useMemo(() => {
+		const gap = rowGap ? 1 : 0
+		return Math.floor((height - axisHeight) / (rowHeight + gap))
+	}, [rowGap, height, axisHeight, rowHeight])
+}
+
+function useCategoryOffsetStart(
+	categories: ICategory[],
+	scrollPosition: number,
+	rowHeight: number,
+	maxCategories: number,
+) {
+	return useMemo(() => {
+		let categoryOffsetStart = Math.floor(scrollPosition / rowHeight)
+		if (categories.length < categoryOffsetStart) {
+			categoryOffsetStart = categories.length - maxCategories
+		}
+		return categoryOffsetStart
+	}, [maxCategories, scrollPosition, rowHeight, categories.length])
+}
+
+function useCategoriesInView(
+	categories: ICategory[],
+	maxCategories: number,
+	categoryOffsetStart: number,
+) {
+	return useMemo(() => {
+		return categories.slice(
+			categoryOffsetStart,
+			categoryOffsetStart + maxCategories,
+		)
+	}, [categoryOffsetStart, maxCategories, categories])
+}
+
+function useOnClickHandler(
+	categoriesInView: ICategory[],
+	rowHeight: number,
+	rowGap: boolean,
+	timeScrub: TimeDomain | undefined,
+	onClearSelection: () => void,
+	onClickCategory: (category: ICategory, ctrl: boolean) => void,
+) {
+	return useCallback(
+		(x: number, y: number, ctrlKey: boolean): void => {
+			if (timeScrub) {
+				onClearSelection()
+			} else {
+				const gap = rowGap ? 1 : 0
+				const category = categoriesInView[Math.floor(y / (rowHeight + gap))]
+				if (category) {
+					onClickCategory(category, ctrlKey)
+				} else {
+					onClearSelection()
+				}
+			}
+		},
+		[
+			categoriesInView,
+			onClearSelection,
+			onClickCategory,
+			rowGap,
+			rowHeight,
+			timeScrub,
+		],
+	)
+}
