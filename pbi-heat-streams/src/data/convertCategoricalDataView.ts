@@ -47,9 +47,9 @@ export function convertCategoricalDataView(
 	}
 }
 
-function unpackCategoryIds(dataView: powerbiVisualsApi.DataView): number[] {
-	return <number[]>(
-		dataView.categorical.categories[0].identity.map(i => (<any>i).identityIndex)
+function unpackCategoryIds(dataView: powerbiVisualsApi.DataView): CategoryId[] {
+	return <CategoryId[]>(
+		dataView.categorical.categories[0].identity.map(i => JSON.stringify(i))
 	)
 }
 
@@ -69,7 +69,7 @@ function unpackCategoryNames(dataView: powerbiVisualsApi.DataView): string[] {
  * @param categoryNames The category names array
  */
 function getCategories(
-	categoryIds: number[],
+	categoryIds: CategoryId[],
 	categoryNames: string[],
 ): [ICategory[], Record<CategoryId, ICategory>] {
 	const categories = categoryNames.map((categoryName, index) => ({

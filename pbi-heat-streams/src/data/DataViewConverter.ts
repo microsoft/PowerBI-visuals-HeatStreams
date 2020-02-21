@@ -3,7 +3,11 @@
  * Licensed under the MIT license. See LICENSE file in the project.
  */
 import powerbiVisualsApi from 'powerbi-visuals-api'
-import { TimeDomain, ICategorySelectionMap } from 'react-heat-streams'
+import {
+	TimeDomain,
+	ICategorySelectionMap,
+	CategoryId,
+} from 'react-heat-streams'
 import { IChartData } from '../chart/types'
 import { IVisualDataOptions } from '../settings/types'
 import { convertCategoricalDataView } from './convertCategoricalDataView'
@@ -32,9 +36,7 @@ export class DataViewConverter {
 	 */
 	public unpackSelectedCategories(): ICategorySelectionMap {
 		const selection = this.selectionManager.getSelectionIds()
-		const ids = selection.map((s: any) => {
-			return s.dataMap[Object.keys(s.dataMap)[0]][0].identityIndex
-		})
+		const ids = selection.map(getCategoryIdFromSelectionId)
 		return ids.reduce((prev, curr) => {
 			prev[curr] = true
 			return prev
@@ -76,4 +78,11 @@ export class DataViewConverter {
 			dateScrubStart && dateScrubEnd && +dateScrubStart !== +dateScrubEnd
 		return isValidScrub ? [dateScrubStart, dateScrubEnd] : null
 	}
+}
+
+function getCategoryIdFromSelectionId(
+	s: powerbiVisualsApi.extensibility.ISelectionId,
+): CategoryId {
+	// HAKK: unpack the category id as a powerBI opaque id from the selection id
+	return JSON.stringify((<any>s).dataMap[Object.keys((<any>s).dataMap)[0]][0])
 }
