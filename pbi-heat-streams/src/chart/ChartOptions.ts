@@ -14,6 +14,7 @@ import { DataViewConverter } from '../data/DataViewConverter'
 import { VisualSettings } from '../settings/VisualSettings'
 import { IChartData, IChartOptions } from './types'
 import { IVisualDataOptions, IVisualRenderingOptions } from '../settings/types'
+import { ChartColorizer } from './ChartColorizer'
 
 export class ChartOptions implements IChartOptions {
 	public _dataOptions: IVisualDataOptions | undefined
@@ -36,22 +37,10 @@ export class ChartOptions implements IChartOptions {
 		this._renderOptions = settings.rendering
 		this._timeScrub = this.converter.unpackDomainScrub(dataView)
 		this._data = this.converter.convertDataView(dataView, settings.data)
-		const { colorScheme } = this.renderOptions
-		const { isLogScale } = this.dataOptions
-		let { valueMin, valueMax } = this
 
-		// If the color mapping is reversed, reverse the scalar inputs
-		if (this.renderOptions.reverseColorScheme) {
-			const tmp = valueMin
-			valueMin = valueMax
-			valueMax = tmp
-		}
-		const scaler = isDivergingColorScheme(colorScheme)
-			? new DivergingScaler(valueMin, this.valueMid, valueMax, isLogScale)
-			: new LinearScaler(valueMin, valueMax, isLogScale)
-
-		this._colorizer = new Colorizer(scaler, colorScheme)
-		this.loadSelections(dataView)
+		const chartColorizer = new ChartColorizer(settings, this._data)
+		this._colorizer = chartColorizer.colorizer
+		this.loadSelections()
 	}
 
 	public get timeScrub(): TimeDomain | null {
@@ -81,7 +70,7 @@ export class ChartOptions implements IChartOptions {
 	/**
 	 * Loads the selections from the given dataView
 	 */
-	public loadSelections(dataView: powerbiVisualsApi.DataView): void {
+	public loadSelections(): void {
 		this._selections = this.converter.unpackSelectedCategories()
 	}
 
@@ -91,26 +80,5 @@ export class ChartOptions implements IChartOptions {
 
 	public get height(): number {
 		return this.element.getBoundingClientRect().height
-	}
-
-	public get valueMin(): number {
-		const valueMin = this.dataOptions.valueMin
-		return valueMin !== null && valueMin !== undefined
-			? valueMin
-			: this.data.valueDomain[0]
-	}
-
-	public get valueMax(): number {
-		const valueMax = this.dataOptions.valueMax
-		return valueMax !== null && valueMax !== undefined
-			? valueMax
-			: this.data.valueDomain[1]
-	}
-
-	public get valueMid(): number {
-		const scoreSplit = this.dataOptions.scoreSplit
-		return scoreSplit !== null && scoreSplit !== undefined
-			? scoreSplit
-			: (this.valueMax + this.valueMin) / 2
 	}
 }

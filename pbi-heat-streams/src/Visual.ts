@@ -100,7 +100,7 @@ export class Visual implements powerbiVisualsApi.extensibility.IVisual {
 	 * Handler for when selection should be restored from PowerBI
 	 */
 	private onRestoreSelection = (): void => {
-		this.chartOptions.loadSelections(this.dataView!)
+		this.chartOptions.loadSelections()
 		this.render()
 	}
 

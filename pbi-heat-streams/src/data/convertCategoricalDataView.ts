@@ -49,7 +49,9 @@ export function convertCategoricalDataView(
 
 function unpackCategoryIds(dataView: powerbiVisualsApi.DataView): CategoryId[] {
 	return <CategoryId[]>(
-		dataView.categorical.categories[0].identity.map(i => JSON.stringify(i))
+		(dataView?.categorical?.categories &&
+			dataView?.categorical?.categories[0] &&
+			dataView.categorical.categories[0].identity?.map(i => JSON.stringify(i)))
 	)
 }
 
