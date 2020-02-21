@@ -16,7 +16,6 @@ import { convertCategoricalDataView } from './convertCategoricalDataView'
 const get = require('lodash/get')
 
 export class DataViewConverter {
-	private data: IChartData | undefined
 	constructor(
 		private selectionManager: powerbiVisualsApi.extensibility.ISelectionManager,
 	) {} // tslint:disable-line no-empty
@@ -25,9 +24,7 @@ export class DataViewConverter {
 		dataView: powerbiVisualsApi.DataView,
 		options: IVisualDataOptions,
 	): IChartData {
-		const result = convertCategoricalDataView(dataView, options)
-		this.data = result
-		return result
+		return convertCategoricalDataView(dataView, options)
 	}
 
 	/**
@@ -36,8 +33,7 @@ export class DataViewConverter {
 	 */
 	public unpackSelectedCategories(): ICategorySelectionMap {
 		const selection = this.selectionManager.getSelectionIds()
-		const ids = selection.map(getCategoryIdFromSelectionId)
-		return ids.reduce((prev, curr) => {
+		return selection.map(unpackCategoryId).reduce((prev, curr) => {
 			prev[curr] = true
 			return prev
 		}, {})
@@ -80,7 +76,7 @@ export class DataViewConverter {
 	}
 }
 
-function getCategoryIdFromSelectionId(
+function unpackCategoryId(
 	s: powerbiVisualsApi.extensibility.ISelectionId,
 ): CategoryId {
 	// HAKK: unpack the category id as a powerBI opaque id from the selection id
