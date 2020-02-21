@@ -36,7 +36,7 @@ export interface ICategory {
 /**
  * A Selection of Category IDs
  */
-export type CategoryId = number
+export type CategoryId = number | string
 export type ICategorySelectionMap = Record<CategoryId, boolean>
 
 /**
