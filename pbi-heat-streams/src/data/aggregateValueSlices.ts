@@ -12,39 +12,25 @@ import {
 import { mean } from 'd3-array'
 import { ICategoryDataMap } from '../chart/types'
 
-function sliceStart(
-	date: Date,
-	dateAggregation: DateAggregation,
-	positionDomain: [Date, Date],
-): Date {
-	const result = new Date(date)
-	result.setUTCMilliseconds(0)
-	result.setUTCSeconds(0)
-	result.setUTCMinutes(0)
-
-	if (dateAggregation === DateAggregation.Days) {
-		result.setUTCHours(0)
-	} else if (dateAggregation === DateAggregation.Months) {
-		result.setUTCHours(0)
-		result.setUTCDate(1)
-	} else if (dateAggregation === DateAggregation.Years) {
-		result.setUTCHours(0)
-		result.setUTCDate(1)
-		result.setUTCMonth(1)
-	}
-
-	return result
-}
-
-export function coalesceValueSlices(
+/**
+ * Aggregates values into buckets using aggregation configs
+ * @param data The raw data map
+ * @param positionDomain The x domain
+ * @param dateAggregation The date aggregation to use (if x is dates)
+ * @param numericAggregation The numeric aggregation to use (if x is numbers)
+ */
+export function aggregateValueSlices(
 	data: ICategoryDataMap,
 	positionDomain: XDomain,
 	dateAggregation: DateAggregation,
 	numericAggregation: number,
-): {
-	categoryValues: ICategoryValueMap
-	valueDomain: [number, number]
-} {
+): [
+	ICategoryValueMap,
+	/**
+	 * value domain
+	 */
+	[number, number],
+] {
 	let valueMin = 0
 	let valueMax = 0
 	const isNumericDomain = typeof positionDomain[0] === 'number'
@@ -61,11 +47,7 @@ export function coalesceValueSlices(
 				if (cd.value !== undefined && cd.value !== null) {
 					const start = isNumericDomain
 						? `${cd.position}`
-						: sliceStart(
-								cd.position,
-								dateAggregation,
-								positionDomain as [Date, Date],
-						  ).toUTCString()
+						: sliceStart(cd.position, dateAggregation).toUTCString()
 
 					if (!valuePositions[start]) {
 						valuePositions[start] = []
@@ -88,17 +70,34 @@ export function coalesceValueSlices(
 				return {
 					start,
 					end,
-					value: mean(valuePositions[vp]) as number,
+					value: <number>mean(valuePositions[vp]),
 				}
 			})
 			agg[current] = slices
 			return agg
 		},
-		{} as ICategoryValueMap,
-	) as ICategoryValueMap
+		<ICategoryValueMap>{},
+	)
 
-	return {
-		categoryValues: result,
-		valueDomain: [valueMin, valueMax] as [number, number],
+	return [result, [valueMin, valueMax]]
+}
+
+function sliceStart(date: Date, dateAggregation: DateAggregation): Date {
+	const result = new Date(date)
+	result.setUTCMilliseconds(0)
+	result.setUTCSeconds(0)
+	result.setUTCMinutes(0)
+
+	if (dateAggregation === DateAggregation.Days) {
+		result.setUTCHours(0)
+	} else if (dateAggregation === DateAggregation.Months) {
+		result.setUTCHours(0)
+		result.setUTCDate(1)
+	} else if (dateAggregation === DateAggregation.Years) {
+		result.setUTCHours(0)
+		result.setUTCDate(1)
+		result.setUTCMonth(1)
 	}
+
+	return result
 }

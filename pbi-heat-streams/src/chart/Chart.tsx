@@ -37,7 +37,7 @@ export class Chart {
 
 	public render(): void {
 		const { width, height, colorizer } = this.options
-		const renderProps = {
+		const props = {
 			width,
 			height,
 			textPercent: this.options.renderOptions.categoryTextPercent / 100.0,
@@ -61,7 +61,7 @@ export class Chart {
 			onClickCategory: this.onClickCategory,
 			onScrub: this.onScrubbed,
 		}
-		render(<HeatStreamsChart {...renderProps} />, this.options.element)
+		render(<HeatStreamsChart {...props} />, this.options.element)
 	}
 
 	private onScrubbed = (bounds: Scrub): void => {

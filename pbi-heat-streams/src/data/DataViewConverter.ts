@@ -2,27 +2,28 @@
  * Copyright (c) Microsoft. All rights reserved.
  * Licensed under the MIT license. See LICENSE file in the project.
  */
-/* eslint-disable @typescript-eslint/no-var-requires */
-import powerbi from 'powerbi-visuals-api'
-import { TimeDomain, ICategorySelectionMap } from 'react-heat-streams'
+import powerbiVisualsApi from 'powerbi-visuals-api'
+import {
+	TimeDomain,
+	ICategorySelectionMap,
+	CategoryId,
+} from 'react-heat-streams'
 import { IChartData } from '../chart/types'
 import { IVisualDataOptions } from '../settings/types'
 import { convertCategoricalDataView } from './convertCategoricalDataView'
-import * as logger from '../logger'
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const get = require('lodash/get')
-const isEqual = require('lodash/isEqual')
 
 export class DataViewConverter {
 	constructor(
-		private selectionManager: powerbi.extensibility.ISelectionManager,
+		private selectionManager: powerbiVisualsApi.extensibility.ISelectionManager,
 	) {} // tslint:disable-line no-empty
 
 	public convertDataView(
-		dataView: powerbi.DataView,
+		dataView: powerbiVisualsApi.DataView,
 		options: IVisualDataOptions,
 	): IChartData {
-		// TODO: when we support date-based drilldown, we have to process the matrix-form data view
 		return convertCategoricalDataView(dataView, options)
 	}
 
@@ -30,39 +31,17 @@ export class DataViewConverter {
 	 * Unpack selected categories from the native PowerBI data structure
 	 * @param dataView
 	 */
-	public unpackSelectedCategories(
-		dataView: powerbi.DataView,
-	): ICategorySelectionMap {
+	public unpackSelectedCategories(): ICategorySelectionMap {
 		const selection = this.selectionManager.getSelectionIds()
-		const category = get(dataView, 'categorical.categories[0]')
-
-		const selectedCategories: ICategorySelectionMap = {}
-		if (category) {
-			selection.forEach(s => {
-				try {
-					const selectorData = (s as any).selector.data[0].expr
-					if (
-						isEqual(
-							selectorData.left.source,
-							(category as any).source.expr.source,
-						)
-					) {
-						selectedCategories[selectorData.right.value] = true
-					}
-				} catch (err) {
-					logger.error(
-						'🐞Error Processing Selected HeatStreams Categories🐞',
-						s,
-						err,
-					)
-				}
-			})
-		}
-
-		return selectedCategories
+		return selection.map(unpackCategoryId).reduce((prev, curr) => {
+			prev[curr] = true
+			return prev
+		}, {})
 	}
 
-	public unpackDomainScrub(dataView: powerbi.DataView): TimeDomain | null {
+	public unpackDomainScrub(
+		dataView: powerbiVisualsApi.DataView,
+	): TimeDomain | null {
 		const castScrubPoint = (v: any) => {
 			if (typeof v === 'string') {
 				const isNum = /^\d+$/.test(v)
@@ -95,4 +74,11 @@ export class DataViewConverter {
 			dateScrubStart && dateScrubEnd && +dateScrubStart !== +dateScrubEnd
 		return isValidScrub ? [dateScrubStart, dateScrubEnd] : null
 	}
+}
+
+function unpackCategoryId(
+	s: powerbiVisualsApi.extensibility.ISelectionId,
+): CategoryId {
+	// HAKK: unpack the category id as a powerBI opaque id from the selection id
+	return JSON.stringify((<any>s).dataMap[Object.keys((<any>s).dataMap)[0]][0])
 }

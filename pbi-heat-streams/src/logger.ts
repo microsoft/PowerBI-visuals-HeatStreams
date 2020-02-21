@@ -2,7 +2,6 @@
  * Copyright (c) Microsoft. All rights reserved.
  * Licensed under the MIT license. See LICENSE file in the project.
  */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 export enum LogLevel {
 	NONE = 0,
 	ERROR = 1,
@@ -11,16 +10,16 @@ export enum LogLevel {
 }
 
 function getLogLevel(): number {
-	if ((window as any)['logLevel'] === undefined) {
+	if ((<any>window)['logLevel'] === undefined) {
 		return LogLevel.ERROR
 	} else {
-		return (window as any)['logLevel']
+		return (<any>window)['logLevel']
 	}
 }
 
 export function setLevel(level: LogLevel): void {
 	console.log('Set Log Level to ', level)
-	;(window as any)['logLevel'] = level
+	;(<any>window)['logLevel'] = level
 }
 
 export function info(message: string, ...args: any[]): void {

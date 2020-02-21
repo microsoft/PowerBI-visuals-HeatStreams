@@ -2,8 +2,8 @@ node_modules/
 .tmp/
 dist/
 lib/
+ext/
 storybook-static/
-package-lock.json
 *-debug.log
 *-error.log
 webpack.statistics.*.html

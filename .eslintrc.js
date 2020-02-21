@@ -38,6 +38,9 @@ module.exports = {
 
 				'react-hooks/rules-of-hooks': 'error', // Checks rules of Hooks
 				'react-hooks/exhaustive-deps': 'warn', // Checks effect dependencies
+
+				// PBI Vis needs legacy casting to conform to their lint rules
+				'@typescript-eslint/consistent-type-assertions': 0,
 			},
 		},
 		{
