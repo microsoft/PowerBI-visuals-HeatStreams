@@ -9,10 +9,7 @@
 		"url": "https://github.com/microsoft/PowerBI-visuals-HeatStreams"
 	},
 	"scripts": {
-		"build:tsc": "tsc",
-		"build:babel:esm": "babel --config-file ../../babelrc.esm.js -d dist/esm lib",
-		"build:babel:cjs": "babel --config-file ../../babelrc.cjs.js -d dist/cjs lib",
-		"build": "npm-run-all -s build:tsc -p build:babel:*",
+		"build": "./scripts/build.sh",
 		"clean": "rimraf lib dist",
 		"start": "tsc -w --preserveWatchOutput"
 	},

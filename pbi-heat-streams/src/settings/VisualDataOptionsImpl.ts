@@ -7,12 +7,12 @@ import { IVisualDataOptions } from './types'
 import { SortBy } from '../types'
 
 export class VisualDataOptionsImpl implements IVisualDataOptions {
-	public dateAggregation: DateAggregation = DateAggregation.Days
+	public dateAggregation = DateAggregation.Days
 	public numericAggregation = 1
-	public valueMin = undefined
-	public valueMax = undefined
-	public scoreSplit = undefined
+	public valueMin
+	public valueMax
+	public scoreSplit
 	public isLogScale = false
-	public sortBy: SortBy = SortBy.Name
+	public sortBy = SortBy.Name
 	public sortInvert = false
 }

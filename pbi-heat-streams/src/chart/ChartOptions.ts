@@ -2,7 +2,7 @@
  * Copyright (c) Microsoft. All rights reserved.
  * Licensed under the MIT license. See LICENSE file in the project.
  */
-import powerbi from 'powerbi-visuals-api'
+import powerbiVisualsApi from 'powerbi-visuals-api'
 import {
 	Colorizer,
 	DivergingScaler,
@@ -29,7 +29,7 @@ export class ChartOptions implements IChartOptions {
 	) {} // tslint:disable-line no-empty
 
 	public loadFromDataView(
-		dataView: powerbi.DataView,
+		dataView: powerbiVisualsApi.DataView,
 		settings: VisualSettings,
 	): void {
 		this._dataOptions = settings.data
@@ -55,34 +55,34 @@ export class ChartOptions implements IChartOptions {
 	}
 
 	public get timeScrub(): TimeDomain | null {
-		return this._timeScrub as TimeDomain | null
+		return <TimeDomain | null>this._timeScrub
 	}
 
 	public get selections(): ICategorySelectionMap {
-		return this._selections as ICategorySelectionMap
+		return <ICategorySelectionMap>this._selections
 	}
 
 	public get data(): IChartData {
-		return this._data as IChartData
+		return <IChartData>this._data
 	}
 
 	public get renderOptions(): IVisualRenderingOptions {
-		return this._renderOptions as IVisualRenderingOptions
+		return <IVisualRenderingOptions>this._renderOptions
 	}
 
 	public get dataOptions(): IVisualDataOptions {
-		return this._dataOptions as IVisualDataOptions
+		return <IVisualDataOptions>this._dataOptions
 	}
 
 	public get colorizer(): Colorizer {
-		return this._colorizer as Colorizer
+		return <Colorizer>this._colorizer
 	}
 
 	/**
 	 * Loads the selections from the given dataView
 	 */
-	public loadSelections(dataView: powerbi.DataView): void {
-		this._selections = this.converter.unpackSelectedCategories(dataView)
+	public loadSelections(dataView: powerbiVisualsApi.DataView): void {
+		this._selections = this.converter.unpackSelectedCategories()
 	}
 
 	public get width(): number {

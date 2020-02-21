@@ -9,6 +9,7 @@ import {
 	ICategorySelectionMap,
 	XDomain,
 	TimeDomain,
+	CategoryId,
 } from 'react-heat-streams'
 import { IVisualRenderingOptions, IVisualDataOptions } from '../settings/types'
 
@@ -18,7 +19,14 @@ export interface ICategoryData {
 }
 
 export interface IChartData {
+	/**
+	 * The category list
+	 */
 	categories: ICategory[]
+	categoriesById: Record<CategoryId, ICategory>
+	/**
+	 * Data points per category
+	 */
 	categoryData: ICategoryDataMap
 	categoryValues: ICategoryValueMap
 	positionDomain: XDomain

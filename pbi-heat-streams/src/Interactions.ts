@@ -2,17 +2,18 @@
  * Copyright (c) Microsoft. All rights reserved.
  * Licensed under the MIT license. See LICENSE file in the project.
  */
-/* eslint-disable @typescript-eslint/no-var-requires */
-import powerbi from 'powerbi-visuals-api'
-import { ICategory, TimeDomain } from 'react-heat-streams'
+import powerbiVisualsApi from 'powerbi-visuals-api'
+import { ICategory, TimeDomain, CategoryId } from 'react-heat-streams'
 import { buildDomainScrub } from './data/buildDomainScrub'
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const get = require('lodash/get')
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const logger = require('./logger')
 
 export class Interactions {
 	constructor(
-		private host: powerbi.extensibility.visual.IVisualHost,
-		private selectionManager: powerbi.extensibility.ISelectionManager,
+		private host: powerbiVisualsApi.extensibility.visual.IVisualHost,
+		private selectionManager: powerbiVisualsApi.extensibility.ISelectionManager,
 	) {} // tslint:disable-line no-empty
 
 	public async clearSelections(): Promise<void> {
@@ -25,25 +26,28 @@ export class Interactions {
 	public async selectCategory(
 		category: ICategory,
 		multiselect: boolean,
-		dataView: powerbi.DataView,
+		dataView: powerbiVisualsApi.DataView,
 	): Promise<void> {
 		logger.info('Handle Cat Click', category, multiselect)
 		const selection = this.selectionIdForCategory(category, dataView)
 		await this.selectionManager.select(selection, multiselect)
 		const selectedCategories = this.selectionManager.hasSelection()
-			? [category.id]
+			? [(<any>category).index]
 			: []
 		this.persistSelectedCategories(selectedCategories)
 	}
 
-	public async scrub(bounds: TimeDomain, dv: powerbi.DataView): Promise<void> {
+	public async scrub(
+		bounds: TimeDomain,
+		dv: powerbiVisualsApi.DataView,
+	): Promise<void> {
 		logger.info('Handle Scrub', bounds)
 		if (bounds === null || bounds === undefined || +bounds[0] === +bounds[1]) {
 			this.applyFilter(null)
 			return
 		}
 		const column = dv.metadata.columns.find(
-			(col: powerbi.DataViewMetadataColumn) => col.roles!.grouping,
+			(col: powerbiVisualsApi.DataViewMetadataColumn) => col.roles!.grouping,
 		)
 		const filter = buildDomainScrub(bounds, column!.identityExprs![0])
 		this.applyFilter(filter)
@@ -54,19 +58,19 @@ export class Interactions {
 	 * @param listener The listener for the event
 	 */
 	public onRestoreSelection(
-		listener: (ids: powerbi.extensibility.ISelectionId[]) => void,
+		listener: (ids: powerbiVisualsApi.extensibility.ISelectionId[]) => void,
 	): void {
 		this.selectionManager.registerOnSelectCallback(listener)
 	}
 
 	private selectionIdForCategory(
 		category: ICategory,
-		dv: powerbi.DataView,
-	): powerbi.visuals.ISelectionId {
+		dv: powerbiVisualsApi.DataView,
+	): powerbiVisualsApi.visuals.ISelectionId {
 		const categoryColumn = get(dv, 'categorical.categories[0]', [])
 		return this.host
 			.createSelectionIdBuilder()
-			.withCategory(categoryColumn, category.id)
+			.withCategory(categoryColumn, (<any>category).index)
 			.createSelectionId()
 	}
 
@@ -77,9 +81,8 @@ export class Interactions {
 		// this.host.applyJsonFilter(filter, 'data', 'filter')
 	}
 
-	private persistSelectedCategories(categories: any): void {
-		// This isn't used yet, but PersistProperties fires the update cycle, which lets selections pipe through
-		this.host.persistProperties({
+	private persistSelectedCategories(categories: CategoryId[]): void {
+		this.host.persistProperties(<any>{
 			merge: [
 				{
 					objectName: 'data',
@@ -89,6 +92,6 @@ export class Interactions {
 					selector: null,
 				},
 			],
-		} as any)
+		})
 	}
 }

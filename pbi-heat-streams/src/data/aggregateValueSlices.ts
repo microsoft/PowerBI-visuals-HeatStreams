@@ -12,11 +12,7 @@ import {
 import { mean } from 'd3-array'
 import { ICategoryDataMap } from '../chart/types'
 
-function sliceStart(
-	date: Date,
-	dateAggregation: DateAggregation,
-	positionDomain: [Date, Date],
-): Date {
+function sliceStart(date: Date, dateAggregation: DateAggregation): Date {
 	const result = new Date(date)
 	result.setUTCMilliseconds(0)
 	result.setUTCSeconds(0)
@@ -36,15 +32,18 @@ function sliceStart(
 	return result
 }
 
-export function coalesceValueSlices(
+export function aggregateValueSlices(
 	data: ICategoryDataMap,
 	positionDomain: XDomain,
 	dateAggregation: DateAggregation,
 	numericAggregation: number,
-): {
-	categoryValues: ICategoryValueMap
-	valueDomain: [number, number]
-} {
+): [
+	ICategoryValueMap,
+	/**
+	 * value domain
+	 */
+	[number, number],
+] {
 	let valueMin = 0
 	let valueMax = 0
 	const isNumericDomain = typeof positionDomain[0] === 'number'
@@ -61,11 +60,7 @@ export function coalesceValueSlices(
 				if (cd.value !== undefined && cd.value !== null) {
 					const start = isNumericDomain
 						? `${cd.position}`
-						: sliceStart(
-								cd.position,
-								dateAggregation,
-								positionDomain as [Date, Date],
-						  ).toUTCString()
+						: sliceStart(cd.position, dateAggregation).toUTCString()
 
 					if (!valuePositions[start]) {
 						valuePositions[start] = []
@@ -88,17 +83,14 @@ export function coalesceValueSlices(
 				return {
 					start,
 					end,
-					value: mean(valuePositions[vp]) as number,
+					value: <number>mean(valuePositions[vp]),
 				}
 			})
 			agg[current] = slices
 			return agg
 		},
-		{} as ICategoryValueMap,
-	) as ICategoryValueMap
+		<ICategoryValueMap>{},
+	)
 
-	return {
-		categoryValues: result,
-		valueDomain: [valueMin, valueMax] as [number, number],
-	}
+	return [result, [valueMin, valueMax]]
 }

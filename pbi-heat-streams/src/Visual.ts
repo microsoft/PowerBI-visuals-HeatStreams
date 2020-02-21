@@ -2,9 +2,9 @@
  * Copyright (c) Microsoft. All rights reserved.
  * Licensed under the MIT license. See LICENSE file in the project.
  */
-/* eslint-disable @typescript-eslint/no-var-requires */
-import powerbi from 'powerbi-visuals-api'
-import { Chart } from './chart'
+import 'regenerator-runtime'
+import powerbiVisualsApi from 'powerbi-visuals-api'
+import { Chart } from './chart/Chart'
 import { ChartOptions } from './chart/ChartOptions'
 import { DataViewConverter } from './data/DataViewConverter'
 import { Interactions } from './Interactions'
@@ -12,22 +12,29 @@ import { VisualSettings } from './settings/VisualSettings'
 import * as logger from './logger'
 import { TimeDomain } from 'react-heat-streams'
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 require('react-heat-streams/style/heat-streams.css')
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const get = require('lodash/get')
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const packageJson = require('../package.json')
 
-export class Visual implements powerbi.extensibility.IVisual {
-	private static parseSettings(dataView: powerbi.DataView): VisualSettings {
-		return VisualSettings.parse(dataView) as VisualSettings
+export class Visual implements powerbiVisualsApi.extensibility.IVisual {
+	private static parseSettings(
+		dataView: powerbiVisualsApi.DataView,
+	): VisualSettings {
+		return <VisualSettings>VisualSettings.parse(dataView)
 	}
 
 	private settings: VisualSettings | undefined
 	private chart: Chart
 	private chartOptions: ChartOptions
 	private interactions: Interactions
-	private dataView: powerbi.DataView | undefined
+	private dataView: powerbiVisualsApi.DataView | undefined
 
-	constructor(options: powerbi.extensibility.visual.VisualConstructorOptions) {
+	constructor(
+		options: powerbiVisualsApi.extensibility.visual.VisualConstructorOptions,
+	) {
 		const target = options.element
 		const host = options.host
 		const selectionManager = host.createSelectionManager()
@@ -37,7 +44,7 @@ export class Visual implements powerbi.extensibility.IVisual {
 		this.chart = new Chart(this.chartOptions)
 		this.interactions = new Interactions(host, selectionManager)
 		this.interactions.onRestoreSelection(this.onRestoreSelection)
-		;(global as any)['setLogLevel'] = logger.setLevel
+		;(<any>global)['setLogLevel'] = logger.setLevel
 		// tslint:disable-next-line no-console
 		console.log(
 			`%c🔥🔥 HeatStreams ${packageJson.version}🔥🔥%c
@@ -60,7 +67,7 @@ export class Visual implements powerbi.extensibility.IVisual {
 	}
 
 	public update(
-		options: powerbi.extensibility.visual.VisualUpdateOptions,
+		options: powerbiVisualsApi.extensibility.visual.VisualUpdateOptions,
 	): void {
 		try {
 			this.dataView = get(options, 'dataViews[0]')
@@ -79,10 +86,10 @@ export class Visual implements powerbi.extensibility.IVisual {
 	 * select which of the objects and properties you want to expose to the users in the property pane.
 	 */
 	public enumerateObjectInstances(
-		options: powerbi.EnumerateVisualObjectInstancesOptions,
+		options: powerbiVisualsApi.EnumerateVisualObjectInstancesOptions,
 	):
-		| powerbi.VisualObjectInstance[]
-		| powerbi.VisualObjectInstanceEnumerationObject {
+		| powerbiVisualsApi.VisualObjectInstance[]
+		| powerbiVisualsApi.VisualObjectInstanceEnumerationObject {
 		return VisualSettings.enumerateObjectInstances(
 			this.settings || VisualSettings.getDefault(),
 			options,
@@ -104,7 +111,7 @@ export class Visual implements powerbi.extensibility.IVisual {
 		})
 		this.chart.onSelectionCleared(() => interactions.clearSelections())
 		this.chart.onScrub(bounds =>
-			interactions.scrub(bounds as TimeDomain, this.dataView!),
+			interactions.scrub(<TimeDomain>bounds, this.dataView!),
 		)
 		logger.info('Render', this.chartOptions)
 		this.chart.render()

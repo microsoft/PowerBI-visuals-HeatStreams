@@ -2,6 +2,7 @@ node_modules/
 .tmp/
 dist/
 lib/
+ext/
 storybook-static/
 *-debug.log
 *-error.log

@@ -2,26 +2,25 @@
  * Copyright (c) Microsoft. All rights reserved.
  * Licensed under the MIT license. See LICENSE file in the project.
  */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import powerbi from 'powerbi-visuals-api'
-import * as models from 'powerbi-models'
+import powerbiVisualsApi from 'powerbi-visuals-api'
+import * as powerbiModels from 'powerbi-models'
 import { TimeDomain } from 'react-heat-streams'
 
-function getTarget(column: any): models.IFilterColumnTarget {
-	return {
-		column: (column as any).ref,
-		table: (column as any).source.entity,
-	} as models.IFilterColumnTarget
+function getTarget(column: any): powerbiModels.IFilterColumnTarget {
+	return <powerbiModels.IFilterColumnTarget>{
+		column: column.ref,
+		table: column.source.entity,
+	}
 }
 
 export function buildDomainScrub(
 	bounds: TimeDomain,
-	column: powerbi.data.ISQExpr,
-): models.AdvancedFilter {
+	column: powerbiVisualsApi.data.ISQExpr,
+): powerbiModels.AdvancedFilter {
 	const start = bounds[0]
 	const end = bounds[1]
 	const filterVal = (v: any): any => (typeof v === 'number' ? v : v)
-	return new models.AdvancedFilter(
+	return new powerbiModels.AdvancedFilter(
 		getTarget(column),
 		'And',
 		{ operator: 'GreaterThan', value: filterVal(start) },
