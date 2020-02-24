@@ -1,3 +1,5 @@
+![Node.js CI](https://github.com/microsoft/PowerBI-visuals-HeatStreams/workflows/Node.js%20CI/badge.svg)
+
 # Heat Streams PowerBI Visual
 
 # About
