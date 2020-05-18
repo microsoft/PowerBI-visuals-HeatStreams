@@ -30,6 +30,7 @@ export interface InteractiveChartProps {
 	axisHeight: number
 	numTicks: number
 	colorScheme: string
+	textColor: string
 }
 
 export const InteractiveChart: React.FC<InteractiveChartProps> = memo(
@@ -43,6 +44,7 @@ export const InteractiveChart: React.FC<InteractiveChartProps> = memo(
 		axisHeight,
 		numTicks,
 		colorScheme,
+		textColor,
 	}) {
 		const colorizer = useMemo(() => {
 			const isLogScale = false
@@ -95,6 +97,7 @@ export const InteractiveChart: React.FC<InteractiveChartProps> = memo(
 				highlightColor={'#FF00FF'}
 				selections={selections}
 				showValues={true}
+				textColor={textColor}
 				onClickCategory={useCallback(
 					(cat: ICategory, ctrl: boolean) => {
 						const selection: ICategorySelectionMap = ctrl

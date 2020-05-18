@@ -12,6 +12,7 @@ export interface IVisualRenderingOptions {
 	axisHeight: number
 	rowGap: boolean
 	colorScheme: string
+	textColor: string
 	zoomLevel: number
 	numTicks: number
 	showValues: boolean

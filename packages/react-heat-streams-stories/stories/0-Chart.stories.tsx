@@ -3,7 +3,7 @@
  * Licensed under the MIT license. See LICENSE file in the project.
  */
 import React from 'react'
-import { withKnobs, number, select } from '@storybook/addon-knobs'
+import { withKnobs, number, select, text } from '@storybook/addon-knobs'
 import { InteractiveChart } from './InteractiveChart'
 import * as colors from 'd3-scale-chromatic'
 
@@ -54,8 +54,8 @@ export const BasicExample = () => {
 	const valueMin = number('Min Value', 0, undefined, DATA_OPTS)
 	const valueMid = number('Mid Value', 50, undefined, DATA_OPTS)
 	const valueMax = number('Max Value', 100, undefined, DATA_OPTS)
+	const textColor = text('Text Color', '#000000', undefined)
 
-	console.log('ayoo')
 	return (
 		<InteractiveChart
 			colorScheme={colorScheme}
@@ -64,6 +64,7 @@ export const BasicExample = () => {
 			rowHeight={rowHeight}
 			axisHeight={axisHeight}
 			numTicks={numTicks}
+			textColor={textColor}
 			valueMin={valueMin}
 			valueMid={valueMid}
 			valueMax={valueMax}

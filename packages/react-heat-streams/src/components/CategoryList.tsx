@@ -29,6 +29,7 @@ export interface ICategoryListProps {
 	showCategories: boolean
 	categories: ICategory[]
 	categoryValues: ICategoryValueMap
+	textColor: string
 	rowHeight: number
 	highlightColor: string
 	numAxisTicks: number
@@ -73,6 +74,7 @@ export const CategoryList: React.FC<ICategoryListProps> = memo(
 		timeScrub,
 		numAxisTicks,
 		xDomain,
+		textColor,
 		onScroll,
 		onScrub,
 	}) {
@@ -93,6 +95,7 @@ export const CategoryList: React.FC<ICategoryListProps> = memo(
 						categories={categories}
 						width={width * textPercent}
 						rowHeight={rowHeight}
+						textColor={textColor}
 						categoryY={categoryY}
 						isCategorySelected={isCategorySelected}
 						onClickCategory={onClickCategory}
@@ -135,6 +138,7 @@ export const CategoryList: React.FC<ICategoryListProps> = memo(
 					height={axisHeight}
 					width={width - width * textPercent}
 					numTicks={numAxisTicks}
+					textColor={textColor}
 				/>
 				<Overlay
 					width={width - textPercent * width}
