@@ -113,6 +113,17 @@
 						}
 					}
 				},
+				"textColor": {
+					"displayName": "Text Color",
+					"description": "The color of the category text and x-axis",
+					"type": {
+						"fill": {
+							"solid": {
+								"color": true
+							}
+						}
+					}
+				},
 				"rowHeight": {
 					"displayName": "Row Height",
 					"description": "The height allocated per category row",

@@ -41,7 +41,6 @@ export const TimeAxis: React.FC<ITimeAxisProps> = memo(function TimeAxis({
 		}),
 		[textColor],
 	)
-	console.log('AXIS TC1', textColor)
 
 	return (
 		<g transform={`translate(${xPan}, ${offset})`} style={styles.grouping}>

@@ -14,6 +14,7 @@ export class VisualRenderingOptionsImpl implements IVisualRenderingOptions {
 	public axisHeight = 20
 	public rowGap = true
 	public colorScheme = 'RdBu'
+	public textColor = '#000000'
 	public zoomLevel = 1
 	public numTicks = 30
 	public showValues = true

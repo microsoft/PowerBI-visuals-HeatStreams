@@ -54,6 +54,7 @@ export class Chart {
 			colorizer: (v: any): string => colorizer.color(v).toString(),
 			categories: this.options.data.categories,
 			categoryValues: this.options.data.categoryValues,
+			textColor: this.options.renderOptions.textColor,
 			selections: this.options.selections,
 			dateAggregation: this.options.dataOptions.dateAggregation,
 			numericAggregation: this.options.dataOptions.numericAggregation,
