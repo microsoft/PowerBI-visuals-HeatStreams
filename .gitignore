@@ -7,3 +7,4 @@ storybook-static/
 *-debug.log
 *-error.log
 webpack.statistics.*.html
+.DS_Store

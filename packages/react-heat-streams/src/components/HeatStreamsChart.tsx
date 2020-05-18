@@ -31,6 +31,11 @@ export interface IHeatStreamsChartProps {
 	categories: ICategory[]
 	categoryValues: ICategoryValueMap
 	numericAggregation?: number
+
+	/**
+	 * Optional text color; CSS Hex
+	 */
+	textColor?: string
 	/**
 	 * A map of category id to selected category
 	 * @default empty object
@@ -56,7 +61,9 @@ export interface IHeatStreamsChartProps {
 	onScrub?: (bounds: Scrub) => void
 }
 
-const NO_OP = () => null
+const NO_OP = (): void => {
+	/* do nothing */
+}
 const DEFAULT_NUM_TICKS = 20
 const DEFAULT_TEXT_PERCENT = 0.15
 const DEFAULT_ZOOM_LEVEL = 1
@@ -64,6 +71,7 @@ const DEFAULT_ROW_HEIGHT = 20
 const DEFAULT_ROW_GAP = true
 const DEFAULT_AXIS_HEIGHT = 20
 const DEFAULT_HIGHLIGHT_COLOR = '#FF0000'
+const DEFAULT_TEXT_COLOR = '#000000'
 const DEFAULT_SELECTIONS = {}
 
 export const HeatStreamsChart: React.FC<IHeatStreamsChartProps> = memo(
@@ -81,6 +89,7 @@ export const HeatStreamsChart: React.FC<IHeatStreamsChartProps> = memo(
 		timeScrub = undefined,
 		showCategories = true,
 		showValues = false,
+		textColor = DEFAULT_TEXT_COLOR,
 		rowGap = DEFAULT_ROW_GAP,
 		zoomLevel = DEFAULT_ZOOM_LEVEL,
 		numTicks = DEFAULT_NUM_TICKS,
@@ -176,6 +185,7 @@ export const HeatStreamsChart: React.FC<IHeatStreamsChartProps> = memo(
 					xScale={xScale}
 					xDomain={xDomain}
 					numAxisTicks={numTicks}
+					textColor={textColor}
 					isCategorySelected={isCategorySelected}
 					sliceWidth={sliceWidth}
 					onClickCategory={onClickCategory}

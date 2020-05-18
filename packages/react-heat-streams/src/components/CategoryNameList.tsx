@@ -12,6 +12,7 @@ export interface ICategoryNameListProps {
 	rowHeight: number
 	categoryY: (input: number) => number
 	isCategorySelected: (category: ICategory) => boolean
+	textColor: string
 	onClickCategory?: (category: ICategory, ctrlKey: boolean) => void
 	onClear?: () => void
 }
@@ -21,6 +22,7 @@ export const CategoryNameList: React.FC<ICategoryNameListProps> = memo(
 		categories,
 		width,
 		rowHeight,
+		textColor,
 		categoryY,
 		isCategorySelected,
 		onClickCategory = NO_OP,
@@ -33,12 +35,20 @@ export const CategoryNameList: React.FC<ICategoryNameListProps> = memo(
 						key={cat.id}
 						category={cat}
 						height={rowHeight}
+						textColor={textColor}
 						selected={isCategorySelected(cat)}
 						onClick={onClickCategory}
 						y={categoryY(index) + rowHeight - 1}
 					/>
 				)),
-			[categories, isCategorySelected, categoryY, onClickCategory, rowHeight],
+			[
+				categories,
+				isCategorySelected,
+				categoryY,
+				onClickCategory,
+				rowHeight,
+				textColor,
+			],
 		)
 		return (
 			<g className="category-names">
@@ -58,6 +68,7 @@ interface ICategoryNameProps {
 	height: number
 	selected: boolean
 	y: number
+	textColor: string
 	onClick?: (category: ICategory, ctrlKey: boolean) => void
 }
 
@@ -66,6 +77,7 @@ const CategoryName: React.FC<ICategoryNameProps> = memo(function CategoryName({
 	height,
 	selected,
 	y,
+	textColor,
 	onClick: onClickCategory = NO_OP,
 }) {
 	const onClick = useCallback(
@@ -80,6 +92,7 @@ const CategoryName: React.FC<ICategoryNameProps> = memo(function CategoryName({
 			height={height}
 			y={y}
 			selected={selected}
+			textColor={textColor}
 			onClick={onClick}
 			name={category.name}
 		/>
@@ -91,15 +104,25 @@ export interface ICategoryTextProps {
 	y: number
 	selected: boolean
 	name: string
+	textColor: string
 	onClick?: (ent: React.MouseEvent<any>) => void
 }
 export const CategoryText: React.FC<ICategoryTextProps> = memo(
-	function CategoryText({ height, y, selected, name, onClick = NO_OP }) {
+	function CategoryText({
+		height,
+		y,
+		selected,
+		name,
+		textColor,
+		onClick = NO_OP,
+	}) {
+		console.log('TC', textColor)
 		return (
 			<text
 				className="category-text"
 				fontSize={`${height - 2}px`}
 				clipPath="url(#clip-category-text)"
+				fill={textColor}
 				x={2}
 				y={y}
 				fontWeight={selected ? 'bold' : 'normal'}
@@ -111,4 +134,6 @@ export const CategoryText: React.FC<ICategoryTextProps> = memo(
 	},
 )
 
-const NO_OP = () => null
+const NO_OP = (): void => {
+	/* do nothing */
+}
