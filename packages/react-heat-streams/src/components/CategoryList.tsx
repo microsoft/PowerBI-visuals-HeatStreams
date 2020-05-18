@@ -138,6 +138,7 @@ export const CategoryList: React.FC<ICategoryListProps> = memo(
 					height={axisHeight}
 					width={width - width * textPercent}
 					numTicks={numAxisTicks}
+					textColor={textColor}
 				/>
 				<Overlay
 					width={width - textPercent * width}

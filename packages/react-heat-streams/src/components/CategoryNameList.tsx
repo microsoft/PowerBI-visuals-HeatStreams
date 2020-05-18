@@ -116,7 +116,6 @@ export const CategoryText: React.FC<ICategoryTextProps> = memo(
 		textColor,
 		onClick = NO_OP,
 	}) {
-		console.log('TC', textColor)
 		return (
 			<text
 				className="category-text"

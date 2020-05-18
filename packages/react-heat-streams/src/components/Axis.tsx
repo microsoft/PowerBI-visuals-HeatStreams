@@ -16,17 +16,9 @@ export interface ITimeAxisProps {
 	xPan: number
 	offset: number
 	numTicks: number
+	textColor: string
 	timeScrub?: TimeDomain
 	xScale: (input: number | Date) => number
-}
-
-const styles: Record<string, React.CSSProperties> = {
-	grouping: {
-		pointerEvents: 'all',
-	},
-	axis: {
-		orient: BOTTOM,
-	} as any,
 }
 
 export const TimeAxis: React.FC<ITimeAxisProps> = memo(function TimeAxis({
@@ -35,20 +27,36 @@ export const TimeAxis: React.FC<ITimeAxisProps> = memo(function TimeAxis({
 	xScale,
 	timeScrub,
 	height,
+	textColor,
 	numTicks = 10,
 }) {
 	const axisScrub =
 		timeScrub == null || timeScrub.length !== 2 ? null : (
 			<AxisScrub height={height} timeScrub={timeScrub} xScale={xScale} />
 		)
+	const axisStyle: any = React.useMemo(
+		() => ({
+			orient: BOTTOM,
+			strokeColor: textColor,
+		}),
+		[textColor],
+	)
+	console.log('AXIS TC1', textColor)
+
 	return (
 		<g transform={`translate(${xPan}, ${offset})`} style={styles.grouping}>
 			{axisScrub}
-			<Axis {...axisPropsFromTickScale(xScale, numTicks)} style={styles.axis} />
+			<Axis {...axisPropsFromTickScale(xScale, numTicks)} style={axisStyle} />
 		</g>
 	)
 })
 TimeAxis.displayName = 'TimeAxis'
+
+const styles: Record<string, React.CSSProperties> = {
+	grouping: {
+		pointerEvents: 'all',
+	},
+}
 
 interface AxisScrubProps {
 	height: number
