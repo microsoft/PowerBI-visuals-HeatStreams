@@ -30,7 +30,7 @@
 		"react": ">= 16.12"
 	},
 	"dependencies": {
-		"d3-color": "^1.4.0",
+		"d3-color": "^3.1.0",
 		"d3-scale": "^3.2.1",
 		"react-d3-axis": "github:darthtrevino/react-d3-axis"
 	}
